@@ -64,6 +64,9 @@ public class LoginController : MonoBehaviour
         }
 
         Debug.Log($"Login bem-sucedido no ambiente: {AppEnvManager.Settings.name}");
+        var connectionClient = WebSocketClient.connectionClient;
+        Debug.Log("vai conectar");
+        //connectionClient.Connect();
     }
 
     [System.Serializable]

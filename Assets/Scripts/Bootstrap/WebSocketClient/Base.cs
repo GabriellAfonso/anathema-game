@@ -17,6 +17,8 @@ public abstract class BaseClient
         this.baseUrl = baseUrl;
     }
 
+    public event Action OnConnected;
+    public event Action<string> OnConnectionError;
     // ===== Conexão =====
 
     public async void Connect(string token)
@@ -30,9 +32,16 @@ public abstract class BaseClient
         var url = BuildUrl();
         socket = new WebSocket(url);
 
-        socket.OnOpen += OnOpen;
+        socket.OnOpen += () =>
+        {
+            OnConnected?.Invoke();
+        };
+
         socket.OnClose += OnClose;
-        socket.OnError += OnError;
+        socket.OnError += (e) =>
+        {
+            OnConnectionError?.Invoke(e);
+        };
         socket.OnMessage += OnMessage;
 
         await socket.Connect();

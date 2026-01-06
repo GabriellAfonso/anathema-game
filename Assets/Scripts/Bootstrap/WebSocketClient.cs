@@ -9,10 +9,13 @@ public class WebSocketClient : MonoBehaviour
 
     void Awake()
     {
-
         DontDestroyOnLoad(gameObject);
+
+        string apiBaseUrl = AppEnvManager.Settings.apiBaseUrl;
         string connectionUrl = AppEnvManager.Settings.connectionConsumerUrl;
-        connectionClient = new ConnectionClient(connectionUrl);
+        Debug.Log("ws://" + apiBaseUrl + connectionUrl);
+
+        connectionClient = new ConnectionClient("ws://" + apiBaseUrl + connectionUrl);
     }
   
 }

@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &207853830
+--- !u!1 &344814886
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,21 +127,35 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 207853831}
+  - component: {fileID: 344814888}
+  - component: {fileID: 344814887}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: WebSocketClient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &207853831
+--- !u!114 &344814887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344814886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c6edc48ab5fad046b7001d2b7e35a00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  baseWsUrl: 
+--- !u!4 &344814888
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 207853830}
+  m_GameObject: {fileID: 344814886}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 482.72226, y: 647.87134, z: 0}
@@ -181,7 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   configDev: {fileID: 11400000, guid: 2fb18d39e3ba7a8428f6e838ec6c705a, type: 2}
   configProd: {fileID: 11400000, guid: 63f06ec5c1ee42846b195faf617f0be5, type: 2}
-  ambienteDesejado: Dev
+  isProd: 0
 --- !u!4 &1633734010
 Transform:
   m_ObjectHideFlags: 0
@@ -201,5 +215,5 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 207853831}
   - {fileID: 1633734010}
+  - {fileID: 344814888}

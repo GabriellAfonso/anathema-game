@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1481737344e90342bccf82f6ec29fa3, type: 3}
   m_Name: AppConfig_Dev
   m_EditorClassIdentifier: Assembly-CSharp::AppConfig
-  apiBaseUrl: http://127.0.0.1:8000
+  apiBaseUrl: 127.0.0.1:8000
   loginEndpoint: /login/
+  connectionConsumerUrl: /ws/connection/

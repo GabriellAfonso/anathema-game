@@ -107,6 +107,8 @@ public class LoginController : MonoBehaviour
         connectionClient.OnConnected += HandleSocketConnected;
         connectionClient.OnConnectionError += HandleSocketError;
 
+
+        SelfProfileService.Instance.LoadProfile(response.token);
         connectionClient.Connect(response.token);
     }
 
@@ -114,6 +116,9 @@ public class LoginController : MonoBehaviour
     {
         WebSocketClient.connectionClient.OnConnected -= HandleSocketConnected;
         WebSocketClient.connectionClient.OnConnectionError -= HandleSocketError;
+
+      
+
 
         SceneManager.LoadScene("Home");
     }

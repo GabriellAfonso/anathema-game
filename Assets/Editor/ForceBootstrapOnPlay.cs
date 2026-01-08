@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 
 [InitializeOnLoad]
 public static class ForceBootstrapOnPlay
@@ -8,7 +7,7 @@ public static class ForceBootstrapOnPlay
 
     static ForceBootstrapOnPlay()
     {
-        Debug.Log("ForceBootstrapOnPlay carregado");
+        //Debug.Log("ForceBootstrapOnPlay carregado");
         EditorApplication.playModeStateChanged += state =>
         {
             if (state == PlayModeStateChange.ExitingEditMode)

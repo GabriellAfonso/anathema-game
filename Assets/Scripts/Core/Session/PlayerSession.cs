@@ -34,8 +34,6 @@ public class PlayerSession : MonoBehaviour
         Coins = profile.coins;
         Credits = profile.credits;
 
-        Debug.Log(profile.nickname);
-
     }
 
     public void SetToken(string token)

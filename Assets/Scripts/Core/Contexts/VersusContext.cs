@@ -6,6 +6,7 @@ public class VersusContext : MonoBehaviour
 
     public PlayerPublicDTO Player;
     public PlayerPublicDTO Opponent;
+    public string MatchId;
 
     private void Awake()
     {
@@ -17,22 +18,15 @@ public class VersusContext : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        Debug.Log("instanciado VersusContext");
     }
 
     public void SetContext(string json)
-    {
-        Debug.Log("setContext");
-        Debug.Log(json);
-       
+    {  
         var dto = JsonUtility.FromJson<VersusDTO>(json);
-
-        Debug.Log(dto == null ? "DTO NULL" : "DTO OK");
-        Debug.Log(dto?.self == null ? "SELF NULL" : "SELF OK");
-        Debug.Log(dto?.opponent == null ? "OPPONENT NULL" : "OPPONENT OK");
 
         Player = dto.self;
         Opponent = dto.opponent;
+        MatchId = dto.match_id;
     }
 
     public void Clear()

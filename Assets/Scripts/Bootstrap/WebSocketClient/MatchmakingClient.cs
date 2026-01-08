@@ -16,7 +16,7 @@ public class MatchmakingClient : BaseClient
     {
         handlers = new Dictionary<string, Action<string>>
         {
-            { "match_found", HandleStartMatch }
+            { "match_found", HandleMatchFound }
             // adicione outros tipos aqui
         };
     }
@@ -24,7 +24,6 @@ public class MatchmakingClient : BaseClient
     protected override void Handle(string type, string payload)
     {
         
-        Debug.Log("entrou no handler "+type);
 
         if (handlers.TryGetValue(type, out var handler))
         {
@@ -36,14 +35,20 @@ public class MatchmakingClient : BaseClient
         }
     }
 
-    private void HandleStartMatch(string payload)
+    private void HandleMatchFound(string payload)
     {
-        Debug.Log(payload);
         // criar dados versusContext
         VersusContext.Instance.SetContext(payload);
 
         // starta a cena de versus
         SceneManager.LoadScene("VersusScene");
+
         // manda conectar o matchClient ao matchcConsumer
+        var matchId = VersusContext.Instance.MatchId;
+        var matchClient = WebSocketClient.MatchClient;
+
+        matchClient.SetMatchId(matchId);
+        matchClient.Connect();
+
     }
 }

@@ -26,7 +26,7 @@ public class VersusController : MonoBehaviour
             SetIconPlayer(player.icon);
 
             opponentNickname.text = opponent.nickname;
-            SetIconPlayer(opponent.icon);
+            SetIconOpponent(opponent.icon);
         }
         else
         {

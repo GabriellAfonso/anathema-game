@@ -11,7 +11,7 @@ public class AppEnvManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Acordou o envmanger");
+        //Debug.Log("Acordou o envmanger");
         Settings = isProd ? configProd : configDev;
 
         print($"AppEnvManager: Loaded {(isProd ? "Production" : "Development")} Config");

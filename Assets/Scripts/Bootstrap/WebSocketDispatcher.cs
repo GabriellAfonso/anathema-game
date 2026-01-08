@@ -5,8 +5,10 @@ using NativeWebSocket;
 public class WebSocketDispatcher : MonoBehaviour
 {
     public static WebSocketDispatcher Instance { get; private set; }
-
     private readonly List<WebSocket> sockets = new();
+    private readonly List<WebSocket> toAdd = new();
+    private readonly List<WebSocket> toRemove = new();
+
 
     private void Awake()
     {
@@ -19,16 +21,17 @@ public class WebSocketDispatcher : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
+ 
     public void Register(WebSocket socket)
     {
-        if (!sockets.Contains(socket))
-            sockets.Add(socket);
+        if (!toAdd.Contains(socket))
+            toAdd.Add(socket);
     }
 
     public void Unregister(WebSocket socket)
     {
-        sockets.Remove(socket);
+        if (!toRemove.Contains(socket))
+            toRemove.Add(socket);
     }
 
     private void Update()
@@ -38,6 +41,20 @@ public class WebSocketDispatcher : MonoBehaviour
         {
             socket?.DispatchMessageQueue();
         }
+
+        if (toAdd.Count > 0)
+        {
+            sockets.AddRange(toAdd);
+            toAdd.Clear();
+        }
+
+        if (toRemove.Count > 0)
+        {
+            foreach (var s in toRemove)
+                sockets.Remove(s);
+            toRemove.Clear();
+        }
 #endif
     }
+
 }

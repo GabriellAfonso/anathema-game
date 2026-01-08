@@ -1,7 +1,8 @@
+using NativeWebSocket;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NativeWebSocket;
 
 public abstract class BaseClient
 {
@@ -21,7 +22,8 @@ public abstract class BaseClient
     public event Action<string> OnConnectionError;
     // ===== Conexão =====
 
-    public async void Connect()
+    #pragma warning disable IDE1006
+    protected async void _Connect()
     {
 
         if (isConnected)
@@ -31,7 +33,7 @@ public abstract class BaseClient
         
         this.token = session.Token;
 
-        var url = BuildUrl();
+        var url = this.BuildUrl();
         socket = new WebSocket(url);
         WebSocketDispatcher.Instance.Register(socket);
 
@@ -49,17 +51,28 @@ public abstract class BaseClient
 
         await socket.Connect();
     }
+#pragma warning restore IDE1006
+    public void Connect()
+    {
+        WebSocketDispatcher.Instance.StartCoroutine(SafeConnect());
+    }
 
+    private IEnumerator SafeConnect()
+    {
+        yield return null; // quebra o frame do handler
+        _Connect();
+    }
     public async void Disconnect()
     {
         if (socket == null)
             return;
 
+        WebSocketDispatcher.Instance.Unregister(socket);
         await socket.Close();
         socket = null;
     }
 
-   protected string BuildUrl()
+   protected virtual string BuildUrl()
     {
         return $"{this.baseUrl}?token={this.token}";
     }
@@ -68,22 +81,22 @@ public abstract class BaseClient
 
     protected virtual void OnOpen()
     {
-        Debug.Log($"{GetType().Name} connected");
+        //Debug.Log($"{GetType().Name} connected");
     }
 
     protected virtual void OnClose(WebSocketCloseCode code)
     {
-        Debug.Log($"{GetType().Name} disconnected: {code}");
+        //Debug.Log($"{GetType().Name} disconnected: {code}");
     }
 
     protected virtual void OnError(string error)
     {
-        Debug.LogError($"{GetType().Name} error: {error}");
+        //Debug.LogError($"{GetType().Name} error: {error}");
     }
 
     protected virtual void OnMessage(byte[] bytes)
     {
-        Debug.Log($"{GetType().Name} recebeu mensagem");
+        //Debug.Log($"{GetType().Name} recebeu mensagem");
         var json = System.Text.Encoding.UTF8.GetString(bytes);
         Dispatch(json);
     }
@@ -92,13 +105,12 @@ public abstract class BaseClient
 
     protected virtual void Dispatch(string json)
     {
-        Debug.Log($"{GetType().Name} entrou no Dispatch");
-        Debug.Log(json);
+       // Debug.Log($"{GetType().Name} entrou no Dispatch");
         var message = JsonUtility.FromJson<BaseMessage>(json);
 
         if (string.IsNullOrEmpty(message.type))
             return;
-        Debug.Log($"{GetType().Name} -> type: {message.type}");
+        //Debug.Log($"{GetType().Name} -> type: {message.type}");
         Handle(message.type, message.payload);
     }
 

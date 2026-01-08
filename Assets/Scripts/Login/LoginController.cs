@@ -1,11 +1,14 @@
 using System.Collections;
+using System.Linq;
 using System.Text;
-using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 using TMPro;
+using Unity.Multiplayer.Playmode;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 public class LoginController : MonoBehaviour
 {
 
@@ -13,18 +16,13 @@ public class LoginController : MonoBehaviour
     [SerializeField] private TMP_InputField usernameInput;
     [SerializeField] private TMP_InputField passwordInput;
     [SerializeField] private Button loginButton;
-
+  
     private void Awake()
     {
         loginButton.onClick.AddListener(HandleLogin);
 
         usernameInput.onSubmit.AddListener(_ => HandleLogin());
         passwordInput.onSubmit.AddListener(_ => HandleLogin());
-
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        int pid = System.Diagnostics.Process.GetCurrentProcess().Id;
-        DevPlayerIndex = pid % 2; // alterna entre 0 e 1
-#endif
     }
 
     private void HandleLogin()
@@ -84,7 +82,7 @@ public class LoginController : MonoBehaviour
 
     private string BuildLoginRequestDto(string username, string password)
     {
-        return JsonUtility.ToJson(new LoginRequestDto
+        return JsonUtility.ToJson(new LoginRequestDTO
         {
             username = username,
             password = password
@@ -105,7 +103,7 @@ public class LoginController : MonoBehaviour
 
     private void HandleLoginSuccess(string jsonResponse)
     {
-        var response = JsonUtility.FromJson<LoginResponse>(jsonResponse);
+        var response = JsonUtility.FromJson<LoginResponseDTO>(jsonResponse);
 
         Debug.Log($"Login bem-sucedido no ambiente: {AppEnvManager.Settings.name}");
         var connectionClient = WebSocketClient.ConnectionClient;
@@ -143,9 +141,7 @@ public class LoginController : MonoBehaviour
         loginButton.interactable = value;
     }
 
-    [Header("Dev Login (Editor Only)")]
-    [SerializeField] private int DevPlayerIndex = 0; // 0 = player1, 1 = player2
-
+    #region Auto Login Gambiarra
     [System.Serializable]
     private class DevUser
     {
@@ -153,40 +149,35 @@ public class LoginController : MonoBehaviour
         public string password;
     }
 
+    #if UNITY_EDITOR || DEVELOPMENT_BUILD
     private void Start()
-    {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        AutoLoginDev();
-#endif
-    }
 
-    private void AutoLoginDev()
+    {
+        if (CurrentPlayer.ReadOnlyTags().Contains("Player1"))
+        {
+            AutoLoginDev(0);
+        }
+        else if (CurrentPlayer.ReadOnlyTags().Contains("Player2"))
+        {
+            AutoLoginDev(1);
+        }
+            
+    }
+   
+
+    private void AutoLoginDev(int player)
     {
         var devUsers = new DevUser[]
-        {
-        new DevUser { username = "teste1", password = "123456" },
-        new DevUser { username = "teste7", password = "123456" }
-        };
+           {
+            new() { username = "teste1", password = "123456" },
+            new() { username = "teste7", password = "123456" }
+           };
 
-        //if (DevPlayerIndex < 0 || DevPlayerIndex >= devUsers.Length)
-        //    DevPlayerIndex = 0;
 
-        var user = devUsers[DevPlayerIndex];
-        Debug.Log($"Dev login automático: {user.username}");
+        var user = devUsers[player];
         StartCoroutine(SendLoginRequest(user.username, user.password));
     }
+    #endif
+    #endregion
 
-    [System.Serializable]
-    private class LoginRequestDto
-    {
-        public string username;
-        public string password;
-    }
-
-    [System.Serializable]
-    private class LoginResponse
-    {
-        public string token;
-        public string refresh;
-    }
 }

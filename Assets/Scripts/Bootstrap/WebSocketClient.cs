@@ -6,6 +6,7 @@ public class WebSocketClient : MonoBehaviour
 {
     public static ConnectionClient ConnectionClient { get; private set; }
     public static MatchmakingClient MatchmakingClient { get; private set; }
+    public static MatchClient MatchClient { get; private set; }
 
 
     void Awake()
@@ -19,6 +20,7 @@ public class WebSocketClient : MonoBehaviour
 
         ConnectionClient = new ConnectionClient("ws://" + apiBaseUrl + connectionUrl);
         MatchmakingClient = new MatchmakingClient("ws://" + apiBaseUrl + matchmakingUrl);
+        MatchClient = new MatchClient("ws://" + apiBaseUrl + matchUrl);
     }
   
 }

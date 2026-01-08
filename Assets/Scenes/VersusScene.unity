@@ -880,10 +880,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ed4b40b59e267f4895967d69b9edd10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  playerNickname: {fileID: 0}
-  playerIconImage: {fileID: 0}
-  opponentNickname: {fileID: 0}
-  opponentIconImage: {fileID: 0}
+  playerNickname: {fileID: 771411356}
+  playerIconImage: {fileID: 1158243606}
+  opponentNickname: {fileID: 144845829}
+  opponentIconImage: {fileID: 346651360}
   defaultIconName: DefaultIcon
 --- !u!4 &1289605354
 Transform:

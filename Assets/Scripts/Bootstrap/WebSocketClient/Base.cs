@@ -33,6 +33,7 @@ public abstract class BaseClient
 
         var url = BuildUrl();
         socket = new WebSocket(url);
+        WebSocketDispatcher.Instance.Register(socket);
 
         socket.OnOpen += () =>
         {
@@ -82,6 +83,7 @@ public abstract class BaseClient
 
     protected virtual void OnMessage(byte[] bytes)
     {
+        Debug.Log($"{GetType().Name} recebeu mensagem");
         var json = System.Text.Encoding.UTF8.GetString(bytes);
         Dispatch(json);
     }
@@ -90,11 +92,13 @@ public abstract class BaseClient
 
     protected virtual void Dispatch(string json)
     {
+        Debug.Log($"{GetType().Name} entrou no Dispatch");
+        Debug.Log(json);
         var message = JsonUtility.FromJson<BaseMessage>(json);
 
         if (string.IsNullOrEmpty(message.type))
             return;
-
+        Debug.Log($"{GetType().Name} -> type: {message.type}");
         Handle(message.type, message.payload);
     }
 
@@ -105,7 +109,7 @@ public abstract class BaseClient
 
     // ===== Envio =====
 
-    protected void Send(string type, object payload = null)
+    protected void Send(string type, string payload = null)
     {
         if (!isConnected)
             return;
@@ -132,7 +136,7 @@ public abstract class BaseClient
     protected class OutgoingMessage
     {
         public string type;
-        public object payload;
+        public string payload;
     }
 }
 

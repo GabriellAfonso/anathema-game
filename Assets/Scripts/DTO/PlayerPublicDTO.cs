@@ -2,8 +2,7 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class OtherPlayerProfileDTO
-{
+public class PlayerPublicDTO{
     public string nickname;
     public string icon;
     public int level;

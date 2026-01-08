@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class LoginController : MonoBehaviour
 {
+
     [Header("UI")]
     [SerializeField] private TMP_InputField usernameInput;
     [SerializeField] private TMP_InputField passwordInput;
@@ -19,6 +20,11 @@ public class LoginController : MonoBehaviour
 
         usernameInput.onSubmit.AddListener(_ => HandleLogin());
         passwordInput.onSubmit.AddListener(_ => HandleLogin());
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        int pid = System.Diagnostics.Process.GetCurrentProcess().Id;
+        DevPlayerIndex = pid % 2; // alterna entre 0 e 1
+#endif
     }
 
     private void HandleLogin()
@@ -135,6 +141,39 @@ public class LoginController : MonoBehaviour
     private void SetLoginInteractable(bool value)
     {
         loginButton.interactable = value;
+    }
+
+    [Header("Dev Login (Editor Only)")]
+    [SerializeField] private int DevPlayerIndex = 0; // 0 = player1, 1 = player2
+
+    [System.Serializable]
+    private class DevUser
+    {
+        public string username;
+        public string password;
+    }
+
+    private void Start()
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        AutoLoginDev();
+#endif
+    }
+
+    private void AutoLoginDev()
+    {
+        var devUsers = new DevUser[]
+        {
+        new DevUser { username = "teste1", password = "123456" },
+        new DevUser { username = "teste7", password = "123456" }
+        };
+
+        //if (DevPlayerIndex < 0 || DevPlayerIndex >= devUsers.Length)
+        //    DevPlayerIndex = 0;
+
+        var user = devUsers[DevPlayerIndex];
+        Debug.Log($"Dev login automático: {user.username}");
+        StartCoroutine(SendLoginRequest(user.username, user.password));
     }
 
     [System.Serializable]

@@ -1,9 +1,15 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+
+using UnityEngine.SceneManagement;
+
 
 public class MatchmakingClient : BaseClient
 {
     private readonly Dictionary<string, Action<string>> handlers;
+
+    
 
     public MatchmakingClient(string baseUrl)
         : base(baseUrl)
@@ -17,6 +23,9 @@ public class MatchmakingClient : BaseClient
 
     protected override void Handle(string type, string payload)
     {
+        
+        Debug.Log("entrou no handler "+type);
+
         if (handlers.TryGetValue(type, out var handler))
         {
             handler(payload);
@@ -29,7 +38,12 @@ public class MatchmakingClient : BaseClient
 
     private void HandleStartMatch(string payload)
     {
+        Debug.Log(payload);
+        // criar dados versusContext
+        VersusContext.Instance.SetContext(payload);
+
         // starta a cena de versus
-        //manda conectar o matchClient ao matchcConsumer
+        SceneManager.LoadScene("VersusScene");
+        // manda conectar o matchClient ao matchcConsumer
     }
 }

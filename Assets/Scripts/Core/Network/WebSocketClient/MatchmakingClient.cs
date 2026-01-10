@@ -1,38 +1,29 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 using UnityEngine.SceneManagement;
 
-public class MatchClient : BaseClient
+
+public class MatchmakingClient : BaseClient
 {
     private readonly Dictionary<string, Action<string>> handlers;
 
-    string MatchId;
+    
 
-    public MatchClient(string baseUrl)
+    public MatchmakingClient(string baseUrl)
         : base(baseUrl)
     {
         handlers = new Dictionary<string, Action<string>>
         {
-            { "match_start", HandleStartMatch }
+            { "match_found", HandleMatchFound }
             // adicione outros tipos aqui
         };
     }
 
-    public void SetMatchId(string matchId)
-    {
-        MatchId = matchId;
-    }
-
-    protected override string BuildUrl()
-    {
-        // Mantém o baseUrl e adiciona token + matchId na query string
-        return $"{this.baseUrl}?token={this.token}&matchId={this.MatchId}";
-    }
-
     protected override void Handle(string type, string payload)
     {
-
+        
 
         if (handlers.TryGetValue(type, out var handler))
         {
@@ -44,8 +35,20 @@ public class MatchClient : BaseClient
         }
     }
 
-    private void HandleStartMatch(string payload)
+    private void HandleMatchFound(string payload)
     {
-  
+        // criar dados versusContext
+        VersusContext.Instance.SetContext(payload);
+
+        // starta a cena de versus
+        SceneManager.LoadScene("VersusScene");
+
+        // manda conectar o matchClient ao matchcConsumer
+        var matchId = VersusContext.Instance.MatchId;
+        var matchClient = NetworkBootstrap.MatchClient;
+
+        matchClient.SetMatchId(matchId);
+        matchClient.Connect();
+
     }
 }

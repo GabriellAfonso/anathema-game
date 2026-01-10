@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-public class WebSocketClient : MonoBehaviour
+public class NetworkBootstrap : MonoBehaviour
 {
     public static ConnectionClient ConnectionClient { get; private set; }
     public static MatchmakingClient MatchmakingClient { get; private set; }

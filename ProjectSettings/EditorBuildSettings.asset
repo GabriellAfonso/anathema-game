@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/VersusScene.unity
     guid: e2a6ad90559212b4cb531adf1c22bd2a
+  - enabled: 1
+    path: Assets/Scenes/MatchScene.unity
+    guid: a424bd707a870ea4fba3d8486310bfa6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -4,7 +4,7 @@ public class MyButtonScript : MonoBehaviour
 {
     public void OnClickAction()
     {
-        var matchmakingClient = WebSocketClient.MatchmakingClient;
+        var matchmakingClient = NetworkBootstrap.MatchmakingClient;
         matchmakingClient.Connect();
     }
 }

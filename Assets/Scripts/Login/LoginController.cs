@@ -106,7 +106,7 @@ public class LoginController : MonoBehaviour
         var response = JsonUtility.FromJson<LoginResponseDTO>(jsonResponse);
 
         Debug.Log($"Login bem-sucedido no ambiente: {AppEnvManager.Settings.name}");
-        var connectionClient = WebSocketClient.ConnectionClient;
+        var connectionClient = NetworkBootstrap.ConnectionClient;
 
         connectionClient.OnConnected += HandleSocketConnected;
         connectionClient.OnConnectionError += HandleSocketError;
@@ -119,8 +119,8 @@ public class LoginController : MonoBehaviour
 
     private void HandleSocketConnected()
     {
-        WebSocketClient.ConnectionClient.OnConnected -= HandleSocketConnected;
-        WebSocketClient.ConnectionClient.OnConnectionError -= HandleSocketError;
+        NetworkBootstrap.ConnectionClient.OnConnected -= HandleSocketConnected;
+        NetworkBootstrap.ConnectionClient.OnConnectionError -= HandleSocketError;
 
       
 
@@ -130,8 +130,8 @@ public class LoginController : MonoBehaviour
 
     private void HandleSocketError(string error)
     {
-        WebSocketClient.ConnectionClient.OnConnected -= HandleSocketConnected;
-        WebSocketClient.ConnectionClient.OnConnectionError -= HandleSocketError;
+        NetworkBootstrap.ConnectionClient.OnConnected -= HandleSocketConnected;
+        NetworkBootstrap.ConnectionClient.OnConnectionError -= HandleSocketError;
 
         Debug.LogError($"Erro ao conectar no WebSocket: {error}");
     }

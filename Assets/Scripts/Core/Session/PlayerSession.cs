@@ -5,6 +5,7 @@ public class PlayerSession : MonoBehaviour
     public static PlayerSession Instance { get; private set; }
 
     public string Token { get; private set; }
+    public string RefreshToken { get; private set; }
     public string Nickname { get; private set; }
     public string Icon { get; private set; }
     public int Level { get; private set; }
@@ -36,7 +37,17 @@ public class PlayerSession : MonoBehaviour
 
     }
 
-    public void SetToken(string token)
+    /// <summary>Guarda o par que o login devolve. O refresh e o unico jeito
+    /// de sobreviver aos 5 minutos de vida do access token.</summary>
+    public void SetTokens(string token, string refreshToken)
+    {
+        Token = token;
+        RefreshToken = refreshToken;
+    }
+
+    /// <summary>So o access token, usado pelo TokenRefreshService: o refresh
+    /// segue valido e nao pode ser sobrescrito aqui.</summary>
+    public void SetAccessToken(string token)
     {
         Token = token;
     }

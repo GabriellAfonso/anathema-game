@@ -77,7 +77,7 @@ public class LoginController : MonoBehaviour
 
     private string BuildLoginUrl()
     {
-        return $"http://{AppEnvManager.Settings.apiBaseUrl}{AppEnvManager.Settings.loginEndpoint}";
+        return AppEnvManager.Settings.HttpUrl(AppEnvManager.Settings.loginEndpoint);
     }
 
     private string BuildLoginRequestDto(string username, string password)
@@ -111,7 +111,7 @@ public class LoginController : MonoBehaviour
         connectionClient.OnConnected += HandleSocketConnected;
         connectionClient.OnConnectionError += HandleSocketError;
 
-        PlayerSession.Instance.SetToken(response.token);
+        PlayerSession.Instance.SetTokens(response.token, response.refresh);
         SelfProfileService.Instance.LoadProfile(response.token);
 
         connectionClient.Connect();

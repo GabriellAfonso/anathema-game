@@ -46,6 +46,6 @@ public class SelfProfileService : MonoBehaviour
     }
     private string BuildFetchSelfProfileUrl()
     {
-        return $"http://{AppEnvManager.Settings.apiBaseUrl}{AppEnvManager.Settings.playerMe}";
+        return AppEnvManager.Settings.HttpUrl(AppEnvManager.Settings.playerMe);
     }
 }

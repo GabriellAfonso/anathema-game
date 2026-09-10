@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: AppConfig_Prod
   m_EditorClassIdentifier: Assembly-CSharp::AppConfig
   apiBaseUrl: 
+  useTls: 1
   loginEndpoint: 

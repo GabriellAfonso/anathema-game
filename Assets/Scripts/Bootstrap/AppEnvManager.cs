@@ -11,11 +11,22 @@ public class AppEnvManager : MonoBehaviour
 
     private void Awake()
     {
-        //Debug.Log("Acordou o envmanger");
+        DontDestroyOnLoad(gameObject);
+
         Settings = isProd ? configProd : configDev;
 
-        print($"AppEnvManager: Loaded {(isProd ? "Production" : "Development")} Config");
+        if (Settings == null)
+        {
+            Debug.LogError($"AppEnvManager: config {(isProd ? "configProd" : "configDev")} nao foi atribuido no Inspector.");
+            return;
+        }
 
-        DontDestroyOnLoad(gameObject);
+        if (string.IsNullOrEmpty(Settings.apiBaseUrl))
+            Debug.LogError($"AppEnvManager: apiBaseUrl vazio em {Settings.name}.");
+
+        if (isProd && !Settings.useTls)
+            Debug.LogError($"AppEnvManager: config de producao ({Settings.name}) esta com useTls desligado. Token JWT vai trafegar em texto puro.");
+
+        print($"AppEnvManager: Loaded {(isProd ? "Production" : "Development")} Config");
     }
 }

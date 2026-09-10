@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: AppConfig_Dev
   m_EditorClassIdentifier: Assembly-CSharp::AppConfig
   apiBaseUrl: 127.0.0.1:8000
+  useTls: 0
   loginEndpoint: /accounts/login/
   playerMe: /players/me/
+  tokenRefreshEndpoint: /accounts/token/refresh/
   connectionConsumerUrl: /ws/connection/
   matchmakingConsumerUrl: /ws/matchmaking/
   matchConsumerUrl: /ws/match/

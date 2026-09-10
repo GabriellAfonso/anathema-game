@@ -1,60 +1,100 @@
 using System.Collections.Generic;
 using UnityEngine;
-using NativeWebSocket;
 
+/// <summary>
+/// Da tempo de execucao aos clients: bombeia as mensagens recebidas e conta o
+/// backoff da reconexao, um passo por frame.
+///
+/// Registra o client, e nao o socket: a cada reconexao nasce um WebSocket novo,
+/// e o client e quem sobrevive a isso.
+/// </summary>
 public class WebSocketDispatcher : MonoBehaviour
 {
-    public static WebSocketDispatcher Instance { get; private set; }
-    private readonly List<WebSocket> sockets = new();
-    private readonly List<WebSocket> toAdd = new();
-    private readonly List<WebSocket> toRemove = new();
+    private static WebSocketDispatcher instance;
 
+    /// <summary>
+    /// Cria o dispatcher se ele nao estiver em cena. Sem ele nenhum client
+    /// recebe mensagem, e faltar o objeto na cena daria NullReferenceException
+    /// no primeiro Connect().
+    /// </summary>
+    public static WebSocketDispatcher Instance
+    {
+        get
+        {
+            if (instance != null)
+                return instance;
+
+            var host = new GameObject(nameof(WebSocketDispatcher));
+            DontDestroyOnLoad(host);
+
+            // AddComponent roda o Awake na hora, que ja preenche `instance`.
+            host.AddComponent<WebSocketDispatcher>();
+
+            return instance;
+        }
+    }
+
+    private readonly List<BaseClient> clients = new();
+    private readonly List<BaseClient> toAdd = new();
+    private readonly List<BaseClient> toRemove = new();
 
     private void Awake()
     {
-        if (Instance != null)
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        Instance = this;
+        instance = this;
         DontDestroyOnLoad(gameObject);
     }
- 
-    public void Register(WebSocket socket)
+
+    public void Register(BaseClient client)
     {
-        if (!toAdd.Contains(socket))
-            toAdd.Add(socket);
+        if (client == null)
+            return;
+
+        toRemove.Remove(client);
+
+        if (!clients.Contains(client) && !toAdd.Contains(client))
+            toAdd.Add(client);
     }
 
-    public void Unregister(WebSocket socket)
+    public void Unregister(BaseClient client)
     {
-        if (!toRemove.Contains(socket))
-            toRemove.Add(socket);
+        if (client == null)
+            return;
+
+        toAdd.Remove(client);
+
+        if (clients.Contains(client) && !toRemove.Contains(client))
+            toRemove.Add(client);
     }
 
     private void Update()
     {
-#if !UNITY_WEBGL || UNITY_EDITOR
-        foreach (var socket in sockets)
-        {
-            socket?.DispatchMessageQueue();
-        }
+        // Tempo nao escalado: com timeScale em 0 numa pausa ou num overlay de
+        // reconexao, a contagem do backoff precisa continuar andando.
+        var delta = Time.unscaledDeltaTime;
+
+        // Itera antes de aplicar as listas: um Pump pode registrar ou remover
+        // client, e mutar a colecao no meio do foreach quebraria.
+        foreach (var client in clients)
+            client?.Pump(delta);
 
         if (toAdd.Count > 0)
         {
-            sockets.AddRange(toAdd);
+            clients.AddRange(toAdd);
             toAdd.Clear();
         }
 
         if (toRemove.Count > 0)
         {
-            foreach (var s in toRemove)
-                sockets.Remove(s);
+            foreach (var client in toRemove)
+                clients.Remove(client);
+
             toRemove.Clear();
         }
-#endif
     }
-
 }

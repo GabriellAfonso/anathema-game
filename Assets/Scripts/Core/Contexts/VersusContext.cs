@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class VersusContext : MonoBehaviour
@@ -21,8 +22,14 @@ public class VersusContext : MonoBehaviour
     }
 
     public void SetContext(string json)
-    {  
-        var dto = JsonUtility.FromJson<VersusDTO>(json);
+    {
+        var dto = JsonConvert.DeserializeObject<VersusDTO>(json);
+
+        if (dto == null)
+        {
+            Debug.LogError($"VersusContext: payload de match_found nao desserializou: {json}");
+            return;
+        }
 
         Player = dto.self;
         Opponent = dto.opponent;

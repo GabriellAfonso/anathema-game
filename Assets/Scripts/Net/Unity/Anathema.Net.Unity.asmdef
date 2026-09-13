@@ -1,0 +1,17 @@
+{
+    "name": "Anathema.Net.Unity",
+    "rootNamespace": "Anathema.Net.Unity",
+    "references": [
+        "Anathema.Net.Core",
+        "Anathema.Net.Json"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class MatchClient : BaseClient
 {
+    private const string MatchSceneName = "MatchScene";
+
     private readonly Dictionary<string, Action<string>> handlers;
 
     string MatchId;
@@ -45,9 +48,29 @@ public class MatchClient : BaseClient
         Debug.LogWarning($"{GetType().Name}: sem handler para o tipo '{type}'.");
     }
 
+    /// <summary>
+    /// Chega no inicio da partida e de novo a cada reconexao, com o estado
+    /// atual. Precisa ser idempotente: recarregar a cena numa reconexao
+    /// apagaria a partida que o jogador estava vendo.
+    /// </summary>
     private void HandleStartMatch(string payload)
     {
-        SceneManager.LoadScene("MatchScene");
+        var state = JsonConvert.DeserializeObject<MatchStateDTO>(payload);
+
+        if (state == null)
+        {
+            Debug.LogError($"{GetType().Name}: match_start sem estado: {payload}");
+            return;
+        }
+
+        // Antes de carregar: a cena le o estado da sessao quando sobe, entao
+        // ele precisa ja estar la.
+        MatchSession.Instance.ApplyState(state);
+
+        if (SceneManager.GetActiveScene().name == MatchSceneName)
+            return;
+
+        SceneManager.LoadScene(MatchSceneName);
     }
 
     /// <summary>

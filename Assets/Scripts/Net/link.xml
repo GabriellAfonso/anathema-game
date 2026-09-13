@@ -1,0 +1,10 @@
+<linker>
+    <!--
+        O codec lê cada campo à mão, sem desserialização por reflexão, então o
+        IL2CPP não tem o que remover por engano. Preservar os dois assemblies
+        inteiros cobre os braços de união que as features seguintes registrarem
+        neles. Ver specs/001-server-connection/research.md, R7.
+    -->
+    <assembly fullname="Anathema.Net.Core" preserve="all"/>
+    <assembly fullname="Anathema.Net.Json" preserve="all"/>
+</linker>

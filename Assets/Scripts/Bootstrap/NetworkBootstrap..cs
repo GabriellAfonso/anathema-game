@@ -26,6 +26,10 @@ public class NetworkBootstrap : MonoBehaviour
         MatchClient = new MatchClient(
             config.WsUrl(config.matchConsumerUrl),
             MatchPolicy());
+
+        // Aqui, e nao num RuntimeInitializeOnLoadMethod: e o unico ponto em que
+        // os clients ja existem e a ordem e garantida.
+        ReconnectOverlay.Attach(MatchmakingClient, MatchClient);
     }
 
     /// <summary>

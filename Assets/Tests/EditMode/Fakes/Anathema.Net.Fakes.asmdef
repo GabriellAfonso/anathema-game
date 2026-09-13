@@ -1,0 +1,20 @@
+{
+    "name": "Anathema.Net.Fakes",
+    "rootNamespace": "Anathema.Net.Fakes",
+    "references": [
+        "Anathema.Net.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

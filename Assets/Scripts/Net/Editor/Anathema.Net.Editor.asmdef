@@ -1,0 +1,19 @@
+{
+    "name": "Anathema.Net.Editor",
+    "rootNamespace": "Anathema.Net.Editor",
+    "references": [
+        "Anathema.Net.Core",
+        "Anathema.Config"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

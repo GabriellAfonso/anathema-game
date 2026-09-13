@@ -106,34 +106,12 @@ public class LoginController : MonoBehaviour
         var response = JsonUtility.FromJson<LoginResponseDTO>(jsonResponse);
 
         Debug.Log($"Login bem-sucedido no ambiente: {AppEnvManager.Settings.name}");
-        var connectionClient = NetworkBootstrap.ConnectionClient;
-
-        connectionClient.OnConnected += HandleSocketConnected;
-        connectionClient.OnConnectionError += HandleSocketError;
 
         PlayerSession.Instance.SetTokens(response.token, response.refresh);
         SelfProfileService.Instance.LoadProfile(response.token);
 
-        connectionClient.Connect();
-    }
-
-    private void HandleSocketConnected()
-    {
-        NetworkBootstrap.ConnectionClient.OnConnected -= HandleSocketConnected;
-        NetworkBootstrap.ConnectionClient.OnConnectionError -= HandleSocketError;
-
-      
-
-
+        // O socket de presenca (ws/connection/) saiu do backend; a Home nao espera mais por ele.
         SceneManager.LoadScene("HomeScene");
-    }
-
-    private void HandleSocketError(string error)
-    {
-        NetworkBootstrap.ConnectionClient.OnConnected -= HandleSocketConnected;
-        NetworkBootstrap.ConnectionClient.OnConnectionError -= HandleSocketError;
-
-        Debug.LogError($"Erro ao conectar no WebSocket: {error}");
     }
 
     private void SetLoginInteractable(bool value)

@@ -1,0 +1,17 @@
+{
+    "name": "Anathema.Config",
+    "rootNamespace": "Anathema.Config",
+    "references": [
+        "Anathema.Net.Core",
+        "Anathema.Net.Unity"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

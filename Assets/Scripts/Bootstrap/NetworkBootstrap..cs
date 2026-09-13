@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class NetworkBootstrap : MonoBehaviour
 {
-    public static ConnectionClient ConnectionClient { get; private set; }
     public static MatchmakingClient MatchmakingClient { get; private set; }
     public static MatchClient MatchClient { get; private set; }
 
@@ -15,10 +14,8 @@ public class NetworkBootstrap : MonoBehaviour
 
         var config = AppEnvManager.Settings;
 
-        ConnectionClient = new ConnectionClient(
-            config.WsUrl(config.connectionConsumerUrl),
-            PresencePolicy());
-
+        // A rota ws/connection/ saiu do backend; o ConnectionClient deixou de ser criado
+        // (specs/001-server-connection/plan.md, "Codigo anterior tocado").
         MatchmakingClient = new MatchmakingClient(
             config.WsUrl(config.matchmakingConsumerUrl),
             QueuePolicy());
@@ -30,17 +27,6 @@ public class NetworkBootstrap : MonoBehaviour
         // Aqui, e nao num RuntimeInitializeOnLoadMethod: e o unico ponto em que
         // os clients ja existem e a ordem e garantida.
         ReconnectOverlay.Attach(MatchmakingClient, MatchClient);
-    }
-
-    /// <summary>
-    /// Presenca: tenta para sempre, sem pressa. Cair daqui nao atrapalha
-    /// nenhuma acao do jogador.
-    /// </summary>
-    private static ReconnectPolicy PresencePolicy()
-    {
-        return new ReconnectPolicy(
-            baseDelaySeconds: 1.0,
-            maxDelaySeconds: 60.0);
     }
 
     /// <summary>

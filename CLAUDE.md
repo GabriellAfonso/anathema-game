@@ -157,5 +157,5 @@ Decisões em vigor:
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
-`specs/002-player-account/plan.md`
+`specs/003-authenticated-socket-queue/plan.md`
 <!-- SPECKIT END -->

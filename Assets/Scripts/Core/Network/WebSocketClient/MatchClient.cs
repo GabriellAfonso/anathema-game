@@ -1,51 +1,52 @@
-using Newtonsoft.Json;
+#nullable enable
 using System;
-using System.Collections.Generic;
-using UnityEngine;
+using Anathema.Net.Connection;
+using Anathema.Net.Core;
+using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Socket da partida no codigo de cena. A conexao abre com matchId e token, desiste sozinha no
+/// match_denied e reconecta recebendo match_start de novo. O que se faz com o payload de match_start
+/// continua como antes; tipar esse frame e o espelho da partida sao da feature 4.
+/// </summary>
+/// <example><code>PlayerSession.Instance.Match.Connect(pairing.Match);</code></example>
 public class MatchClient : BaseClient
 {
     private const string MatchSceneName = "MatchScene";
+    private const string MatchStartType = "match_start";
 
-    private readonly Dictionary<string, Action<string>> handlers;
+    private readonly Uri matchBase;
+    private readonly IClientLog log;
+    private bool nextTextIsMatchStart;
 
-    string MatchId;
-
-    public MatchClient(
-        string baseUrl,
-        ReconnectPolicy policy = null,
-        Heartbeat heartbeat = null)
-        : base(baseUrl, policy, heartbeat)
+    /// <summary>Cliente sobre a conexao de partida.</summary>
+    /// <example><code>MatchClient match = new MatchClient(connections.MatchConnection, connections.Routes.Match, log);</code></example>
+    public MatchClient(AuthenticatedConnection connection, Uri matchBase, IClientLog log)
+        : base(connection)
     {
-        handlers = new Dictionary<string, Action<string>>
-        {
-            { "match_start", HandleStartMatch },
-            { "match_denied", HandleMatchDenied },
-            // adicione outros tipos aqui
-        };
+        this.matchBase = matchBase ?? throw new ArgumentNullException(nameof(matchBase), "match base url is null: expected ConnectionRoutes.Match");
+        this.log = log ?? throw new ArgumentNullException(nameof(log), "log is null: expected the client log");
+        connection.FrameReceived += frame => nextTextIsMatchStart = frame.MessageType == MatchStartType;
+        connection.RawTextReceived += OnRawText;
     }
 
-    public void SetMatchId(string matchId)
+    /// <summary>Conecta ao socket da partida pareada e passa a se manter nele.</summary>
+    /// <example><code>match.Connect(pairing.Match);</code></example>
+    public void Connect(MatchId match)
     {
-        MatchId = matchId;
+        Connection.Connect(ConnectionTarget.Match(matchBase, match));
     }
 
-    protected override string BuildUrl()
+    private void OnRawText(string text)
     {
-        // Mantem o baseUrl e adiciona token + matchId na query string
-        return $"{this.baseUrl}?token={this.token}&matchId={this.MatchId}";
-    }
-
-    protected override void Handle(string type, string payload)
-    {
-        if (handlers.TryGetValue(type, out var handler))
-        {
-            handler(payload);
+        // Ponte ate a feature 4: o match_start ainda vira MatchStateDTO por JsonConvert, como antes
+        // (specs/003-authenticated-socket-queue/research.md, R12).
+        if (!nextTextIsMatchStart)
             return;
-        }
 
-        Debug.LogWarning($"{GetType().Name}: sem handler para o tipo '{type}'.");
+        nextTextIsMatchStart = false;
+        HandleStartMatch(JsonConvert.DeserializeObject<MatchStartEnvelope>(text)?.Payload);
     }
 
     /// <summary>
@@ -53,13 +54,11 @@ public class MatchClient : BaseClient
     /// atual. Precisa ser idempotente: recarregar a cena numa reconexao
     /// apagaria a partida que o jogador estava vendo.
     /// </summary>
-    private void HandleStartMatch(string payload)
+    private void HandleStartMatch(MatchStateDTO? state)
     {
-        var state = JsonConvert.DeserializeObject<MatchStateDTO>(payload);
-
         if (state == null)
         {
-            Debug.LogError($"{GetType().Name}: match_start sem estado: {payload}");
+            log.Error("match_start_without_state");
             return;
         }
 
@@ -73,27 +72,9 @@ public class MatchClient : BaseClient
         SceneManager.LoadScene(MatchSceneName);
     }
 
-    /// <summary>
-    /// O MatchConsumer recusou a entrada: sem matchId, jogador nao participa,
-    /// ou a partida nao existe mais. Reconectar nunca vai passar desse gate.
-    ///
-    /// A mensagem chega antes do close de proposito (MatchConsumer.reject), e e
-    /// a unica forma confiavel de saber o motivo: a NativeWebSocket achata todo
-    /// codigo fora de 1000-1015 em Undefined.
-    /// </summary>
-    private void HandleMatchDenied(string payload)
+    private sealed class MatchStartEnvelope
     {
-        var reason = ReadError(payload);
-
-        Debug.LogWarning($"{GetType().Name}: entrada na partida recusada: {reason}");
-
-        RejectReconnect(reason);
-    }
-
-    private static string ReadError(string payload)
-    {
-        var dto = JsonUtility.FromJson<ErrorPayloadDTO>(payload);
-
-        return string.IsNullOrEmpty(dto?.error) ? "motivo nao informado" : dto.error;
+        [JsonProperty("payload")]
+        public MatchStateDTO? Payload { get; set; }
     }
 }

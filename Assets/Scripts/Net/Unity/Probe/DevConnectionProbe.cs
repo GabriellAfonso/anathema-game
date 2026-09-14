@@ -66,7 +66,7 @@ namespace Anathema.Net.Unity
             UnityAppLifecycle lifecycle = UnityAppLifecycle.Create(adapters.Clock, adapters.Queue);
             UnityNetworkReachability reachability = UnityNetworkReachability.Create(adapters.Clock, adapters.Queue);
             LogSignals(adapters.Log, lifecycle, reachability);
-            layer.AddComponent<NetworkLayerHost>().Attach(adapters.Queue, lifecycle, reachability);
+            layer.AddComponent<NetworkLayerHost>().Attach(adapters.Queue, lifecycle, reachability, new UnityFrameTicker());
         }
 
         private static void LogSignals(IClientLog log, IAppLifecycle lifecycle, INetworkReachability reachability)

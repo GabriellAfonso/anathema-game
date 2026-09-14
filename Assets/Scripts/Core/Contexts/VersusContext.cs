@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using Anathema.Net.Connection;
 using UnityEngine;
 
 public class VersusContext : MonoBehaviour
@@ -21,23 +21,30 @@ public class VersusContext : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void SetContext(string json)
+    /// <summary>
+    /// Guarda o pareamento do match_found, ja tipado pela fila (feature 003), para a VersusScene mostrar.
+    /// </summary>
+    /// <example><code>VersusContext.Instance.SetContext(pairing);</code></example>
+    public void SetContext(MatchPairing pairing)
     {
-        var dto = JsonConvert.DeserializeObject<VersusDTO>(json);
-
-        if (dto == null)
-        {
-            Debug.LogError($"VersusContext: payload de match_found nao desserializou: {json}");
-            return;
-        }
-
-        Player = dto.self;
-        Opponent = dto.opponent;
-        MatchId = dto.match_id;
+        Player = ToPublic(pairing.Self);
+        Opponent = ToPublic(pairing.Opponent);
+        MatchId = pairing.Match.Value;
     }
 
     public void Clear()
     {
         Destroy(gameObject);
+    }
+
+    private static PlayerPublicDTO ToPublic(PairedPlayer player)
+    {
+        return new PlayerPublicDTO
+        {
+            user_id = (int)player.User.Value,
+            nickname = player.Nickname,
+            icon = player.Icon,
+            level = (int)player.Level,
+        };
     }
 }

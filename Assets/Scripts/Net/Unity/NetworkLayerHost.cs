@@ -13,7 +13,7 @@ namespace Anathema.Net.Unity
     /// <example>
     /// <code>
     /// NetworkLayerHost host = new GameObject("NetworkLayer").AddComponent&lt;NetworkLayerHost&gt;();
-    /// host.Attach(queue, lifecycle, reachability);
+    /// host.Attach(queue, lifecycle, reachability, ticker);
     /// </code>
     /// </example>
     public sealed class NetworkLayerHost : MonoBehaviour
@@ -21,20 +21,25 @@ namespace Anathema.Net.Unity
         private MainThreadQueue? queue;
         private UnityAppLifecycle? lifecycle;
         private UnityNetworkReachability? reachability;
+        private UnityFrameTicker? ticker;
 
         /// <summary>Liga o hospedeiro às peças da camada. Antes disso, ele não faz nada.</summary>
-        /// <example><code>host.Attach(queue, UnityAppLifecycle.Create(clock, queue), UnityNetworkReachability.Create(clock, queue));</code></example>
-        public void Attach(MainThreadQueue mainThreadQueue, UnityAppLifecycle appLifecycle, UnityNetworkReachability networkReachability)
+        /// <example><code>host.Attach(queue, UnityAppLifecycle.Create(clock, queue), UnityNetworkReachability.Create(clock, queue), new UnityFrameTicker());</code></example>
+        public void Attach(MainThreadQueue mainThreadQueue, UnityAppLifecycle appLifecycle, UnityNetworkReachability networkReachability, UnityFrameTicker frameTicker)
         {
             queue = mainThreadQueue ?? throw new ArgumentNullException(nameof(mainThreadQueue), "queue is null: expected the main thread queue");
             lifecycle = appLifecycle ?? throw new ArgumentNullException(nameof(appLifecycle), "lifecycle is null: expected the app lifecycle adapter");
             reachability = networkReachability ?? throw new ArgumentNullException(nameof(networkReachability), "reachability is null: expected the reachability adapter");
+            ticker = frameTicker ?? throw new ArgumentNullException(nameof(frameTicker), "ticker is null: expected the frame ticker that drives the connections");
         }
 
         private void Update()
         {
             reachability?.Poll();
             queue?.Drain();
+            // Depois de drenar: frames já recebidos contam antes de a conexão avaliar esperas e silêncio
+            // (specs/003-authenticated-socket-queue/research.md, R2 e R3).
+            ticker?.Raise();
         }
 
         private void OnApplicationPause(bool paused) => lifecycle?.OnPause(paused);

@@ -102,6 +102,27 @@ namespace Anathema.Net.Core
             return cards;
         }
 
+        /// <summary>Lista obrigatória de cópias na partida, na ordem; item negativo aponta o índice.</summary>
+        /// <example><code>IReadOnlyList&lt;CardInstanceId&gt; attackers = combat.ReadCardInstanceIdList("attacker_card_instance_ids");</code></example>
+        public static IReadOnlyList<CardInstanceId> ReadCardInstanceIdList(this IPayloadReader reader, string field)
+        {
+            IReadOnlyList<long> raw = reader.ReadIntegerList(field);
+            CardInstanceId[] cards = new CardInstanceId[raw.Count];
+            for (int index = 0; index < raw.Count; index++)
+                cards[index] = ToCardInstanceId(reader, field, index, raw[index]);
+
+            return cards;
+        }
+
+        private static CardInstanceId ToCardInstanceId(IPayloadReader reader, string field, int index, long raw)
+        {
+            if (raw >= 0)
+                return new CardInstanceId(raw);
+
+            string itemPath = PayloadPath.Item(PayloadPath.Field(reader.Path, field), index);
+            throw new PayloadShapeException(new DecodeFailure(DecodeFailureKind.InvalidValue, itemPath, $"{itemPath} is {raw}: expected a non-negative card_instance_id"));
+        }
+
         private static CardId ToCardId(IPayloadReader reader, string field, int index, long raw)
         {
             if (raw >= 1)

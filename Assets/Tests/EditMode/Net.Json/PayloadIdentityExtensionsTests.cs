@@ -116,5 +116,44 @@ namespace Anathema.Net.Json.Tests
             Assert.That(reader.ReadDeckId("deck_id"), Is.EqualTo(new DeckId(4)));
             Assert.That(reader.ReadCardIdList("card_ids"), Is.EqualTo(new[] { new CardId(9), new CardId(1001) }));
         }
+
+        [TestCase("{\"ids\": []}", new long[0])]
+        [TestCase("{\"ids\": [3, 7]}", new long[] { 3, 7 })]
+        public void ListaDeCardInstanceIdPreservaOrdem(string json, long[] expected)
+        {
+            IReadOnlyList<CardInstanceId> cards = Reader(json).ReadCardInstanceIdList("ids");
+
+            Assert.That(cards, Is.EqualTo(System.Array.ConvertAll(expected, value => new CardInstanceId(value))));
+        }
+
+        [Test]
+        public void ListaDeCardInstanceIdComNegativoApontaOItem()
+        {
+            PayloadShapeException error = Assert.Throws<PayloadShapeException>(() => Reader("{\"attackers\": [21, -1]}").ReadCardInstanceIdList("attackers"));
+
+            Assert.That(error.Failure.Kind, Is.EqualTo(DecodeFailureKind.InvalidValue));
+            Assert.That(error.Failure.Path, Is.EqualTo("attackers[1]"));
+        }
+
+        [Test]
+        public void ListaDeCardInstanceIdComTextoEhTipoErrado()
+        {
+            PayloadShapeException error = Assert.Throws<PayloadShapeException>(() => Reader("{\"attackers\": [21, \"22\"]}").ReadCardInstanceIdList("attackers"));
+
+            Assert.That(error.Failure.Kind, Is.EqualTo(DecodeFailureKind.WrongFieldType));
+            Assert.That(error.Failure.Path, Is.EqualTo("attackers[1]"));
+        }
+
+        [Test]
+        public void IdaEVoltaDeListaDeCardInstanceId()
+        {
+            string json = Codec().EncodeObject(writer =>
+            {
+                writer.WriteCardInstanceIdList("filled", new[] { new CardInstanceId(3), new CardInstanceId(7) });
+                writer.WriteCardInstanceIdList("empty", new CardInstanceId[0]);
+            });
+
+            Assert.That(json, Is.EqualTo("{\"filled\":[3,7],\"empty\":[]}"));
+        }
     }
 }

@@ -46,5 +46,12 @@ namespace Anathema.Net.Core
         {
             writer.WriteIntegerList(field, cards.Select(card => card.Value).ToArray());
         }
+
+        /// <summary>Escreve a lista de cópias na partida como inteiros crus, na ordem dada; vazia vira <c>[]</c>.</summary>
+        /// <example><code>writer.WriteCardInstanceIdList("attacker_card_instance_ids", attackers);</code></example>
+        public static void WriteCardInstanceIdList(this IPayloadWriter writer, string field, IReadOnlyList<CardInstanceId> cards)
+        {
+            writer.WriteIntegerList(field, cards.Select(card => card.Value).ToArray());
+        }
     }
 }

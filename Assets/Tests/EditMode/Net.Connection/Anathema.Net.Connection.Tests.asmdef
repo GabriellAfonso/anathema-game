@@ -1,0 +1,28 @@
+{
+    "name": "Anathema.Net.Connection.Tests",
+    "rootNamespace": "Anathema.Net.Connection.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Anathema.Net.Core",
+        "Anathema.Net.Json",
+        "Anathema.Net.Account",
+        "Anathema.Net.Connection",
+        "Anathema.Net.Fakes"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

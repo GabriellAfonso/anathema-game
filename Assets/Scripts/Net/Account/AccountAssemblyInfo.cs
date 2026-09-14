@@ -6,3 +6,8 @@ using System.Runtime.CompilerServices;
 // e UnrecognizedCatalogCard. Expor tudo isso como público só para testar vazaria detalhe
 // de implementação para a apresentação e para as features seguintes.
 [assembly: InternalsVisibleTo("Anathema.Net.Account.Tests")]
+
+// O FakeAccessTokenSource da feature 003 cria AccessToken pelo construtor interno. O construtor
+// continua fechado para o código de produção: a assembly de fakes é só de editor e só existe com
+// UNITY_INCLUDE_TESTS (specs/003-authenticated-socket-queue/research.md, R5).
+[assembly: InternalsVisibleTo("Anathema.Net.Fakes")]

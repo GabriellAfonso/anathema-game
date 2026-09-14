@@ -1,21 +1,17 @@
 {
-    "name": "Anathema.Net.Fakes",
-    "rootNamespace": "Anathema.Net.Fakes",
+    "name": "Anathema.Net.Connection",
+    "rootNamespace": "Anathema.Net.Connection",
     "references": [
         "Anathema.Net.Core",
         "Anathema.Net.Account"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": false,
-    "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
-    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": true
 }

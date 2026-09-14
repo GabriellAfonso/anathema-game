@@ -1,4 +1,6 @@
 #nullable enable
+using Anathema.Net.Core;
+using Anathema.Net.Account;
 using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
@@ -91,6 +93,57 @@ namespace Anathema.Config.Tests
         public void RotaDoSocketDePresencaSaiu()
         {
             Assert.That(typeof(AppConfig).GetField("connectionConsumerUrl", BindingFlags.Public | BindingFlags.Instance), Is.Null);
+        }
+
+        [Test]
+        public void RotasDeContaSaemNoHostEfetivo()
+        {
+            FillAccountRoutes();
+
+            AccountRoutes routes = config.BuildAccountRoutes();
+
+            Assert.That(routes.Login.ToString(), Is.EqualTo("http://127.0.0.1:8000/accounts/login/"));
+            Assert.That(routes.Refresh.ToString(), Is.EqualTo("http://127.0.0.1:8000/accounts/token/refresh/"));
+            Assert.That(routes.Deck(new DeckId(4)).ToString(), Is.EqualTo("http://127.0.0.1:8000/players/decks/4/"));
+            Assert.That(routes.Matches.ToString(), Is.EqualTo("http://127.0.0.1:8000/game/matches/"));
+        }
+
+        [Test]
+        public void RotasDeContaSeguemUseTls()
+        {
+            FillAccountRoutes();
+            config.useTls = true;
+
+            Assert.That(config.BuildAccountRoutes().Cards.ToString(), Is.EqualTo("https://127.0.0.1:8000/game/cards/"));
+        }
+
+        [TestCase("registerEndpoint")]
+        [TestCase("cardsEndpoint")]
+        [TestCase("decksEndpoint")]
+        [TestCase("matchesEndpoint")]
+        [TestCase("loginEndpoint")]
+        [TestCase("playerMe")]
+        [TestCase("tokenRefreshEndpoint")]
+        public void RotaDeContaVaziaLancaComOCampoEOAsset(string field)
+        {
+            FillAccountRoutes();
+            config.name = "AppConfig_Test";
+            typeof(AppConfig).GetField(field)!.SetValue(config, "");
+
+            System.InvalidOperationException error = Assert.Throws<System.InvalidOperationException>(() => config.BuildAccountRoutes());
+
+            Assert.That(error.Message, Does.Contain(field).And.Contain("AppConfig_Test"));
+        }
+
+        private void FillAccountRoutes()
+        {
+            config.registerEndpoint = "/accounts/register/";
+            config.loginEndpoint = "/accounts/login/";
+            config.tokenRefreshEndpoint = "/accounts/token/refresh/";
+            config.playerMe = "/players/me/";
+            config.cardsEndpoint = "/game/cards/";
+            config.decksEndpoint = "/players/decks/";
+            config.matchesEndpoint = "/game/matches/";
         }
     }
 }

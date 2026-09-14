@@ -1,4 +1,5 @@
 #nullable enable
+using Anathema.Net.Account;
 using Anathema.Net.Core;
 using Anathema.Net.Unity;
 using UnityEngine;
@@ -22,6 +23,10 @@ public class AppConfig : ScriptableObject
     public string loginEndpoint = "";
     public string playerMe = "";
     public string tokenRefreshEndpoint = "";
+    public string registerEndpoint = "";
+    public string cardsEndpoint = "";
+    public string decksEndpoint = "";
+    public string matchesEndpoint = "";
 
     // connectionConsumerUrl saiu: a rota ws/connection/ nao existe mais no backend.
     [Header("WebSocket")]
@@ -80,6 +85,31 @@ public class AppConfig : ScriptableObject
     public string WsUrl(string path)
     {
         return $"{(useTls ? "wss" : "ws")}://{EffectiveHost}{path}";
+    }
+
+    /// <summary>
+    /// Rotas HTTP de conta e dados do jogador no host efetivo. Rota vazia lança com o campo e o
+    /// asset, para o erro de configuração aparecer na composição e não no primeiro pedido.
+    /// </summary>
+    /// <example><code>AccountRoutes routes = AppEnvManager.Settings.BuildAccountRoutes();</code></example>
+    public AccountRoutes BuildAccountRoutes()
+    {
+        return new AccountRoutes(
+            RouteUrl(registerEndpoint, nameof(registerEndpoint)),
+            RouteUrl(loginEndpoint, nameof(loginEndpoint)),
+            RouteUrl(tokenRefreshEndpoint, nameof(tokenRefreshEndpoint)),
+            RouteUrl(playerMe, nameof(playerMe)),
+            RouteUrl(cardsEndpoint, nameof(cardsEndpoint)),
+            RouteUrl(decksEndpoint, nameof(decksEndpoint)),
+            RouteUrl(matchesEndpoint, nameof(matchesEndpoint)));
+    }
+
+    private System.Uri RouteUrl(string path, string field)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            throw new System.InvalidOperationException($"{field} is '{path}' in {name}: expected a route like /accounts/login/");
+
+        return new System.Uri(HttpUrl(path));
     }
 
     private void ApplyLaunchHostOnce()

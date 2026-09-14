@@ -3,6 +3,7 @@
     "rootNamespace": "Anathema.Config",
     "references": [
         "Anathema.Net.Core",
+        "Anathema.Net.Account",
         "Anathema.Net.Unity"
     ],
     "includePlatforms": [],

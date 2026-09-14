@@ -15,3 +15,7 @@ MonoBehaviour:
   apiBaseUrl: 
   useTls: 1
   loginEndpoint: 
+  registerEndpoint: 
+  cardsEndpoint: 
+  decksEndpoint: 
+  matchesEndpoint: 

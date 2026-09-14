@@ -1,0 +1,16 @@
+{
+    "name": "Anathema.Net.Account",
+    "rootNamespace": "Anathema.Net.Account",
+    "references": [
+        "Anathema.Net.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

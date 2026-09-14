@@ -1,4 +1,6 @@
 #nullable enable
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Anathema.Net.Core
 {
@@ -29,6 +31,20 @@ namespace Anathema.Net.Core
         public static void WriteMatchId(this IPayloadWriter writer, string field, MatchId id)
         {
             writer.WriteText(field, id.Value);
+        }
+
+        /// <summary>Escreve o deck como inteiro cru.</summary>
+        /// <example><code>writer.WriteDeckId("deck_id", deck);</code></example>
+        public static void WriteDeckId(this IPayloadWriter writer, string field, DeckId id)
+        {
+            writer.WriteInteger(field, id.Value);
+        }
+
+        /// <summary>Escreve a lista de cartas como inteiros crus, na ordem dada.</summary>
+        /// <example><code>writer.WriteCardIdList("card_ids", draft.Cards);</code></example>
+        public static void WriteCardIdList(this IPayloadWriter writer, string field, IReadOnlyList<CardId> cards)
+        {
+            writer.WriteIntegerList(field, cards.Select(card => card.Value).ToArray());
         }
     }
 }

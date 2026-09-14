@@ -9,11 +9,11 @@ namespace Anathema.Net.Core.Tests
     /// <summary>
     /// Trocar um identificador pelo outro precisa ser erro de compilação (constituição,
     /// princípio III). Compilação que falha não vira teste; o que dá para garantir aqui é
-    /// que nenhum dos três ganhe uma conversão que abriria essa porta.
+    /// que nenhum deles ganhe uma conversão que abriria essa porta.
     /// </summary>
     public class IdentityIsolationTests
     {
-        private static readonly Type[] IdentityTypes = { typeof(UserId), typeof(CardInstanceId), typeof(MatchId) };
+        private static readonly Type[] IdentityTypes = { typeof(UserId), typeof(CardInstanceId), typeof(MatchId), typeof(DeckId), typeof(CardId) };
 
         [Test]
         public void NenhumIdentificadorTemOperadorDeConversao()

@@ -53,6 +53,10 @@ namespace Anathema.Net.Core
         /// <example><code>IReadOnlyList&lt;long&gt; cards = payload.ReadIntegerList("card_ids");</code></example>
         IReadOnlyList<long> ReadIntegerList(string field);
 
+        /// <summary>Lista obrigatória de textos.</summary>
+        /// <example><code>IReadOnlyList&lt;string&gt; messages = refusal.ReadTextList("email");</code></example>
+        IReadOnlyList<string> ReadTextList(string field);
+
         /// <summary>Texto opcional: nulo se ausente ou <c>null</c>; tipo errado lança.</summary>
         /// <example><code>string? reason = payload.ReadOptionalText("reason");</code></example>
         string? ReadOptionalText(string field);

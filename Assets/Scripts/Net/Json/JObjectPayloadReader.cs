@@ -78,6 +78,15 @@ namespace Anathema.Net.Json
             return items.Select((item, index) => AsInteger(PayloadPath.Item(listPath, index), field, item)).ToArray();
         }
 
+        /// <summary>Lista obrigatória de textos; item que não é texto aponta o índice.</summary>
+        /// <example><code>IReadOnlyList&lt;string&gt; messages = reader.ReadTextList("name");</code></example>
+        public IReadOnlyList<string> ReadTextList(string field)
+        {
+            JArray items = AsArray(field, Required(field));
+            string listPath = PayloadPath.Field(Path, field);
+            return items.Select((item, index) => ItemAsText(PayloadPath.Item(listPath, index), item)).ToArray();
+        }
+
         /// <summary>Texto opcional.</summary>
         /// <example><code>string? reason = reader.ReadOptionalText("reason");</code></example>
         public string? ReadOptionalText(string field)
@@ -142,6 +151,14 @@ namespace Anathema.Net.Json
                 throw Shape(DecodeFailureKind.WrongFieldType, itemPath, $"{itemPath} is {JsonSnippet.Of(item)}: expected an object");
 
             return new JObjectPayloadReader((JObject)item, itemPath);
+        }
+
+        private static string ItemAsText(string itemPath, JToken item)
+        {
+            if (item.Type != JTokenType.String)
+                throw Shape(DecodeFailureKind.WrongFieldType, itemPath, $"{itemPath} is {JsonSnippet.Of(item)}: expected text");
+
+            return item.Value<string>() ?? string.Empty;
         }
 
         private static long AsInteger(string path, string field, JToken token)

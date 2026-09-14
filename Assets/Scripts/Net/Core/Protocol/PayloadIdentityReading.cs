@@ -1,4 +1,5 @@
 #nullable enable
+using System.Collections.Generic;
 
 namespace Anathema.Net.Core
 {
@@ -65,6 +66,49 @@ namespace Anathema.Net.Core
         public static MatchId? ReadOptionalMatchId(this IPayloadReader reader, string field)
         {
             return reader.ReadOptionalText(field) == null ? (MatchId?)null : reader.ReadMatchId(field);
+        }
+
+        /// <summary>Deck obrigatório, inteiro positivo.</summary>
+        /// <example><code>DeckId deck = payload.ReadDeckId("deck_id");</code></example>
+        public static DeckId ReadDeckId(this IPayloadReader reader, string field)
+        {
+            long raw = reader.ReadInteger(field);
+            if (raw < 1)
+                throw Invalid(reader, field, $"{field} is {raw}: expected a positive integer");
+
+            return new DeckId(raw);
+        }
+
+        /// <summary>Carta do catálogo obrigatória, inteiro positivo.</summary>
+        /// <example><code>CardId card = problem.ReadCardId("card_id");</code></example>
+        public static CardId ReadCardId(this IPayloadReader reader, string field)
+        {
+            long raw = reader.ReadInteger(field);
+            if (raw < 1)
+                throw Invalid(reader, field, $"{field} is {raw}: expected a positive integer");
+
+            return new CardId(raw);
+        }
+
+        /// <summary>Lista obrigatória de cartas do catálogo, na ordem e com as repetições.</summary>
+        /// <example><code>IReadOnlyList&lt;CardId&gt; cards = deck.ReadCardIdList("card_ids");</code></example>
+        public static IReadOnlyList<CardId> ReadCardIdList(this IPayloadReader reader, string field)
+        {
+            IReadOnlyList<long> raw = reader.ReadIntegerList(field);
+            CardId[] cards = new CardId[raw.Count];
+            for (int index = 0; index < raw.Count; index++)
+                cards[index] = ToCardId(reader, field, index, raw[index]);
+
+            return cards;
+        }
+
+        private static CardId ToCardId(IPayloadReader reader, string field, int index, long raw)
+        {
+            if (raw >= 1)
+                return new CardId(raw);
+
+            string itemPath = PayloadPath.Item(PayloadPath.Field(reader.Path, field), index);
+            throw new PayloadShapeException(new DecodeFailure(DecodeFailureKind.InvalidValue, itemPath, $"{itemPath} is {raw}: expected a positive card_id"));
         }
 
         private static PayloadShapeException Invalid(IPayloadReader reader, string field, string detail)

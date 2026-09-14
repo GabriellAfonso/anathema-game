@@ -101,5 +101,38 @@ namespace Anathema.Net.Json.Tests
             Assert.That(reader.FieldNames, Is.EquivalentTo(new[] { "code", "error", "keep" }));
             Assert.That(reader.ReadBoolean("keep"), Is.False);
         }
+
+        [Test]
+        public void ListaDeTextosPreservaAOrdem()
+        {
+            Assert.That(Reader("{\"messages\": [\"a\", \"b\"]}").ReadTextList("messages"), Is.EqualTo(new[] { "a", "b" }));
+            Assert.That(Reader("{\"messages\": []}").ReadTextList("messages"), Is.Empty);
+        }
+
+        [Test]
+        public void ListaDeTextosAusenteEhMissingField()
+        {
+            PayloadShapeException error = Assert.Throws<PayloadShapeException>(() => Reader("{}").ReadTextList("messages"));
+
+            Assert.That(error.Failure.Kind, Is.EqualTo(DecodeFailureKind.MissingField));
+        }
+
+        [Test]
+        public void TextoSoltoNoLugarDaListaEhTipoErrado()
+        {
+            PayloadShapeException error = Assert.Throws<PayloadShapeException>(() => Reader("{\"messages\": \"a\"}").ReadTextList("messages"));
+
+            Assert.That(error.Failure.Kind, Is.EqualTo(DecodeFailureKind.WrongFieldType));
+            Assert.That(error.Failure.Path, Is.EqualTo("messages"));
+        }
+
+        [Test]
+        public void ItemQueNaoEhTextoApontaOIndice()
+        {
+            PayloadShapeException error = Assert.Throws<PayloadShapeException>(() => Reader("{\"messages\": [\"a\", 1]}").ReadTextList("messages"));
+
+            Assert.That(error.Failure.Kind, Is.EqualTo(DecodeFailureKind.WrongFieldType));
+            Assert.That(error.Failure.Path, Is.EqualTo("messages[1]"));
+        }
     }
 }

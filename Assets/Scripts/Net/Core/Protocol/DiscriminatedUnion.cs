@@ -18,13 +18,24 @@ namespace Anathema.Net.Core
     public sealed class DiscriminatedUnion<TBase> where TBase : class
     {
         private readonly string discriminatorField;
-        private readonly Func<string, TBase> unknownArm;
+        private readonly Func<string, IPayloadReader, TBase> unknownArm;
         private readonly Dictionary<string, Func<IPayloadReader, TBase>> arms =
             new Dictionary<string, Func<IPayloadReader, TBase>>(StringComparer.Ordinal);
 
         /// <summary>Cria a união vazia com o campo discriminador e o braço desconhecido.</summary>
         /// <example><code>new DiscriminatedUnion&lt;DeckProblem&gt;("kind", kind => new UnknownDeckProblem(kind));</code></example>
         public DiscriminatedUnion(string discriminatorField, Func<string, TBase> unknownArm)
+            : this(discriminatorField, IgnoringBody(unknownArm, discriminatorField))
+        {
+        }
+
+        /// <summary>
+        /// Cria a união vazia com um braço desconhecido que também recebe o objeto: valor novo de
+        /// discriminador que ainda traz campo obrigatório (a <c>message</c> de um <c>kind</c> novo em
+        /// <c>deck_problems</c>) é lido sem virar dicionário solto; campo ausente vira falha com caminho.
+        /// </summary>
+        /// <example><code>new DiscriminatedUnion&lt;DeckProblem&gt;("kind", (kind, item) => new UnrecognizedDeckProblem(kind, item.ReadText("message")));</code></example>
+        public DiscriminatedUnion(string discriminatorField, Func<string, IPayloadReader, TBase> unknownArm)
         {
             if (string.IsNullOrWhiteSpace(discriminatorField))
                 throw new ArgumentException($"discriminator field is '{discriminatorField}': expected a field name like type or kind", nameof(discriminatorField));
@@ -84,9 +95,17 @@ namespace Anathema.Net.Core
             return Dispatch(value, objectWithDiscriminator);
         }
 
+        private static Func<string, IPayloadReader, TBase> IgnoringBody(Func<string, TBase> unknownArm, string discriminatorField)
+        {
+            if (unknownArm == null)
+                throw new ArgumentNullException(nameof(unknownArm), $"unknown arm of union on '{discriminatorField}' is null: expected a factory for unknown values");
+
+            return (value, _) => unknownArm(value);
+        }
+
         private TBase Dispatch(string value, IPayloadReader body)
         {
-            return arms.TryGetValue(value, out Func<IPayloadReader, TBase>? arm) ? arm(body) : unknownArm(value);
+            return arms.TryGetValue(value, out Func<IPayloadReader, TBase>? arm) ? arm(body) : unknownArm(value, body);
         }
     }
 }

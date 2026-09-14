@@ -1,0 +1,54 @@
+{
+  "type": "match_update",
+  "payload": {
+    "version": 11,
+    "view": {
+      "match_id": "match-7",
+      "round_number": 3,
+      "phase": "combat",
+      "priority_user_id": 9,
+      "token_holder_user_id": 7,
+      "token_consumed": true,
+      "consecutive_passes": 0,
+      "outcome": null,
+      "combat": {
+        "attacker_card_instance_ids": [21, 22],
+        "blocks": [{"blocker_card_instance_id": 40, "attacker_card_instance_id": 21}]
+      },
+      "you": {
+        "profile": {"user_id": 7, "nickname": "gabriel", "icon": "default", "level": 1},
+        "nexus": 18,
+        "energy_current": 2,
+        "hand": [{"card_instance_id": 25, "card_id": 1}],
+        "bank": [
+          {"card": {"card_instance_id": 21, "card_id": 5}, "damage_taken": 0, "modifiers": []},
+          {"card": {"card_instance_id": 22, "card_id": 2}, "damage_taken": 0, "modifiers": []}
+        ],
+        "graveyard": [],
+        "deck_size": 30,
+        "mulligan_taken": true
+      },
+      "opponent": {
+        "profile": {"user_id": 9, "nickname": "rival", "icon": "knight", "level": 3},
+        "nexus": 17,
+        "energy_current": 1,
+        "hand_size": 3,
+        "bank": [
+          {"card": {"card_instance_id": 40, "card_id": 1}, "damage_taken": 0, "modifiers": []},
+          {"card": {"card_instance_id": 41, "card_id": 2}, "damage_taken": 0, "modifiers": []}
+        ],
+        "graveyard": [],
+        "deck_size": 31,
+        "mulligan_taken": true
+      }
+    },
+    "events": [
+      {"kind": "attack_confirmed", "user_id": 7},
+      {"kind": "blocker_assigned", "user_id": 9, "blocker_card_instance_id": 40, "attacker_card_instance_id": 21}
+    ],
+    "clock": {
+      "turn": {"turn_number": 15, "holder_user_id": 9, "remaining_ms": 30000, "warning": false},
+      "mulligan_remaining_ms": null
+    }
+  }
+}

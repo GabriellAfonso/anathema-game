@@ -1,0 +1,18 @@
+{
+    "name": "Anathema.Net.Match",
+    "rootNamespace": "Anathema.Net.Match",
+    "references": [
+        "Anathema.Net.Core",
+        "Anathema.Net.Account",
+        "Anathema.Net.Connection"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

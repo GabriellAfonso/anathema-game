@@ -1,0 +1,55 @@
+{
+  "type": "match_update",
+  "payload": {
+    "version": 5,
+    "view": {
+      "match_id": "match-7",
+      "round_number": 2,
+      "phase": "action",
+      "priority_user_id": 9,
+      "token_holder_user_id": 9,
+      "token_consumed": false,
+      "consecutive_passes": 0,
+      "outcome": null,
+      "combat": null,
+      "field_from_the_future": true,
+      "you": {
+        "profile": {"user_id": 7, "nickname": "gabriel", "icon": "default", "level": 1},
+        "nexus": 20,
+        "energy_current": 3,
+        "hand": [
+          {"card_instance_id": 1, "card_id": 1},
+          {"card_instance_id": 31, "card_id": 5}
+        ],
+        "bank": [
+          {"card": {"card_instance_id": 21, "card_id": 2}, "damage_taken": 0, "modifiers": []}
+        ],
+        "graveyard": [{"card_instance_id": 3, "card_id": 1002}],
+        "deck_size": 34,
+        "mulligan_taken": true
+      },
+      "opponent": {
+        "profile": {"user_id": 9, "nickname": "rival", "icon": "knight", "level": 3},
+        "nexus": 20,
+        "energy_current": 2,
+        "hand_size": 5,
+        "bank": [
+          {"card": {"card_instance_id": 40, "card_id": 1}, "damage_taken": 1, "modifiers": []}
+        ],
+        "graveyard": [],
+        "deck_size": 33,
+        "mulligan_taken": true
+      }
+    },
+    "events": [
+      {"kind": "passed", "user_id": 9},
+      {"kind": "round_started", "round_number": 2, "token_holder_user_id": 9},
+      {"kind": "cards_drawn", "user_id": 7, "count": 1, "cards": [{"card_instance_id": 31, "card_id": 5}]},
+      {"kind": "cards_drawn", "user_id": 9, "count": 1, "cards": []}
+    ],
+    "clock": {
+      "turn": {"turn_number": 12, "holder_user_id": 9, "remaining_ms": 25000, "warning": false},
+      "mulligan_remaining_ms": null
+    }
+  }
+}

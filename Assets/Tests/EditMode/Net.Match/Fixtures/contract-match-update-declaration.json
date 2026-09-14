@@ -1,0 +1,63 @@
+{
+  "type": "match_update",
+  "payload": {
+    "version": 9,
+    "view": {
+      "match_id": "match-7",
+      "round_number": 3,
+      "phase": "declaration",
+      "priority_user_id": 7,
+      "token_holder_user_id": 7,
+      "token_consumed": false,
+      "consecutive_passes": 0,
+      "outcome": null,
+      "combat": {"attacker_card_instance_ids": [21, 22], "blocks": []},
+      "you": {
+        "profile": {"user_id": 7, "nickname": "gabriel", "icon": "default", "level": 1},
+        "nexus": 18,
+        "energy_current": 2,
+        "hand": [
+          {"card_instance_id": 23, "card_id": 1003},
+          {"card_instance_id": 24, "card_id": 1004},
+          {"card_instance_id": 25, "card_id": 1},
+          {"card_instance_id": 26, "card_id": 1002}
+        ],
+        "bank": [
+          {
+            "card": {"card_instance_id": 21, "card_id": 5},
+            "damage_taken": 2,
+            "modifiers": [
+              {"modifier_kind": "attack", "amount": 3, "duration": "until_end_of_round"},
+              {"modifier_kind": "health", "amount": 1, "duration": "permanent"},
+              {"modifier_kind": "damage_immunity", "duration": "permanent"}
+            ]
+          },
+          {"card": {"card_instance_id": 22, "card_id": 2}, "damage_taken": 0, "modifiers": []}
+        ],
+        "graveyard": [],
+        "deck_size": 30,
+        "mulligan_taken": true
+      },
+      "opponent": {
+        "profile": {"user_id": 9, "nickname": "rival", "icon": "knight", "level": 3},
+        "nexus": 17,
+        "energy_current": 1,
+        "hand_size": 3,
+        "bank": [
+          {"card": {"card_instance_id": 40, "card_id": 1}, "damage_taken": 0, "modifiers": []},
+          {"card": {"card_instance_id": 41, "card_id": 2}, "damage_taken": 0, "modifiers": []}
+        ],
+        "graveyard": [],
+        "deck_size": 31,
+        "mulligan_taken": true
+      }
+    },
+    "events": [
+      {"kind": "attackers_sent", "user_id": 7, "attacker_card_instance_ids": [21, 22]}
+    ],
+    "clock": {
+      "turn": {"turn_number": 14, "holder_user_id": 7, "remaining_ms": 18000, "warning": false},
+      "mulligan_remaining_ms": null
+    }
+  }
+}

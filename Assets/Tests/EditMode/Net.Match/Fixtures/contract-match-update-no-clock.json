@@ -1,0 +1,40 @@
+{
+  "type": "match_update",
+  "payload": {
+    "version": 6,
+    "view": {
+      "match_id": "match-7",
+      "round_number": 2,
+      "phase": "action",
+      "priority_user_id": 7,
+      "token_holder_user_id": 9,
+      "token_consumed": false,
+      "consecutive_passes": 1,
+      "outcome": null,
+      "combat": null,
+      "you": {
+        "profile": {"user_id": 7, "nickname": "gabriel", "icon": "default", "level": 1},
+        "nexus": 20,
+        "energy_current": 3,
+        "hand": [{"card_instance_id": 1, "card_id": 1}],
+        "bank": [],
+        "graveyard": [],
+        "deck_size": 34,
+        "mulligan_taken": true
+      },
+      "opponent": {
+        "profile": {"user_id": 9, "nickname": "rival", "icon": "knight", "level": 3},
+        "nexus": 20,
+        "energy_current": 2,
+        "hand_size": 5,
+        "bank": [],
+        "graveyard": [],
+        "deck_size": 33,
+        "mulligan_taken": true
+      }
+    },
+    "events": [
+      {"kind": "passed", "user_id": 9}
+    ]
+  }
+}

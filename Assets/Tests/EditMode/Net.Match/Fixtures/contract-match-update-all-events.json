@@ -1,0 +1,64 @@
+{
+  "type": "match_update",
+  "payload": {
+    "version": 30,
+    "view": {
+      "match_id": "match-7",
+      "round_number": 4,
+      "phase": "action",
+      "priority_user_id": 7,
+      "token_holder_user_id": 9,
+      "token_consumed": false,
+      "consecutive_passes": 0,
+      "outcome": null,
+      "combat": null,
+      "you": {
+        "profile": {"user_id": 7, "nickname": "gabriel", "icon": "default", "level": 1},
+        "nexus": 20,
+        "energy_current": 4,
+        "hand": [],
+        "bank": [
+          {"card": {"card_instance_id": 21, "card_id": 5}, "damage_taken": 0, "modifiers": []}
+        ],
+        "graveyard": [],
+        "deck_size": 28,
+        "mulligan_taken": true
+      },
+      "opponent": {
+        "profile": {"user_id": 9, "nickname": "rival", "icon": "knight", "level": 3},
+        "nexus": 17,
+        "energy_current": 4,
+        "hand_size": 4,
+        "bank": [],
+        "graveyard": [{"card_instance_id": 40, "card_id": 1}],
+        "deck_size": 27,
+        "mulligan_taken": true
+      }
+    },
+    "events": [
+      {"kind": "mulligan_taken", "user_id": 7, "swapped_count": 1},
+      {"kind": "unit_played", "user_id": 7, "card": {"card_instance_id": 21, "card_id": 5}},
+      {"kind": "spell_cast", "user_id": 7, "card": {"card_instance_id": 23, "card_id": 1002}, "target_card_instance_id": 40},
+      {"kind": "passed", "user_id": 9},
+      {"kind": "attackers_sent", "user_id": 7, "attacker_card_instance_ids": [21, 22]},
+      {"kind": "attacker_withdrawn", "user_id": 7, "attacker_card_instance_id": 22},
+      {"kind": "attack_confirmed", "user_id": 7},
+      {"kind": "blocker_assigned", "user_id": 9, "blocker_card_instance_id": 40, "attacker_card_instance_id": 21},
+      {"kind": "blocker_removed", "user_id": 9, "blocker_card_instance_id": 40},
+      {"kind": "defense_ended", "user_id": 9},
+      {"kind": "forfeited", "user_id": 9},
+      {"kind": "unit_damaged", "card_instance_id": 40, "amount": 3},
+      {"kind": "unit_died", "user_id": 9, "card": {"card_instance_id": 40, "card_id": 1}},
+      {"kind": "nexus_changed", "user_id": 9, "amount": 17},
+      {"kind": "round_started", "round_number": 4, "token_holder_user_id": 9},
+      {"kind": "cards_drawn", "user_id": 9, "count": 1, "cards": []},
+      {"kind": "match_finished", "defeated_user_id": 9, "reason": "forfeit"},
+      {"kind": "turn_timed_out", "user_id": 9, "turn_number": 12},
+      {"kind": "mulligan_timed_out", "user_id": 9}
+    ],
+    "clock": {
+      "turn": {"turn_number": 20, "holder_user_id": 7, "remaining_ms": 30000, "warning": false},
+      "mulligan_remaining_ms": null
+    }
+  }
+}

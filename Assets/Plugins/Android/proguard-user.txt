@@ -1,0 +1,3 @@
+# RefreshTokenCipher só é alcançado por JNI a partir do C#; sem esta regra o R8 o remove quando a
+# minificação do release é ligada (specs/002-player-account/research.md, R4).
+-keep class com.anathema.net.RefreshTokenCipher { public static *; }

@@ -8,6 +8,7 @@
         "Anathema.Net.Account",
         "Anathema.Net.Json",
         "Anathema.Net.Connection",
+        "Anathema.Net.Match",
         "Anathema.Net.Unity",
         "Anathema.Net.Fakes"
     ],

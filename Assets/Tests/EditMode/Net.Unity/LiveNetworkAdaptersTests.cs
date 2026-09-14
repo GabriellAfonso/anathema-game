@@ -54,5 +54,15 @@ namespace Anathema.Net.Unity.Tests
 
             Assert.That(decoded.Value, Is.InstanceOf<Anathema.Net.Connection.MatchmakingFailedFrame>());
         }
+
+        [Test]
+        public void CodecConheceOsFramesDaPartida()
+        {
+            LiveNetworkAdapters adapters = LiveNetworkAdapters.Create(new MainThreadQueue(new FakeClientLog()), new FakeClientLog(), new CleartextPolicy(false));
+
+            DecodeOutcome<ServerFrame> decoded = adapters.Codec.Decode("{\"type\": \"turn_warning\", \"payload\": {\"turn_number\": 12, \"holder_user_id\": 7, \"remaining_ms\": 15000}}");
+
+            Assert.That(decoded.Value, Is.InstanceOf<Anathema.Net.Match.TurnWarningFrame>());
+        }
     }
 }

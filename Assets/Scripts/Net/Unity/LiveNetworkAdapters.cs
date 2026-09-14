@@ -1,8 +1,8 @@
 #nullable enable
 using System;
-using Anathema.Net.Connection;
 using Anathema.Net.Core;
 using Anathema.Net.Json;
+using Anathema.Net.Match;
 
 namespace Anathema.Net.Unity
 {
@@ -28,8 +28,9 @@ namespace Anathema.Net.Unity
             Clock = PlatformMonotonicClock.Create(log);
             Sockets = new DotNetWebSocketFactory(queue, policy, log);
             // Um codec só para a conta e os dois sockets: os frames de fila entram na mesma união
-            // (specs/003-authenticated-socket-queue/research.md, R1).
-            Codec = new NewtonsoftProtocolCodec(ConnectionFrames.CreateUnion(), log);
+            // (specs/003-authenticated-socket-queue/research.md, R1), e os de partida também
+            // (specs/004-match-session/research.md, R3).
+            Codec = new NewtonsoftProtocolCodec(MatchFrames.CreateUnion(), log);
         }
 
         /// <summary>Fila da thread principal compartilhada.</summary>

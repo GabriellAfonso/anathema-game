@@ -34,8 +34,8 @@ namespace Anathema.Net.Connection
         /// <summary>Primeiro frame que não é negação de gate: o servidor aceitou este socket.</summary>
         internal event Action? Proven;
 
-        /// <summary>Frame decodificado, com o texto cru.</summary>
-        internal event Action<ServerFrame, string>? FrameArrived;
+        /// <summary>Frame decodificado.</summary>
+        internal event Action<ServerFrame>? FrameArrived;
 
         /// <summary>O socket terminou; uma vez só.</summary>
         internal event Action<SocketEnd>? Ended;
@@ -82,7 +82,7 @@ namespace Anathema.Net.Connection
             NoteGate(decoded.Value);
             ProveUnlessGate(decoded.Value);
             if (!finished)
-                FrameArrived?.Invoke(decoded.Value, text);
+                FrameArrived?.Invoke(decoded.Value);
         }
 
         private void NoteGate(ServerFrame frame)

@@ -37,19 +37,6 @@ namespace Anathema.Net.Connection.Tests
         }
 
         [Test]
-        public void TextoCruAcompanhaCadaFrameAceito()
-        {
-            AuthenticatedConnection connection = ConnectAndOpen();
-            List<string> texts = new List<string>();
-            connection.RawTextReceived += texts.Add;
-
-            rig.Receive(TestFrames.Pong);
-            rig.Receive("[]");
-
-            Assert.That(texts, Is.EqualTo(new[] { TestFrames.Pong }));
-        }
-
-        [Test]
         public async Task EnviarSemSocketAbertoDevolveNotOpenERegistra()
         {
             AuthenticatedConnection connection = rig.Connection();

@@ -64,13 +64,6 @@ namespace Anathema.Net.Connection
         /// <summary>Frame decodificado do socket atual, em ordem (FR-014).</summary>
         public event Action<ServerFrame>? FrameReceived;
 
-        /// <summary>
-        /// Texto cru de cada frame aceito. Ponte só para o <c>MatchClient</c> continuar lendo
-        /// <c>match_start</c> como hoje; sai quando a feature 4 tipar o frame
-        /// (specs/003-authenticated-socket-queue/research.md, R12).
-        /// </summary>
-        public event Action<string>? RawTextReceived;
-
         /// <summary>A conexão voltou depois de cair: o socket reaberto foi provado (FR-012).</summary>
         public event Action? Recovered;
 
@@ -193,7 +186,7 @@ namespace Anathema.Net.Connection
             socket = attempt;
             attempt.Opened += () => OnOpened(attempt);
             attempt.Proven += () => OnProven(attempt);
-            attempt.FrameArrived += (frame, text) => OnFrame(attempt, frame, text);
+            attempt.FrameArrived += frame => OnFrame(attempt, frame);
             attempt.Ended += end => OnEnded(attempt, end);
             ports.Log.Info("connection_opening", new LogField("target", current.ToString()), new LogField("attempt", policy.Attempt));
             attempt.Open(current.WithToken(token));
@@ -224,16 +217,13 @@ namespace Anathema.Net.Connection
                 Recovered?.Invoke();
         }
 
-        private void OnFrame(SocketAttempt attempt, ServerFrame frame, string text)
+        private void OnFrame(SocketAttempt attempt, ServerFrame frame)
         {
             if (attempt != socket)
                 return;
 
             silence.NoteFrame(frame);
             FrameReceived?.Invoke(frame);
-            // Quem assina pode ter saído dentro do aviso (a fila sai no match_found).
-            if (attempt == socket)
-                RawTextReceived?.Invoke(text);
         }
 
         private void OnEnded(SocketAttempt attempt, SocketEnd end)

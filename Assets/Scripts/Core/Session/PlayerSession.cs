@@ -103,7 +103,7 @@ public class PlayerSession : MonoBehaviour
     {
         LiveConnectionServices composed = LiveConnectionServices.FromAdapters(adapters, lifecycle, reachability, ticker, Account.Tokens, AppEnvManager.Settings.BuildConnectionRoutes());
         connections = composed;
-        Match = new MatchClient(composed.MatchConnection, composed.Routes.Match, Log);
+        Match = new MatchClient(composed.MatchConnection, composed.Routes.Match, Account.Catalog, adapters.Clock, Log);
         Matchmaking = new MatchmakingClient(composed.MatchmakingConnection, composed.Queue, Match, Log);
 
         // Aqui, e nao num RuntimeInitializeOnLoadMethod: e o unico ponto em que

@@ -1,22 +1,32 @@
-using System.Collections;
+#nullable enable
+using System;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
+using Anathema.Net.Account;
+using Anathema.Net.Core;
+using Anathema.Net.Unity;
 using TMPro;
 using Unity.Multiplayer.Playmode;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+/// <summary>
+/// Tela de login. Ao abrir, tenta retomar a sessão guardada sem pedir senha; se não der, espera
+/// usuário e senha e entra pela sessão de conta (specs/002-player-account). Nos dois caminhos lê o
+/// perfil e vai para a Home.
+/// </summary>
 public class LoginController : MonoBehaviour
 {
-
     [Header("UI")]
-    [SerializeField] private TMP_InputField usernameInput;
-    [SerializeField] private TMP_InputField passwordInput;
-    [SerializeField] private Button loginButton;
-  
+    [SerializeField] private TMP_InputField usernameInput = null!;
+    [SerializeField] private TMP_InputField passwordInput = null!;
+    [SerializeField] private Button loginButton = null!;
+
+    private static LiveAccountServices Account => PlayerSession.Instance.Account;
+
+    private static IClientLog Log => PlayerSession.Instance.Log;
+
     private void Awake()
     {
         loginButton.onClick.AddListener(HandleLogin);
@@ -25,93 +35,100 @@ public class LoginController : MonoBehaviour
         passwordInput.onSubmit.AddListener(_ => HandleLogin());
     }
 
-    private void HandleLogin()
+    private async void Start()
     {
         if (!IsEnvironmentReady())
             return;
 
-        string username = usernameInput.text.Trim();
-        string password = passwordInput.text;
-
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        try
         {
-            Debug.LogWarning("Usu�rio ou senha vazios.");
+            await ResumeOrWaitForLoginAsync();
+        }
+        catch (Exception unexpected)
+        {
+            ReportUnexpected("login_resume_failed", unexpected);
+        }
+    }
+
+    private async Task ResumeOrWaitForLoginAsync()
+    {
+        SetLoginInteractable(false);
+        ResumeOutcome resumed = await Account.Session.ResumeAsync();
+        if (resumed.Kind == ResumeOutcomeKind.Resumed)
+        {
+            await EnterHomeAsync();
             return;
         }
 
-        StartCoroutine(SendLoginRequest(username, password));
-    }
-
-    private bool IsEnvironmentReady()
-    {
-        if (AppEnvManager.Settings == null)
-        {
-            Debug.LogError("Configura��o global n�o encontrada. O Bootstrap foi executado?");
-            return false;
-        }
-
-        return true;
-    }
-
-    private IEnumerator SendLoginRequest(string username, string password)
-    {
-        string loginUrl = BuildLoginUrl();
-        string jsonBody = BuildLoginRequestDto(username, password);
-
-        using UnityWebRequest request = CreatePostRequest(loginUrl, jsonBody);
-
-        SetLoginInteractable(false);
-
-        yield return request.SendWebRequest();
-
         SetLoginInteractable(true);
+        StartDevAutoLogin();
+    }
 
-        if (request.result != UnityWebRequest.Result.Success)
+    private async void HandleLogin()
+    {
+        if (!IsEnvironmentReady())
+            return;
+
+        try
         {
-            Debug.LogError($"Erro no login ({AppEnvManager.Settings.name}): {request.error}");
-            yield break;
+            await SignInWithInputsAsync();
+        }
+        catch (Exception unexpected)
+        {
+            ReportUnexpected("login_failed_unexpectedly", unexpected);
+        }
+    }
+
+    private Task SignInWithInputsAsync()
+    {
+        string username = usernameInput.text.Trim();
+        string password = passwordInput.text;
+
+        if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            return SignInAsync(username, password);
+
+        Log.Warning("login_input_empty");
+        return Task.CompletedTask;
+    }
+
+    private async Task SignInAsync(string username, string password)
+    {
+        SetLoginInteractable(false);
+        SignInOutcome outcome = await Account.Session.SignInAsync(username, new Password(password));
+        if (outcome.Kind == SignInOutcomeKind.SignedIn)
+        {
+            await EnterHomeAsync();
+            return;
         }
 
-        HandleLoginSuccess(request.downloadHandler.text);
+        // Um segundo toque durante o login em curso não pode religar o botão antes de ele terminar.
+        if (outcome.Kind != SignInOutcomeKind.AlreadyInProgress)
+            SetLoginInteractable(true);
     }
 
-    private string BuildLoginUrl()
+    private static async Task EnterHomeAsync()
     {
-        return AppEnvManager.Settings.HttpUrl(AppEnvManager.Settings.loginEndpoint);
-    }
-
-    private string BuildLoginRequestDto(string username, string password)
-    {
-        return JsonUtility.ToJson(new LoginRequestDTO
-        {
-            username = username,
-            password = password
-        });
-    }
-
-    private UnityWebRequest CreatePostRequest(string url, string jsonBody)
-    {
-        var request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST)
-        {
-            uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(jsonBody)),
-            downloadHandler = new DownloadHandlerBuffer()
-        };
-
-        request.SetRequestHeader("Content-Type", "application/json");
-        return request;
-    }
-
-    private void HandleLoginSuccess(string jsonResponse)
-    {
-        var response = JsonUtility.FromJson<LoginResponseDTO>(jsonResponse);
-
-        Debug.Log($"Login bem-sucedido no ambiente: {AppEnvManager.Settings.name}");
-
-        PlayerSession.Instance.SetTokens(response.token, response.refresh);
-        SelfProfileService.Instance.LoadProfile(response.token);
+        // O MiniPlayerProfile lê a sessão no Awake da Home: sem esperar o perfil, ele aparecia vazio.
+        // Falha ao ler o perfil fica registrada pelo SelfProfileService e não impede a Home.
+        await SelfProfileService.Instance.LoadProfileAsync();
 
         // O socket de presenca (ws/connection/) saiu do backend; a Home nao espera mais por ele.
         SceneManager.LoadScene("HomeScene");
+    }
+
+    private static bool IsEnvironmentReady()
+    {
+        if (AppEnvManager.Settings != null && PlayerSession.Instance != null)
+            return true;
+
+        new UnityConsoleLog().Error("login_environment_missing", new LogField("expected", "BootstrapScene ran AppEnvManager and PlayerSession"));
+        return false;
+    }
+
+    private void ReportUnexpected(string eventName, Exception unexpected)
+    {
+        Log.Error(eventName, new LogField("error", unexpected.GetType().Name));
+        SetLoginInteractable(true);
     }
 
     private void SetLoginInteractable(bool value)
@@ -123,39 +140,41 @@ public class LoginController : MonoBehaviour
     [System.Serializable]
     private class DevUser
     {
-        public string username;
-        public string password;
+        public string username = "";
+        public string password = "";
     }
 
-    #if UNITY_EDITOR || DEVELOPMENT_BUILD
-    private void Start()
-
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    private void StartDevAutoLogin()
     {
         if (CurrentPlayer.ReadOnlyTags().Contains("Player1"))
-        {
             AutoLoginDev(0);
-        }
         else if (CurrentPlayer.ReadOnlyTags().Contains("Player2"))
-        {
             AutoLoginDev(1);
-        }
-            
     }
-   
 
-    private void AutoLoginDev(int player)
+    private async void AutoLoginDev(int player)
     {
-        var devUsers = new DevUser[]
-           {
-            new() { username = "teste1", password = "123456" },
-            new() { username = "teste7", password = "123456" }
-           };
+        DevUser[] devUsers =
+        {
+            new DevUser { username = "teste1", password = "123456" },
+            new DevUser { username = "teste7", password = "123456" },
+        };
 
-
-        var user = devUsers[player];
-        StartCoroutine(SendLoginRequest(user.username, user.password));
+        DevUser user = devUsers[player];
+        try
+        {
+            await SignInAsync(user.username, user.password);
+        }
+        catch (Exception unexpected)
+        {
+            ReportUnexpected("dev_auto_login_failed", unexpected);
+        }
     }
-    #endif
+#else
+    private void StartDevAutoLogin()
+    {
+    }
+#endif
     #endregion
-
 }

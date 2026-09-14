@@ -1,10 +1,20 @@
-using System.Collections;
+#nullable enable
+using System.Threading.Tasks;
+using Anathema.Net.Account;
+using Anathema.Net.Core;
 using UnityEngine;
-using UnityEngine.Networking;
 
+/// <summary>
+/// Lê o próprio perfil pela sessão de conta e grava na PlayerSession, para a Home mostrar.
+/// Delega para o OwnProfileQuery (specs/002-player-account); fica como componente da
+/// BootstrapScene até existir tela de perfil que leia direto.
+/// </summary>
+/// <example><code>bool loaded = await SelfProfileService.Instance.LoadProfileAsync();</code></example>
 public class SelfProfileService : MonoBehaviour
 {
-    public static SelfProfileService Instance { get; private set; }
+    /// <summary>O serviço da BootstrapScene.</summary>
+    /// <example><code>await SelfProfileService.Instance.LoadProfileAsync();</code></example>
+    public static SelfProfileService Instance { get; private set; } = null!;
 
     private void Awake()
     {
@@ -18,34 +28,19 @@ public class SelfProfileService : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void LoadProfile(string token)
+    /// <summary>Lê o perfil e grava na sessão; devolve se conseguiu. Falha fica registrada.</summary>
+    /// <example><code>bool loaded = await SelfProfileService.Instance.LoadProfileAsync();</code></example>
+    public async Task<bool> LoadProfileAsync()
     {
-        StartCoroutine(FetchSelfProfile(token));
-    }
-
-    private IEnumerator FetchSelfProfile(string token)
-    {
-        var url = BuildFetchSelfProfileUrl();
-        var request = UnityWebRequest.Get(url);
-
-        request.SetRequestHeader("Authorization", $"Bearer {token}");
-        request.SetRequestHeader("Content-Type", "application/json");
-
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
+        PlayerSession session = PlayerSession.Instance;
+        AccountCallOutcome<OwnProfile, ProfileRefusal> profile = await session.Account.Profile.ReadAsync();
+        if (profile.IsSuccess)
         {
-            Debug.LogError($"Erro ao carregar perfil: {request.error}");
-            yield break;
+            session.SetProfile(profile.Value);
+            return true;
         }
 
-        var json = request.downloadHandler.text;
-        var profile = JsonUtility.FromJson<SelfPlayerProfileDTO>(json);
-
-        PlayerSession.Instance.SetProfile(profile);
-    }
-    private string BuildFetchSelfProfileUrl()
-    {
-        return AppEnvManager.Settings.HttpUrl(AppEnvManager.Settings.playerMe);
+        session.Log.Warning("own_profile_unavailable", new LogField("refusal", profile.Refusal?.ToString() ?? "none"), new LogField("failure", profile.Failure?.ToString() ?? "none"));
+        return false;
     }
 }

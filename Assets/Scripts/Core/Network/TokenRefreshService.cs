@@ -1,9 +1,8 @@
+#nullable enable
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
-using UnityEngine.Networking;
+using System.Threading.Tasks;
+using Anathema.Net.Account;
+using Anathema.Net.Core;
 
 public enum TokenRefreshResult
 {
@@ -23,137 +22,57 @@ public enum TokenRefreshResult
 /// O access token do SimpleJWT dura 5 minutos por padrao, e o middleware de
 /// WebSocket valida o token so no handshake. Um socket aberto sobrevive, mas
 /// qualquer reconexao depois desses 5 minutos leva close 4001 sem isto aqui.
+///
+/// Desde a feature 002 e so uma ponte: delega para a renovacao da sessao de conta
+/// (IAccessTokenSource.RenewNowAsync), que ja faz o pedido, guarda o token e decide
+/// quando a sessao expira. Sai quando a feature 3 religar o BaseClient nas portas novas
+/// (specs/002-player-account/plan.md, Complexity Tracking).
 /// </summary>
-public class TokenRefreshService : MonoBehaviour
+/// <example><code>TokenRefreshService.Instance.Refresh(result => { if (result == TokenRefreshResult.Success) OpenSocket(); });</code></example>
+public class TokenRefreshService
 {
-    private static TokenRefreshService instance;
+    private static TokenRefreshService? instance;
 
     /// <summary>
-    /// Cria o servico sob demanda se ele nao estiver em cena.
-    ///
-    /// Diferente dos outros singletons do projeto de proposito: quem chama
-    /// isto e o caminho de reconexao, que so roda quando algo ja deu errado.
-    /// Depender de alguem lembrar de arrastar o componente para a
-    /// BootstrapScene daria NullReferenceException no pior momento possivel.
+    /// Cria o servico sob demanda. Quem chama isto e o caminho de reconexao, que so roda
+    /// quando algo ja deu errado; depender de alguem montar o servico antes daria
+    /// NullReferenceException no pior momento possivel.
     /// </summary>
-    public static TokenRefreshService Instance
-    {
-        get
-        {
-            if (instance != null)
-                return instance;
-
-            var host = new GameObject(nameof(TokenRefreshService));
-            DontDestroyOnLoad(host);
-
-            // AddComponent roda o Awake na hora, que ja preenche `instance`.
-            host.AddComponent<TokenRefreshService>();
-
-            return instance;
-        }
-    }
-
-    // Os tres clients podem tomar 4001 no mesmo frame. Sem isto, cada um
-    // dispara um refresh e as respostas se sobrescrevem.
-    private readonly List<Action<TokenRefreshResult>> waiting = new();
-    private bool inFlight;
-
-    private void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
+    /// <example><code>TokenRefreshService.Instance.Refresh(OnRefreshed);</code></example>
+    public static TokenRefreshService Instance => instance ??= new TokenRefreshService();
 
     /// <summary>
-    /// Pede um access token novo. Chamadas concorrentes compartilham a mesma
-    /// requisicao: todos os callbacks recebem o mesmo resultado.
+    /// Pede um access token novo, sem olhar a margem: o BaseClient so chama isto depois de um 4001.
+    /// Os tres clients podem tomar 4001 no mesmo frame; a renovacao da sessao e unica, entao as
+    /// chamadas concorrentes compartilham a mesma requisicao e recebem o mesmo resultado.
     /// </summary>
+    /// <example><code>TokenRefreshService.Instance.Refresh(OnRefreshed);</code></example>
     public void Refresh(Action<TokenRefreshResult> onDone)
     {
-        if (onDone != null)
-            waiting.Add(onDone);
-
-        if (inFlight)
-            return;
-
-        inFlight = true;
-        StartCoroutine(SendRefreshRequest());
+        _ = RefreshAsync(onDone);
     }
 
-    private IEnumerator SendRefreshRequest()
+    private static async Task RefreshAsync(Action<TokenRefreshResult> onDone)
     {
-        var refreshToken = PlayerSession.Instance.RefreshToken;
-
-        if (string.IsNullOrEmpty(refreshToken))
+        try
         {
-            Debug.LogWarning("TokenRefreshService: sem refresh token guardado na sessao.");
-            Finish(TokenRefreshResult.Expired);
-            yield break;
+            // Sem ConfigureAwait: o callback do BaseClient continua na thread principal.
+            RenewalOutcome renewed = await PlayerSession.Instance.Account.Tokens.RenewNowAsync();
+            onDone?.Invoke(ToResult(renewed));
         }
-
-        var body = JsonUtility.ToJson(new TokenRefreshRequestDTO { refresh = refreshToken });
-
-        using var request = new UnityWebRequest(BuildRefreshUrl(), UnityWebRequest.kHttpVerbPOST)
+        catch (Exception unexpected)
         {
-            uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body)),
-            downloadHandler = new DownloadHandlerBuffer(),
-        };
-
-        request.SetRequestHeader("Content-Type", "application/json");
-
-        yield return request.SendWebRequest();
-
-        // 401 e a unica resposta que mata a sessao: o refresh token expirou ou
-        // foi revogado. Qualquer outra falha pode ser rede, e reautenticar o
-        // jogador por causa de wifi ruim seria pior que tentar de novo.
-        if (request.responseCode == 401)
-        {
-            Debug.LogWarning("TokenRefreshService: refresh recusado (401). Sessao expirada.");
-            Finish(TokenRefreshResult.Expired);
-            yield break;
+            PlayerSession.Instance.Log.Error("token_refresh_bridge_failed", new LogField("error", unexpected.GetType().Name));
+            onDone?.Invoke(TokenRefreshResult.NetworkError);
         }
-
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogWarning($"TokenRefreshService: falha ao renovar token: {request.error}");
-            Finish(TokenRefreshResult.NetworkError);
-            yield break;
-        }
-
-        var response = JsonUtility.FromJson<TokenRefreshResponseDTO>(request.downloadHandler.text);
-
-        if (response == null || string.IsNullOrEmpty(response.access))
-        {
-            Debug.LogError(
-                $"TokenRefreshService: resposta sem 'access': {request.downloadHandler.text}");
-            Finish(TokenRefreshResult.NetworkError);
-            yield break;
-        }
-
-        PlayerSession.Instance.SetAccessToken(response.access);
-        Finish(TokenRefreshResult.Success);
     }
 
-    private void Finish(TokenRefreshResult result)
+    private static TokenRefreshResult ToResult(RenewalOutcome renewed)
     {
-        inFlight = false;
+        // 401 e a unica resposta que mata a sessao; falha de rede nao reautentica o jogador.
+        if (renewed.Kind == RenewalOutcomeKind.Renewed)
+            return TokenRefreshResult.Success;
 
-        // Copia antes de invocar: um callback pode chamar Refresh de novo.
-        var callbacks = waiting.ToArray();
-        waiting.Clear();
-
-        foreach (var callback in callbacks)
-            callback(result);
-    }
-
-    private string BuildRefreshUrl()
-    {
-        return AppEnvManager.Settings.HttpUrl(AppEnvManager.Settings.tokenRefreshEndpoint);
+        return renewed.Kind == RenewalOutcomeKind.Unavailable ? TokenRefreshResult.NetworkError : TokenRefreshResult.Expired;
     }
 }

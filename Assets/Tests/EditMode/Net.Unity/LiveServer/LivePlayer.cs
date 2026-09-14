@@ -8,6 +8,7 @@ using Anathema.Net.Account;
 using Anathema.Net.Connection;
 using Anathema.Net.Core;
 using Anathema.Net.Fakes;
+using Anathema.Net.Match;
 using NUnit.Framework;
 
 namespace Anathema.Net.Unity.Tests
@@ -19,19 +20,23 @@ namespace Anathema.Net.Unity.Tests
     internal sealed class LivePlayer : IDisposable
     {
         private const string Password = "live-queue-123";
+        private const string SpellDeckName = "Fumaça";
 
-        internal LivePlayer(LiveNetworkAdapters adapters, IFrameTicker ticker, string vaultDirectory, bool spoilFirstToken)
+        internal LivePlayer(LiveNetworkAdapters adapters, IFrameTicker ticker, string vaultDirectory, bool spoilFirstToken, IWebSocketFactory? sockets = null)
         {
+            Adapters = adapters;
             Lifecycle = new FakeAppLifecycle(new FakeMonotonicClock());
             RefreshTokenVaultSlot slot = RefreshTokenVaultSlot.Named("live-queue-" + Guid.NewGuid().ToString("N").Substring(0, 12));
             Account = new LiveAccountServices(adapters.Http, adapters.Codec, adapters.Clock, Lifecycle, Log, LocalAccountRoutes.Create(),
                 new DpapiRefreshTokenVault(vaultDirectory, slot), new AccountTiming());
             IAccessTokenSource tokens = spoilFirstToken ? new SpoiledFirstTokenSource(Account.Tokens) : Account.Tokens;
-            ConnectionPorts ports = new ConnectionPorts(adapters.Sockets, adapters.Clock, ticker, Lifecycle, Reachability, adapters.Queue, Log);
+            ConnectionPorts ports = new ConnectionPorts(sockets ?? adapters.Sockets, adapters.Clock, ticker, Lifecycle, Reachability, adapters.Queue, Log);
             Connections = new LiveConnectionServices(ports, tokens, adapters.Codec, LocalConnectionRoutes.Create());
             Connections.Queue.Paired += Pairings.Add;
             Connections.Queue.Refused += Refusals.Add;
         }
+
+        internal LiveNetworkAdapters Adapters { get; }
 
         internal FakeClientLog Log { get; } = new FakeClientLog();
 
@@ -62,10 +67,43 @@ namespace Anathema.Net.Unity.Tests
             return decks.Value.First().Deck;
         }
 
+        /// <summary>
+        /// Cadastra e cria o deck com feitiços de <c>spell_deck_id</c> em <c>backend/scripts/smoke_match.py</c>: o deck
+        /// inicial não tem feitiço nenhum, e sem isto a partida nunca lança um.
+        /// </summary>
+        internal async Task<DeckId> SignUpWithSpellDeckAsync()
+        {
+            await SignUpAsync();
+            AccountCallOutcome<PlayerDeck, DeckRefusal> created = await Account.Decks.CreateAsync(new DeckDraft(SpellDeckName, SpellDeckCards()));
+            Assert.That(created.IsSuccess, Is.True, "create spell deck: " + created.Refusal);
+            return created.Value.Deck;
+        }
+
+        /// <summary>O catálogo da sessão desta conta.</summary>
+        internal async Task<LoadedCatalog> LoadCatalogAsync()
+        {
+            AccountCallOutcome<LoadedCatalog, UnrecognizedRefusal> loaded = await Account.Catalog.LoadAsync();
+            Assert.That(loaded.IsSuccess, Is.True, "load catalog: " + (loaded.Failure?.ToString() ?? loaded.Refusal?.ToString()));
+            return loaded.Value;
+        }
+
+        /// <summary>A sessão de partida sobre a conexão de partida desta conta, sem começar.</summary>
+        internal LiveMatch OpenMatch(MatchId match, LoadedCatalog catalog)
+        {
+            return new LiveMatch(Connections.MatchConnection, Connections.Routes.Match, match, catalog, Adapters.Clock, Log);
+        }
+
         public void Dispose()
         {
             Connections.Dispose();
             Account.Dispose();
+        }
+
+        private static IReadOnlyList<CardId> SpellDeckCards()
+        {
+            IEnumerable<long> units = Enumerable.Range(1, 8).SelectMany(card => Enumerable.Repeat((long)card, 3)).Append(9);
+            IEnumerable<long> spells = Enumerable.Range(1001, 5).SelectMany(card => Enumerable.Repeat((long)card, 3));
+            return units.Concat(spells).Select(card => new CardId(card)).ToArray();
         }
     }
 }

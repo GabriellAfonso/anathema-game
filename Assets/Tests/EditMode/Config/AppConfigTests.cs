@@ -135,6 +135,45 @@ namespace Anathema.Config.Tests
             Assert.That(error.Message, Does.Contain(field).And.Contain("AppConfig_Test"));
         }
 
+        [Test]
+        public void RotasDeSocketUsamWsNoHostEfetivo()
+        {
+            FillConnectionRoutes();
+
+            Anathema.Net.Connection.ConnectionRoutes routes = config.BuildConnectionRoutes();
+
+            Assert.That(routes.Matchmaking.ToString(), Is.EqualTo("ws://127.0.0.1:8000/ws/matchmaking/"));
+            Assert.That(routes.Match.ToString(), Is.EqualTo("ws://127.0.0.1:8000/ws/match/"));
+        }
+
+        [Test]
+        public void RotasDeSocketSeguemUseTls()
+        {
+            FillConnectionRoutes();
+            config.useTls = true;
+
+            Assert.That(config.BuildConnectionRoutes().Match.ToString(), Is.EqualTo("wss://127.0.0.1:8000/ws/match/"));
+        }
+
+        [TestCase("matchmakingConsumerUrl")]
+        [TestCase("matchConsumerUrl")]
+        public void RotaDeSocketVaziaLancaComOCampoEOAsset(string field)
+        {
+            FillConnectionRoutes();
+            config.name = "AppConfig_Test";
+            typeof(AppConfig).GetField(field)!.SetValue(config, "");
+
+            System.InvalidOperationException error = Assert.Throws<System.InvalidOperationException>(() => config.BuildConnectionRoutes());
+
+            Assert.That(error.Message, Does.Contain(field).And.Contain("AppConfig_Test"));
+        }
+
+        private void FillConnectionRoutes()
+        {
+            config.matchmakingConsumerUrl = "/ws/matchmaking/";
+            config.matchConsumerUrl = "/ws/match/";
+        }
+
         private void FillAccountRoutes()
         {
             config.registerEndpoint = "/accounts/register/";

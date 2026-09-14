@@ -6,6 +6,7 @@
         "UnityEditor.TestRunner",
         "Anathema.Net.Core",
         "Anathema.Net.Account",
+        "Anathema.Net.Connection",
         "Anathema.Config",
         "Anathema.Net.Fakes"
     ],

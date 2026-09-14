@@ -4,7 +4,7 @@ using Anathema.Net.Core;
 using Anathema.Net.Unity;
 using UnityEngine;
 
-// Fica no namespace global: o codigo antigo (NetworkBootstrap, LoginController, AppEnvManager)
+// Fica no namespace global: o codigo antigo (PlayerSession, LoginController, AppEnvManager)
 // usa AppConfig sem using, e esta feature evolui o arquivo no lugar sem tocar neles.
 [CreateAssetMenu(
     fileName = "AppConfig",
@@ -104,12 +104,29 @@ public class AppConfig : ScriptableObject
             RouteUrl(matchesEndpoint, nameof(matchesEndpoint)));
     }
 
+    /// <summary>
+    /// Os dois sockets (fila e partida) no host efetivo, com <c>ws</c> ou <c>wss</c> conforme
+    /// <see cref="useTls"/>. Rota vazia lança com o campo e o asset, como as rotas de conta.
+    /// </summary>
+    /// <example><code>Anathema.Net.Connection.ConnectionRoutes routes = AppEnvManager.Settings.BuildConnectionRoutes();</code></example>
+    public Anathema.Net.Connection.ConnectionRoutes BuildConnectionRoutes()
+    {
+        return new Anathema.Net.Connection.ConnectionRoutes(
+            new System.Uri(WsUrl(RequireRoute(matchmakingConsumerUrl, nameof(matchmakingConsumerUrl)))),
+            new System.Uri(WsUrl(RequireRoute(matchConsumerUrl, nameof(matchConsumerUrl)))));
+    }
+
     private System.Uri RouteUrl(string path, string field)
     {
-        if (string.IsNullOrWhiteSpace(path))
-            throw new System.InvalidOperationException($"{field} is '{path}' in {name}: expected a route like /accounts/login/");
+        return new System.Uri(HttpUrl(RequireRoute(path, field)));
+    }
 
-        return new System.Uri(HttpUrl(path));
+    private string RequireRoute(string path, string field)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            throw new System.InvalidOperationException($"{field} is '{path}' in {name}: expected a route like /accounts/login/ or /ws/match/");
+
+        return path;
     }
 
     private void ApplyLaunchHostOnce()

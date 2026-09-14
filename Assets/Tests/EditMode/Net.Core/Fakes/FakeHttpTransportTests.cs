@@ -1,4 +1,5 @@
 #nullable enable
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using Anathema.Net.Fakes;
@@ -69,6 +70,58 @@ namespace Anathema.Net.Core.Tests
             Assert.That(request.Method, Is.EqualTo("POST"));
             Assert.That(request.Headers["Content-Type"], Is.EqualTo("application/json"));
             Assert.That(request.Body, Is.EqualTo("{\"a\": 1}"));
+        }
+
+        [Test]
+        public void RespostaSeguradaFicaPendenteAteSoltar()
+        {
+            FakeHttpTransport http = new FakeHttpTransport();
+            HeldHttpResponse held = http.HoldNext();
+
+            Task<HttpOutcome> pending = http.SendAsync(new HttpRequestSpec("POST", CardsUrl));
+
+            Assert.That(http.Requests.Count, Is.EqualTo(1));
+            Assert.That(pending.IsCompleted, Is.False);
+            Assert.That(held.IsPending, Is.True);
+            held.Release(200, "ok");
+            Assert.That(pending.IsCompleted, Is.True);
+            Assert.That(pending.Result.AsResponse!.Body, Is.EqualTo("ok"));
+        }
+
+        [Test]
+        public void RespostaSeguradaPodeSoltarComoFalha()
+        {
+            FakeHttpTransport http = new FakeHttpTransport();
+            HeldHttpResponse held = http.HoldNext();
+            Task<HttpOutcome> pending = http.SendAsync(new HttpRequestSpec("GET", CardsUrl));
+
+            held.ReleaseFailure(TransportFailureKind.Timeout, "Request timeout");
+
+            Assert.That(pending.Result.AsFailure!.Kind, Is.EqualTo(TransportFailureKind.Timeout));
+        }
+
+        [Test]
+        public void SoltarDuasVezesLanca()
+        {
+            FakeHttpTransport http = new FakeHttpTransport();
+            HeldHttpResponse held = http.HoldNext();
+            held.Release(200, "");
+
+            Assert.Throws<InvalidOperationException>(() => held.Release(200, ""));
+        }
+
+        [Test]
+        public void SeguradaERoteirizadaSaoConsumidasNaOrdem()
+        {
+            FakeHttpTransport http = new FakeHttpTransport();
+            http.HoldNext();
+            http.RespondNext(201, "");
+
+            Task<HttpOutcome> first = http.SendAsync(new HttpRequestSpec("GET", CardsUrl));
+            Task<HttpOutcome> second = http.SendAsync(new HttpRequestSpec("GET", CardsUrl));
+
+            Assert.That(first.IsCompleted, Is.False);
+            Assert.That(second.Result.AsResponse!.Status, Is.EqualTo(201));
         }
     }
 }

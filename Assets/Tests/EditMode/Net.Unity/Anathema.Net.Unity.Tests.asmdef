@@ -5,17 +5,24 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Anathema.Net.Core",
+        "Anathema.Net.Account",
         "Anathema.Net.Json",
         "Anathema.Net.Unity",
         "Anathema.Net.Fakes"
     ],
-    "includePlatforms": ["Editor"],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": ["nunit.framework.dll"],
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
     "autoReferenced": false,
-    "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

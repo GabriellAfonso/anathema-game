@@ -26,6 +26,7 @@ namespace Anathema.Net.Core
             return new DiscriminatedUnion<ServerFrame>(TypeField, type => new UnknownServerFrame(type))
                 .Register(MessageRefusedFrame.TypeName, MessageRefusedFrame.Read)
                 .Register(AuthDeniedFrame.TypeName, AuthDeniedFrame.Read)
+                .Register(MatchDeniedFrame.TypeName, MatchDeniedFrame.Read)
                 .Register(PongFrame.TypeName, PongFrame.Read);
         }
     }

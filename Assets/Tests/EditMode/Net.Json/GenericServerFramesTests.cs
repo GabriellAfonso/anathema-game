@@ -76,5 +76,22 @@ namespace Anathema.Net.Json.Tests
 
             Assert.That(frame, Is.InstanceOf<UnknownServerFrame>());
         }
+
+        [Test]
+        public void MatchDeniedLeOErro()
+        {
+            ServerFrame frame = Codec().Decode("{\"type\": \"match_denied\", \"payload\": {\"error\": \"no live match 'x'\"}}").Value;
+
+            Assert.That(((MatchDeniedFrame)frame).Error, Is.EqualTo("no live match 'x'"));
+        }
+
+        [Test]
+        public void MatchDeniedSemErroApontaPayloadError()
+        {
+            DecodeFailure failure = Codec().Decode("{\"type\": \"match_denied\", \"payload\": {}}").Failure;
+
+            Assert.That(failure.Kind, Is.EqualTo(DecodeFailureKind.MissingField));
+            Assert.That(failure.Path, Is.EqualTo("payload.error"));
+        }
     }
 }

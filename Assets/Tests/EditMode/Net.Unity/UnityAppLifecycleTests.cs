@@ -43,5 +43,15 @@ namespace Anathema.Net.Unity.Tests
 
             Assert.That(signals, Is.Zero);
         }
+
+        [TestCase(UnityEngine.RuntimePlatform.Android, true, Anathema.Net.Core.BackgroundSignalMode.AndroidPause)]
+        [TestCase(UnityEngine.RuntimePlatform.Android, false, Anathema.Net.Core.BackgroundSignalMode.AndroidPause)]
+        [TestCase(UnityEngine.RuntimePlatform.WindowsPlayer, true, Anathema.Net.Core.BackgroundSignalMode.DesktopKeepsRunning)]
+        [TestCase(UnityEngine.RuntimePlatform.WindowsPlayer, false, Anathema.Net.Core.BackgroundSignalMode.DesktopStopsOnFocusLoss)]
+        [TestCase(UnityEngine.RuntimePlatform.WindowsEditor, true, Anathema.Net.Core.BackgroundSignalMode.DesktopKeepsRunning)]
+        public void ModoDoCicloDeVidaSaiDaPlataformaEDoRunInBackground(UnityEngine.RuntimePlatform platform, bool runInBackground, Anathema.Net.Core.BackgroundSignalMode expected)
+        {
+            Assert.That(UnityAppLifecycle.ModeOf(platform, runInBackground), Is.EqualTo(expected));
+        }
     }
 }

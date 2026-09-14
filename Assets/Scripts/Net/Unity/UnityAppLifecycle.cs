@@ -14,7 +14,7 @@ namespace Anathema.Net.Unity
     /// <example>
     /// <code>
     /// UnityAppLifecycle lifecycle = UnityAppLifecycle.Create(clock, queue);
-    /// host.Attach(queue, lifecycle, reachability);
+    /// host.Attach(queue, lifecycle, reachability, ticker);
     /// </code>
     /// </example>
     public sealed class UnityAppLifecycle : IAppLifecycle
@@ -46,8 +46,21 @@ namespace Anathema.Net.Unity
         /// <example><code>UnityAppLifecycle lifecycle = UnityAppLifecycle.Create(clock, queue);</code></example>
         public static UnityAppLifecycle Create(IMonotonicClock clock, MainThreadQueue queue)
         {
-            bool focusLossStopsPlayer = Application.platform != RuntimePlatform.Android && !Application.runInBackground;
-            return new UnityAppLifecycle(new LifecycleSignalFilter(clock, focusLossStopsPlayer), queue);
+            return new UnityAppLifecycle(new LifecycleSignalFilter(clock, ModeOf(Application.platform, Application.runInBackground)), queue);
+        }
+
+        /// <summary>
+        /// Qual leitura de pausa e foco vale na plataforma. Fora do Android com Run In Background o player
+        /// não para ao minimizar, e tratar a pausa como segundo plano suspenderia a fila à toa
+        /// (specs/003-authenticated-socket-queue/research.md, R9).
+        /// </summary>
+        /// <example><code>BackgroundSignalMode mode = UnityAppLifecycle.ModeOf(Application.platform, Application.runInBackground);</code></example>
+        public static BackgroundSignalMode ModeOf(RuntimePlatform platform, bool runInBackground)
+        {
+            if (platform == RuntimePlatform.Android)
+                return BackgroundSignalMode.AndroidPause;
+
+            return runInBackground ? BackgroundSignalMode.DesktopKeepsRunning : BackgroundSignalMode.DesktopStopsOnFocusLoss;
         }
 
         /// <summary>Repasse de <c>OnApplicationPause</c>.</summary>

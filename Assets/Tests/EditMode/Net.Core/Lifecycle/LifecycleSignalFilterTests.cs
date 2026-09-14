@@ -99,5 +99,51 @@ namespace Anathema.Net.Core.Tests
             };
             return filter;
         }
+
+        [Test]
+        public void ModoAndroidIgnoraPerdaDeFocoSozinha()
+        {
+            List<string> seen = new List<string>();
+            LifecycleSignalFilter filter = RecordInto(new LifecycleSignalFilter(clock, BackgroundSignalMode.AndroidPause), seen);
+
+            filter.OnFocus(false);
+            filter.OnPause(true);
+            filter.OnFocus(true);
+
+            Assert.That(seen, Is.EqualTo(new[] { "background", "foreground" }));
+        }
+
+        [Test]
+        public void ModoDesktopQueParaNoFocoLevaAoSegundoPlano()
+        {
+            List<string> seen = new List<string>();
+            LifecycleSignalFilter filter = RecordInto(new LifecycleSignalFilter(clock, BackgroundSignalMode.DesktopStopsOnFocusLoss), seen);
+
+            filter.OnFocus(false);
+            filter.OnFocus(true);
+
+            Assert.That(seen, Is.EqualTo(new[] { "background", "foreground" }));
+        }
+
+        [Test]
+        public void ModoDesktopQueContinuaRodandoNuncaVaiAoSegundoPlano()
+        {
+            List<string> seen = new List<string>();
+            LifecycleSignalFilter filter = RecordInto(new LifecycleSignalFilter(clock, BackgroundSignalMode.DesktopKeepsRunning), seen);
+
+            filter.OnPause(true);
+            filter.OnFocus(false);
+            filter.OnPause(false);
+            filter.OnFocus(true);
+
+            Assert.That(seen, Is.Empty);
+        }
+
+        private static LifecycleSignalFilter RecordInto(LifecycleSignalFilter filter, List<string> seen)
+        {
+            filter.WentToBackground += _ => seen.Add("background");
+            filter.ReturnedToForeground += _ => seen.Add("foreground");
+            return filter;
+        }
     }
 }

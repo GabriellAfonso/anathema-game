@@ -19,7 +19,7 @@ namespace Anathema.Net.Core
     public sealed class LifecycleSignalFilter
     {
         private readonly IMonotonicClock clock;
-        private readonly bool focusLossStopsPlayer;
+        private readonly BackgroundSignalMode mode;
         private bool inBackground;
         private MonotonicInstant leftAt;
 
@@ -29,9 +29,20 @@ namespace Anathema.Net.Core
         /// </summary>
         /// <example><code>LifecycleSignalFilter android = new LifecycleSignalFilter(clock, false);</code></example>
         public LifecycleSignalFilter(IMonotonicClock clock, bool focusLossStopsPlayer)
+            : this(clock, focusLossStopsPlayer ? BackgroundSignalMode.DesktopStopsOnFocusLoss : BackgroundSignalMode.AndroidPause)
+        {
+        }
+
+        /// <summary>
+        /// Filtro com o modo explícito. <see cref="BackgroundSignalMode.DesktopKeepsRunning"/> é o player
+        /// desktop com Run In Background: minimizar não para o jogo, então nenhum aviso é segundo plano
+        /// (specs/003-authenticated-socket-queue/research.md, R9).
+        /// </summary>
+        /// <example><code>LifecycleSignalFilter filter = new LifecycleSignalFilter(clock, BackgroundSignalMode.DesktopKeepsRunning);</code></example>
+        public LifecycleSignalFilter(IMonotonicClock clock, BackgroundSignalMode mode)
         {
             this.clock = clock ?? throw new ArgumentNullException(nameof(clock), "clock is null: expected the monotonic clock that measures time away");
-            this.focusLossStopsPlayer = focusLossStopsPlayer;
+            this.mode = mode;
         }
 
         /// <summary>O app saiu do primeiro plano.</summary>
@@ -44,6 +55,9 @@ namespace Anathema.Net.Core
         /// <example><code>filter.OnPause(pauseStatus);</code></example>
         public void OnPause(bool paused)
         {
+            if (mode == BackgroundSignalMode.DesktopKeepsRunning)
+                return;
+
             if (paused)
                 EnterBackground();
             else
@@ -54,13 +68,16 @@ namespace Anathema.Net.Core
         /// <example><code>filter.OnFocus(hasFocus);</code></example>
         public void OnFocus(bool focused)
         {
+            if (mode == BackgroundSignalMode.DesktopKeepsRunning)
+                return;
+
             if (focused)
             {
                 ReturnToForeground();
                 return;
             }
 
-            if (focusLossStopsPlayer)
+            if (mode == BackgroundSignalMode.DesktopStopsOnFocusLoss)
                 EnterBackground();
         }
 

@@ -16,18 +16,13 @@ namespace Anathema.Net.Account
     /// </example>
     public sealed class MatchHistoryRow
     {
-        private static readonly Dictionary<string, MatchEndReason> EndReasons = new Dictionary<string, MatchEndReason>
-        {
-            ["nexus_depleted"] = MatchEndReason.NexusDepleted,
-            ["forfeit"] = MatchEndReason.Forfeit,
-        };
-
         private MatchHistoryRow(IPayloadReader row)
         {
             Match = row.ReadMatchId("match_id");
             Won = row.ReadBoolean("won");
             EndReasonText = row.ReadText("end_reason");
-            EndReason = EndReasons.TryGetValue(EndReasonText, out MatchEndReason reason) ? reason : MatchEndReason.Unknown;
+            // O mesmo texto chega no desfecho do socket de partida; um mapeamento só (specs/004-match-session/research.md, R2).
+            EndReason = MatchEndReasonText.Parse(EndReasonText);
             IPayloadReader? opponent = row.ReadOptionalObject("opponent");
             Opponent = opponent == null ? null : HistoryOpponent.Read(opponent);
             DurationSeconds = row.ReadInteger("duration_seconds");

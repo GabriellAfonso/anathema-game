@@ -24,19 +24,14 @@ namespace Anathema.Net.Account
             ["enemy_unit"] = SpellTargetKind.EnemyUnit,
         };
 
-        private static readonly Dictionary<string, SpellDuration> Durations = new Dictionary<string, SpellDuration>
-        {
-            ["permanent"] = SpellDuration.Permanent,
-            ["until_end_of_round"] = SpellDuration.UntilEndOfRound,
-        };
-
         private SpellEffect(IPayloadReader effect)
         {
             RequiresTarget = effect.ReadBoolean("requires_target");
             TargetKindText = effect.ReadText("target_kind");
             TargetKind = TargetKinds.TryGetValue(TargetKindText, out SpellTargetKind target) ? target : SpellTargetKind.Unknown;
             DurationText = effect.ReadText("duration");
-            Duration = Durations.TryGetValue(DurationText, out SpellDuration duration) ? duration : SpellDuration.Unknown;
+            // O mesmo texto chega nos modificadores de unidade da partida; um mapeamento só (specs/004-match-session/research.md, R2).
+            Duration = SpellDurationText.Parse(DurationText);
             DeclarationOnly = effect.ReadBoolean("declaration_only");
         }
 

@@ -157,5 +157,5 @@ Decisões em vigor:
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
-`specs/003-authenticated-socket-queue/plan.md`
+`specs/004-match-session/plan.md`
 <!-- SPECKIT END -->

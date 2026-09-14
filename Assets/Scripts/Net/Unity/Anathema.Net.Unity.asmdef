@@ -4,6 +4,7 @@
     "references": [
         "Anathema.Net.Core",
         "Anathema.Net.Account",
+        "Anathema.Net.Connection",
         "Anathema.Net.Json"
     ],
     "includePlatforms": [],

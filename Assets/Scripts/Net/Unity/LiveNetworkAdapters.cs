@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using Anathema.Net.Connection;
 using Anathema.Net.Core;
 using Anathema.Net.Json;
 
@@ -25,7 +26,10 @@ namespace Anathema.Net.Unity
             Policy = policy;
             Http = new UnityHttpTransport(queue, policy);
             Clock = PlatformMonotonicClock.Create(log);
-            Codec = new NewtonsoftProtocolCodec(GenericServerFrames.CreateUnion(), log);
+            Sockets = new DotNetWebSocketFactory(queue, policy, log);
+            // Um codec só para a conta e os dois sockets: os frames de fila entram na mesma união
+            // (specs/003-authenticated-socket-queue/research.md, R1).
+            Codec = new NewtonsoftProtocolCodec(ConnectionFrames.CreateUnion(), log);
         }
 
         /// <summary>Fila da thread principal compartilhada.</summary>
@@ -52,6 +56,10 @@ namespace Anathema.Net.Unity
         /// <example><code>string ping = adapters.Codec.Encode(new PingMessage(null));</code></example>
         public IProtocolCodec Codec { get; }
 
+        /// <summary>Um DotNetWebSocket novo por tentativa de conexão.</summary>
+        /// <example><code>IWebSocket socket = adapters.Sockets.Create();</code></example>
+        public IWebSocketFactory Sockets { get; }
+
         /// <summary>Monta os adaptadores.</summary>
         /// <example><code>LiveNetworkAdapters adapters = LiveNetworkAdapters.Create(queue, log, policy);</code></example>
         public static LiveNetworkAdapters Create(MainThreadQueue queue, IClientLog log, CleartextPolicy policy)
@@ -64,6 +72,6 @@ namespace Anathema.Net.Unity
 
         /// <summary>Uma conexão de socket nova (uma instância por conexão).</summary>
         /// <example><code>IWebSocket socket = adapters.CreateSocket();</code></example>
-        public IWebSocket CreateSocket() => new DotNetWebSocket(Queue, Policy, Log);
+        public IWebSocket CreateSocket() => Sockets.Create();
     }
 }

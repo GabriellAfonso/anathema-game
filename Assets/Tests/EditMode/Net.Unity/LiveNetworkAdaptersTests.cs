@@ -36,5 +36,23 @@ namespace Anathema.Net.Unity.Tests
         {
             Assert.Throws<ArgumentNullException>(() => LiveNetworkAdapters.Create(new MainThreadQueue(new FakeClientLog()), new FakeClientLog(), null!));
         }
+
+        [Test]
+        public void FabricaDeSocketCriaInstanciasNovas()
+        {
+            LiveNetworkAdapters adapters = LiveNetworkAdapters.Create(new MainThreadQueue(new FakeClientLog()), new FakeClientLog(), new CleartextPolicy(false));
+
+            Assert.That(adapters.Sockets.Create(), Is.Not.SameAs(adapters.Sockets.Create()));
+        }
+
+        [Test]
+        public void CodecConheceOsFramesDaFila()
+        {
+            LiveNetworkAdapters adapters = LiveNetworkAdapters.Create(new MainThreadQueue(new FakeClientLog()), new FakeClientLog(), new CleartextPolicy(false));
+
+            DecodeOutcome<ServerFrame> decoded = adapters.Codec.Decode("{\"type\": \"matchmaking_failed\", \"payload\": {\"error\": \"x\"}}");
+
+            Assert.That(decoded.Value, Is.InstanceOf<Anathema.Net.Connection.MatchmakingFailedFrame>());
+        }
     }
 }

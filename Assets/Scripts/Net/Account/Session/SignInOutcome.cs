@@ -39,7 +39,7 @@ namespace Anathema.Net.Account
 
         /// <summary>A falha de transporte; só em <see cref="SignInOutcomeKind.TransportFailed"/>.</summary>
         /// <example><code>TransportFailureKind? kind = outcome.Transport?.Kind;</code></example>
-        public TransportFailure? Transport { get; }
+        internal TransportFailure? Transport { get; }
 
         /// <summary>O que não bateu; só em <see cref="SignInOutcomeKind.OutOfContract"/>. Nunca contém token.</summary>
         /// <example><code>string? path = outcome.Decode?.Path;</code></example>
@@ -59,7 +59,7 @@ namespace Anathema.Net.Account
 
         /// <summary>Falha de transporte.</summary>
         /// <example><code>return SignInOutcome.TransportFailed(outcome.AsFailure!);</code></example>
-        public static SignInOutcome TransportFailed(TransportFailure transport)
+        internal static SignInOutcome TransportFailed(TransportFailure transport)
         {
             return new SignInOutcome(SignInOutcomeKind.TransportFailed, transport: transport ?? throw new ArgumentNullException(nameof(transport), "sign in transport failure is null: expected the failure from IHttpTransport"));
         }
@@ -75,11 +75,18 @@ namespace Anathema.Net.Account
         /// <example><code>return SignInOutcome.AlreadyInProgress();</code></example>
         public static SignInOutcome AlreadyInProgress() => new SignInOutcome(SignInOutcomeKind.AlreadyInProgress);
 
+        /// <summary>Já havia sessão com este dono; nada foi enviado.</summary>
+        /// <example><code>return SignInOutcome.AlreadySignedIn(session.Self!.Value);</code></example>
+        public static SignInOutcome AlreadySignedIn(UserId user) => new SignInOutcome(SignInOutcomeKind.AlreadySignedIn, user: user);
+
         /// <summary>Forma para log, sem credencial.</summary>
         /// <example><code>string text = outcome.ToString(); // SignedIn user_id=7</code></example>
         public override string ToString()
         {
             if (Kind == SignInOutcomeKind.SignedIn)
+                return $"{Kind} {User}";
+
+            if (Kind == SignInOutcomeKind.AlreadySignedIn)
                 return $"{Kind} {User}";
 
             return Decode == null ? $"{Kind} status={Status}" : $"{Kind} {Decode.Kind} at {Decode.Path}";

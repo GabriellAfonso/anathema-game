@@ -23,5 +23,11 @@ namespace Anathema.Net.Account
 
         /// <summary>Já havia um login em curso; nada foi enviado.</summary>
         AlreadyInProgress,
+
+        /// <summary>
+        /// Já havia sessão; nada foi enviado. A fachada devolve este valor fora do estágio deslogado, em vez de
+        /// trocar de conta por baixo de uma fila ou partida (specs/005-presentation-facade/research.md, R4).
+        /// </summary>
+        AlreadySignedIn,
     }
 }

@@ -1,0 +1,22 @@
+{
+    "name": "Anathema.Client.Scenes",
+    "rootNamespace": "Anathema.Client.Scenes",
+    "references": [
+        "Anathema.Net.Core",
+        "Anathema.Net.Account",
+        "Anathema.Net.Connection",
+        "Anathema.Net.Match",
+        "Anathema.Net.Facade",
+        "Anathema.Net.Unity",
+        "Anathema.Config"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -10,7 +10,9 @@ namespace Anathema.Net.Editor
     /// <c>AppEnvManager</c> de uma cena seleciona. Por nome e não pelo tipo porque o
     /// <c>AppEnvManager</c> está no Assembly-CSharp, que nenhuma asmdef referencia, e esta
     /// feature não o altera (specs/001-server-connection/plan.md, Complexity Tracking).
-    /// <c>AppEnvManagerFieldsTests</c> falha se um dos campos sumir.
+    /// Na 005 o <c>AppEnvManager</c> foi absorvido pelo <c>ClientHost</c> (Anathema.Client.Scenes), com os
+    /// mesmos campos; a leitura segue por nome para o editor não depender da borda de cena.
+    /// <c>ClientHostFieldsTests</c> falha se um dos campos sumir.
     /// </summary>
     /// <example>
     /// <code>
@@ -19,15 +21,15 @@ namespace Anathema.Net.Editor
     /// </example>
     public static class EnvironmentSelectionReader
     {
-        /// <summary>Campo booleano de Assets/Scripts/Bootstrap/AppEnvManager.cs.</summary>
+        /// <summary>Campo booleano de Assets/Scripts/Client/Scenes/ClientHost.cs.</summary>
         /// <example><code>serialized.FindProperty(EnvironmentSelectionReader.IsProdField);</code></example>
         public const string IsProdField = "isProd";
 
-        /// <summary>Campo do config de desenvolvimento de Assets/Scripts/Bootstrap/AppEnvManager.cs.</summary>
+        /// <summary>Campo do config de desenvolvimento de Assets/Scripts/Client/Scenes/ClientHost.cs.</summary>
         /// <example><code>serialized.FindProperty(EnvironmentSelectionReader.DevConfigField);</code></example>
         public const string DevConfigField = "configDev";
 
-        /// <summary>Campo do config de produção de Assets/Scripts/Bootstrap/AppEnvManager.cs.</summary>
+        /// <summary>Campo do config de produção de Assets/Scripts/Client/Scenes/ClientHost.cs.</summary>
         /// <example><code>serialized.FindProperty(EnvironmentSelectionReader.ProdConfigField);</code></example>
         public const string ProdConfigField = "configProd";
 

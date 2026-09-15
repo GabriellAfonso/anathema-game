@@ -1,0 +1,24 @@
+{
+    "name": "Anathema.Presentation",
+    "rootNamespace": "",
+    "references": [
+        "Anathema.Net.Core",
+        "Anathema.Net.Account",
+        "Anathema.Net.Connection",
+        "Anathema.Net.Match",
+        "Anathema.Net.Facade",
+        "Anathema.Client.Scenes",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
+        "Unity.Multiplayer.Playmode"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

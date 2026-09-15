@@ -203,7 +203,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1444415098}
-        m_TargetAssemblyTypeName: LoginController, Assembly-CSharp
+        m_TargetAssemblyTypeName: LoginController, Anathema.Presentation
         m_MethodName: OnLoginClicked
         m_Mode: 1
         m_Arguments:

@@ -1282,7 +1282,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2141414835}
-        m_TargetAssemblyTypeName: MyButtonScript, Assembly-CSharp
+        m_TargetAssemblyTypeName: MyButtonScript, Anathema.Presentation
         m_MethodName: OnClickAction
         m_Mode: 1
         m_Arguments:
@@ -1342,7 +1342,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c01b3792f4772a40957cdd2e0768217, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MyButtonScript
+  m_EditorClassIdentifier: Anathema.Presentation::MyButtonScript
 --- !u!1001 &5015412645231698578
 PrefabInstance:
   m_ObjectHideFlags: 0

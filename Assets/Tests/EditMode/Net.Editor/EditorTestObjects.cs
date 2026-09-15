@@ -10,16 +10,17 @@ namespace Anathema.Net.Editor.Tests
     /// <summary>
     /// Cria configs e seletores de ambiente para os testes do gate, e destrói tudo no fim. O
     /// seletor é o próprio AppEnvManager, achado pelo MonoScript: um MonoBehaviour declarado nesta
-    /// asmdef (só de editor) não pode ser adicionado a um GameObject.
+    /// asmdef (só de editor) não pode ser adicionado a um GameObject. Desde a 005 o seletor é o
+    /// <c>ClientHost</c>, que absorveu os campos do AppEnvManager com os mesmos nomes.
     /// </summary>
     internal sealed class EditorTestObjects
     {
-        private const string AppEnvManagerPath = "Assets/Scripts/Bootstrap/AppEnvManager.cs";
+        private const string SelectorPath = "Assets/Scripts/Client/Scenes/ClientHost.cs";
         private readonly List<Object> created = new List<Object>();
 
-        internal static Type? AppEnvManagerType()
+        internal static Type? SelectorType()
         {
-            MonoScript? script = AssetDatabase.LoadAssetAtPath<MonoScript>(AppEnvManagerPath);
+            MonoScript? script = AssetDatabase.LoadAssetAtPath<MonoScript>(SelectorPath);
             return script == null ? null : script.GetClass();
         }
 
@@ -41,7 +42,7 @@ namespace Anathema.Net.Editor.Tests
 
         internal Component Selector(bool production, AppConfig? development, AppConfig? productionConfig)
         {
-            Type type = AppEnvManagerType() ?? throw new InvalidOperationException($"{AppEnvManagerPath} not found: expected the scene environment selector script");
+            Type type = SelectorType() ?? throw new InvalidOperationException($"{SelectorPath} not found: expected the scene environment selector script");
             Component selector = Owner().AddComponent(type);
             SerializedObject serialized = new SerializedObject(selector);
             serialized.FindProperty(EnvironmentSelectionReader.IsProdField).boolValue = production;

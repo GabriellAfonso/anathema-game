@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &283544562
+--- !u!1 &400100001
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,136 +127,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 283544564}
-  - component: {fileID: 283544563}
+  - component: {fileID: 400100003}
+  - component: {fileID: 400100002}
   m_Layer: 0
-  m_Name: SelfProfileService
+  m_Name: ReconnectOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &283544563
+--- !u!114 &400100002
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 283544562}
+  m_GameObject: {fileID: 400100001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf20cb8909a800e43ae01844ce6f6f3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SelfProfileService
---- !u!4 &283544564
+  m_Script: {fileID: 11500000, guid: 4d0d1ef4fa0d4480bbb4f07cf9cec29a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Anathema.Presentation::ReconnectOverlay
+--- !u!4 &400100003
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 283544562}
+  m_GameObject: {fileID: 400100001}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1041.5944, y: 458.5211, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1633734008
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1633734010}
-  - component: {fileID: 1633734009}
-  m_Layer: 0
-  m_Name: AppEnvManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1633734009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1633734008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d825e2b135862a439f3cb5671306499, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  configDev: {fileID: 11400000, guid: 2fb18d39e3ba7a8428f6e838ec6c705a, type: 2}
-  configProd: {fileID: 11400000, guid: 63f06ec5c1ee42846b195faf617f0be5, type: 2}
-  isProd: 0
---- !u!4 &1633734010
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1633734008}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 482.72226, y: 647.87134, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1763109695
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1763109697}
-  - component: {fileID: 1763109696}
-  m_Layer: 0
-  m_Name: VersusContext
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1763109696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1763109695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf4de0202d068f044a2223a922f56df2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VersusContext
-  Player:
-    nickname: 
-    icon: 
-    level: 0
-  Opponent:
-    nickname: 
-    icon: 
-    level: 0
---- !u!4 &1763109697
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1763109695}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 936.86633, y: 589.1939, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -273,7 +174,7 @@ GameObject:
   - component: {fileID: 2010800367}
   - component: {fileID: 2010800366}
   m_Layer: 0
-  m_Name: PlayerSession
+  m_Name: ClientHost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -289,8 +190,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a958c356c0e2162458c168a5766cc835, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSession
+  m_Name:
+  m_EditorClassIdentifier: Anathema.Client.Scenes::Anathema.Client.Scenes.ClientHost
+  configDev: {fileID: 11400000, guid: 2fb18d39e3ba7a8428f6e838ec6c705a, type: 2}
+  configProd: {fileID: 11400000, guid: 63f06ec5c1ee42846b195faf617f0be5, type: 2}
+  isProd: 0
 --- !u!4 &2010800367
 Transform:
   m_ObjectHideFlags: 0
@@ -310,7 +214,5 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1633734010}
-  - {fileID: 283544564}
   - {fileID: 2010800367}
-  - {fileID: 1763109697}
+  - {fileID: 400100003}

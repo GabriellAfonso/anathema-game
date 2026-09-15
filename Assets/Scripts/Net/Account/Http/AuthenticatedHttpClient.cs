@@ -16,7 +16,7 @@ namespace Anathema.Net.Account
     /// AuthenticatedCallResult result = await client.SendAsync(AuthenticatedRequest.Get(routes.Cards));
     /// </code>
     /// </example>
-    public sealed class AuthenticatedHttpClient
+    internal sealed class AuthenticatedHttpClient
     {
         private readonly IHttpTransport http;
         private readonly AccountSession session;

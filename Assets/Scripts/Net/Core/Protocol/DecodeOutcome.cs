@@ -14,7 +14,7 @@ namespace Anathema.Net.Core
     /// Handle(outcome.Value);
     /// </code>
     /// </example>
-    public sealed class DecodeOutcome<T>
+    internal sealed class DecodeOutcome<T>
     {
         private readonly T value;
         private readonly DecodeFailure? failure;

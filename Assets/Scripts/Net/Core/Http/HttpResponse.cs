@@ -9,7 +9,7 @@ namespace Anathema.Net.Core
     /// HttpResponse response = new HttpResponse(401, "{\"detail\": \"...\"}");
     /// </code>
     /// </example>
-    public sealed class HttpResponse : HttpOutcome
+    internal sealed class HttpResponse : HttpOutcome
     {
         /// <summary>Cria a resposta; status fora de 100..599 lança.</summary>
         /// <example><code>HttpOutcome ok = new HttpResponse(200, body);</code></example>

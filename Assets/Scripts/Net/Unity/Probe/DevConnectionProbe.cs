@@ -18,7 +18,7 @@ namespace Anathema.Net.Unity
     /// // adb shell am start -n &lt;pacote&gt;/com.unity3d.player.UnityPlayerGameActivity -e serverHost 192.168.0.10:8000 -e connectionProbe true
     /// </code>
     /// </example>
-    public static class DevConnectionProbe
+    internal static class DevConnectionProbe
     {
         private const string DefaultHost = "127.0.0.1:8000";
 

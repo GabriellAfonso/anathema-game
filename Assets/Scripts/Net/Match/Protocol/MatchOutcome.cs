@@ -37,6 +37,6 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê um objeto com <c>defeated_user_id</c> e <c>reason</c>.</summary>
         /// <example><code>MatchOutcome outcome = MatchOutcome.Read(view.ReadObject("outcome"));</code></example>
-        public static MatchOutcome Read(IPayloadReader outcome) => new MatchOutcome(outcome);
+        internal static MatchOutcome Read(IPayloadReader outcome) => new MatchOutcome(outcome);
     }
 }

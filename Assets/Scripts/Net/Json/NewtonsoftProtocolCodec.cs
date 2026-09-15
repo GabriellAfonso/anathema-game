@@ -18,7 +18,7 @@ namespace Anathema.Net.Json
     /// DecodeOutcome&lt;ServerFrame&gt; frame = codec.Decode(text);
     /// </code>
     /// </example>
-    public sealed class NewtonsoftProtocolCodec : IProtocolCodec
+    internal sealed class NewtonsoftProtocolCodec : IProtocolCodec
     {
         // Um match_update inteiro não passa de uma dúzia de níveis; 64 barra JSON hostil sem recursão funda.
         private const int MaxDepth = 64;

@@ -14,7 +14,7 @@ namespace Anathema.Net.Account
     /// SpellDuration duration = SpellDurationText.Parse(modifier.ReadText("duration"));
     /// </code>
     /// </example>
-    public static class SpellDurationText
+    internal static class SpellDurationText
     {
         private static readonly Dictionary<string, SpellDuration> Durations = new Dictionary<string, SpellDuration>(StringComparer.Ordinal)
         {

@@ -17,7 +17,7 @@ namespace Anathema.Net.Core
     /// socket.Open(new Uri("ws://127.0.0.1:8000/ws/matchmaking/?token=" + token));
     /// </code>
     /// </example>
-    public interface IWebSocket
+    internal interface IWebSocket
     {
         /// <summary>Handshake concluído.</summary>
         event Action? Opened;

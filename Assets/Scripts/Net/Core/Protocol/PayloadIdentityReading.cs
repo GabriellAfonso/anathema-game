@@ -12,7 +12,7 @@ namespace Anathema.Net.Core
     /// UserId opponent = payload.ReadObject("opponent").ReadUserId("user_id");
     /// </code>
     /// </example>
-    public static class PayloadIdentityReading
+    internal static class PayloadIdentityReading
     {
         /// <summary>Lê um <see cref="UserId"/>; inteiro menor que 1 é valor inválido.</summary>
         /// <example><code>UserId self = reader.ReadUserId("user_id");</code></example>

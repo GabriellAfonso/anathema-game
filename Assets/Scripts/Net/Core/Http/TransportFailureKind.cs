@@ -4,7 +4,7 @@ namespace Anathema.Net.Core
 {
     /// <summary>Por que o pedido não teve resposta.</summary>
     /// <example><code>if (failure.Kind == TransportFailureKind.CleartextRefused) log.Error("cleartext_in_production");</code></example>
-    public enum TransportFailureKind
+    internal enum TransportFailureKind
     {
         /// <summary>O prazo do pedido esgotou.</summary>
         Timeout,

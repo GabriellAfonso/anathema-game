@@ -17,7 +17,7 @@ namespace Anathema.Net.Connection
     /// ReconnectPlan plan = policy.OnClosed(closure.Code ?? ReconnectPolicy.AbnormalClosure);
     /// </code>
     /// </example>
-    public sealed class ReconnectPolicy
+    internal sealed class ReconnectPolicy
     {
         // Codigos do backend, em apps/game/consumers/. 4001 e o gate de auth do
         // BaseConsumer; a serie 44xx e o gate de partida do MatchConsumer.

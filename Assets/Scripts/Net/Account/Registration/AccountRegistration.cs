@@ -16,7 +16,7 @@ namespace Anathema.Net.Account
     /// AccountCallOutcome&lt;AccountCreated, RegistrationRefusal&gt; registered = await registration.RegisterAsync(form);
     /// </code>
     /// </example>
-    public sealed class AccountRegistration
+    internal sealed class AccountRegistration
     {
         private readonly IHttpTransport http;
         private readonly IProtocolCodec codec;

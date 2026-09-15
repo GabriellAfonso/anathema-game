@@ -23,6 +23,6 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o objeto <c>opponent</c>.</summary>
         /// <example><code>OpponentSideView opponent = OpponentSideView.Read(view.ReadObject("opponent"));</code></example>
-        public static OpponentSideView Read(IPayloadReader side) => new OpponentSideView(side);
+        internal static OpponentSideView Read(IPayloadReader side) => new OpponentSideView(side);
     }
 }

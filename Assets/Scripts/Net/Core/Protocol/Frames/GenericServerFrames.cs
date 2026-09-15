@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// IProtocolCodec codec = new NewtonsoftProtocolCodec(frames, log);
     /// </code>
     /// </example>
-    public static class GenericServerFrames
+    internal static class GenericServerFrames
     {
         /// <summary>Campo discriminador do envelope.</summary>
         /// <example><code>string field = GenericServerFrames.TypeField; // "type"</code></example>

@@ -14,7 +14,7 @@ namespace Anathema.Net.Core
     /// DeckProblem[] listed = body.ReadObjectList("deck_problems").Select(problems.ReadNested).ToArray();
     /// </code>
     /// </example>
-    public static class DeckProblemUnion
+    internal static class DeckProblemUnion
     {
         /// <summary>Uma união nova com os braços registrados.</summary>
         /// <example><code>DiscriminatedUnion&lt;DeckProblem&gt; problems = DeckProblemUnion.Create();</code></example>

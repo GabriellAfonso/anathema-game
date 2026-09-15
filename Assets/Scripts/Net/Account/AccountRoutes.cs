@@ -11,11 +11,11 @@ namespace Anathema.Net.Account
     /// </summary>
     /// <example>
     /// <code>
-    /// AccountRoutes routes = AppEnvManager.Settings.BuildAccountRoutes();
+    /// AccountRoutes routes = config.BuildAccountRoutes();
     /// Uri deck = routes.Deck(new DeckId(4)); // http://host/players/decks/4/
     /// </code>
     /// </example>
-    public sealed class AccountRoutes
+    internal sealed class AccountRoutes
     {
         /// <summary>Cria as rotas; URL relativa, ou decks sem barra final, lança.</summary>
         /// <example><code>AccountRoutes routes = new AccountRoutes(register, login, refresh, me, cards, decks, matches);</code></example>

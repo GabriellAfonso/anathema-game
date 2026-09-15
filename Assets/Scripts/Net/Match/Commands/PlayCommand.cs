@@ -33,7 +33,9 @@ namespace Anathema.Net.Match
 
         /// <summary>Escreve os campos do <c>payload</c>; comando sem campo não escreve nada.</summary>
         /// <example><code>play.WritePayload(writer);</code></example>
-        public abstract void WritePayload(IPayloadWriter writer);
+        void IOutgoingMessage.WritePayload(IPayloadWriter writer) => Write(writer);
+
+        internal abstract void Write(IPayloadWriter writer);
 
         /// <summary>O <c>type</c>, para log.</summary>
         /// <example><code>log.Warning("match_command_not_sent", new LogField("command", play.ToString()));</code></example>

@@ -13,7 +13,7 @@ namespace Anathema.Net.Connection
     /// connection.StatusChanged += status => overlay.Show(status.Phase, status.Attempt);
     /// </code>
     /// </example>
-    public sealed class ConnectionStatus : IEquatable<ConnectionStatus>
+    internal sealed class ConnectionStatus : IEquatable<ConnectionStatus>
     {
         private ConnectionStatus(ConnectionPhase phase, int attempt, TimeSpan wait, SuspensionReason? suspension, GiveUpReason? giveUp)
         {

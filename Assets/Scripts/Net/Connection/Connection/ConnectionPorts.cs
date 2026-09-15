@@ -14,7 +14,7 @@ namespace Anathema.Net.Connection
     /// ConnectionPorts ports = new ConnectionPorts(sockets, clock, ticker, lifecycle, reachability, queue, log);
     /// </code>
     /// </example>
-    public sealed class ConnectionPorts
+    internal sealed class ConnectionPorts
     {
         /// <summary>Portas validadas; nenhuma pode ser nula.</summary>
         /// <example><code>ConnectionPorts ports = new ConnectionPorts(sockets, clock, ticker, lifecycle, reachability, queue, log);</code></example>

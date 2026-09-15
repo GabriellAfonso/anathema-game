@@ -17,7 +17,7 @@ namespace Anathema.Net.Unity
     /// IWebSocket socket = adapters.CreateSocket();
     /// </code>
     /// </example>
-    public sealed class LiveNetworkAdapters
+    internal sealed class LiveNetworkAdapters
     {
         private LiveNetworkAdapters(MainThreadQueue queue, IClientLog log, CleartextPolicy policy)
         {

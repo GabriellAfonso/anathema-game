@@ -4,7 +4,7 @@ namespace Anathema.Net.Core
 {
     /// <summary>O que a leitura da guarda segura encontrou.</summary>
     /// <example><code>if (outcome.Kind == VaultReadKind.Found) Resume(outcome.Token!);</code></example>
-    public enum VaultReadKind
+    internal enum VaultReadKind
     {
         /// <summary>Havia um refresh token legível.</summary>
         Found,

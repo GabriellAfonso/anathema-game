@@ -16,7 +16,7 @@ namespace Anathema.Net.Unity
     /// reachability.Changed += change => log.Info("network_kind_changed");
     /// </code>
     /// </example>
-    public sealed class UnityNetworkReachability : INetworkReachability
+    internal sealed class UnityNetworkReachability : INetworkReachability
     {
         private readonly NetworkKindTracker tracker;
 

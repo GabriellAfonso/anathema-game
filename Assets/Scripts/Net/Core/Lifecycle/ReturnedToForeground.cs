@@ -16,7 +16,7 @@ namespace Anathema.Net.Core
     /// };
     /// </code>
     /// </example>
-    public sealed class ReturnedToForeground
+    internal sealed class ReturnedToForeground
     {
         /// <summary>Cria o aviso; duração negativa lança.</summary>
         /// <example><code>ReturnedToForeground signal = new ReturnedToForeground(now, now - leftAt);</code></example>

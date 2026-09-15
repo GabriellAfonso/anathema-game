@@ -13,11 +13,11 @@ namespace Anathema.Net.Core
     /// string kind = DiscriminatorField.Read(problem, "kind");
     /// </code>
     /// </example>
-    public static class DiscriminatorField
+    internal static class DiscriminatorField
     {
         /// <summary>Valor exato do discriminador (com diferença de maiúsculas).</summary>
         /// <example><code>string type = DiscriminatorField.Read(envelope, "type");</code></example>
-        public static string Read(IPayloadReader reader, string field)
+        internal static string Read(IPayloadReader reader, string field)
         {
             string path = PayloadPath.Field(reader.Path, field);
             if (!reader.Has(field))

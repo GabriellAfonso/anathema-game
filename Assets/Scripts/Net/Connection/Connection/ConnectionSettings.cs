@@ -12,7 +12,7 @@ namespace Anathema.Net.Connection
     /// AuthenticatedConnection queue = new AuthenticatedConnection(ports, tokens, codec, ConnectionSettings.ForMatchmaking());
     /// </code>
     /// </example>
-    public sealed class ConnectionSettings
+    internal sealed class ConnectionSettings
     {
         /// <summary>Configuração com a política e os tempos dados.</summary>
         /// <example><code>ConnectionSettings settings = new ConnectionSettings(new ReconnectPolicy(maxAttempts: 3), ConnectionTiming.Default);</code></example>

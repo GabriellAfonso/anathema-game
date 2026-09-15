@@ -29,7 +29,7 @@ namespace Anathema.Net.Account
 
         /// <summary>Cria o catálogo da sessão.</summary>
         /// <example><code>CardCatalog cards = new CardCatalog(client, session, codec, log, routes);</code></example>
-        public CardCatalog(AuthenticatedHttpClient client, AccountSession session, IProtocolCodec codec, IClientLog log, AccountRoutes routes)
+        internal CardCatalog(AuthenticatedHttpClient client, AccountSession session, IProtocolCodec codec, IClientLog log, AccountRoutes routes)
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client), "catalog client is null: expected the authenticated http client");
             this.session = session ?? throw new ArgumentNullException(nameof(session), "catalog session is null: expected the account session");

@@ -12,7 +12,7 @@ namespace Anathema.Net.Core
     /// if (frame is AuthDeniedFrame denied) tokens.MarkRejected(denied.Error);
     /// </code>
     /// </example>
-    public sealed class AuthDeniedFrame : ServerFrame
+    internal sealed class AuthDeniedFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c>.</summary>
         /// <example><code>union.Register(AuthDeniedFrame.TypeName, AuthDeniedFrame.Read);</code></example>
@@ -32,7 +32,7 @@ namespace Anathema.Net.Core
 
         /// <summary>Braço da união: lê <c>error</c> obrigatório.</summary>
         /// <example><code>AuthDeniedFrame denied = AuthDeniedFrame.Read(payload);</code></example>
-        public static AuthDeniedFrame Read(IPayloadReader payload)
+        internal static AuthDeniedFrame Read(IPayloadReader payload)
         {
             return new AuthDeniedFrame(payload.ReadText("error"));
         }

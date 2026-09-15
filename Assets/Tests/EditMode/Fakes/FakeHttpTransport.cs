@@ -19,7 +19,7 @@ namespace Anathema.Net.Fakes
     /// HttpOutcome outcome = http.SendAsync(request).Result;
     /// </code>
     /// </example>
-    public sealed class FakeHttpTransport : IHttpTransport
+    internal sealed class FakeHttpTransport : IHttpTransport
     {
         private readonly Queue<Task<HttpOutcome>> scripted = new Queue<Task<HttpOutcome>>();
         private readonly List<HttpRequestSpec> requests = new List<HttpRequestSpec>();

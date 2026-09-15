@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// RefreshToken refresh = new RefreshToken(body.ReadText("refresh"));
     /// </code>
     /// </example>
-    public sealed class RefreshToken : IEquatable<RefreshToken>
+    internal sealed class RefreshToken : IEquatable<RefreshToken>
     {
         private readonly string text;
 

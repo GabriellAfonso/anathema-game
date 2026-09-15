@@ -17,7 +17,7 @@ namespace Anathema.Net.Core
     /// }
     /// </code>
     /// </example>
-    public abstract class ServerFrame
+    internal abstract class ServerFrame
     {
         /// <summary>Cria o frame com o valor exato de <c>type</c>.</summary>
         /// <example><code>protected MatchFoundFrame() : base("match_found") { }</code></example>

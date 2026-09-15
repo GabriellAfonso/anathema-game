@@ -5,7 +5,7 @@ namespace Anathema.Net.Connection
 {
     /// <summary>A decisao, com o motivo junto para virar log e mensagem de UI.</summary>
     /// <example><code>ReconnectPlan plan = new ReconnectPlan(ReconnectAction.Retry, 0.5, "close 1006");</code></example>
-    public readonly struct ReconnectPlan
+    internal readonly struct ReconnectPlan
     {
         /// <summary>Plano com acao, espera e motivo.</summary>
         /// <example><code>ReconnectPlan plan = new ReconnectPlan(ReconnectAction.GiveUp, 0, "partida nao existe mais");</code></example>

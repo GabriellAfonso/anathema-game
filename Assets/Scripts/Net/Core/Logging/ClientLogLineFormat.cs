@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// string line = ClientLogLineFormat.Format(entry); // socket_closed close_code=4001
     /// </code>
     /// </example>
-    public static class ClientLogLineFormat
+    internal static class ClientLogLineFormat
     {
         /// <summary>Formata a entrada numa linha.</summary>
         /// <example><code>UnityEngine.Debug.Log(ClientLogLineFormat.Format(entry));</code></example>

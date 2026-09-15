@@ -16,7 +16,7 @@ namespace Anathema.Net.Fakes
     /// ClientLogEntry failure = log.Single("main_thread_item_failed");
     /// </code>
     /// </example>
-    public sealed class FakeClientLog : IClientLog
+    internal sealed class FakeClientLog : IClientLog
     {
         private readonly object gate = new object();
         private readonly List<ClientLogEntry> entries = new List<ClientLogEntry>();

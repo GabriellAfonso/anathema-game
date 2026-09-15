@@ -7,12 +7,13 @@ namespace Anathema.Net.Unity.Tests
 {
     public class NetworkKindMappingTests
     {
-        [TestCase(NetworkReachability.NotReachable, NetworkKind.None)]
-        [TestCase(NetworkReachability.ReachableViaLocalAreaNetwork, NetworkKind.LocalArea)]
-        [TestCase(NetworkReachability.ReachableViaCarrierDataNetwork, NetworkKind.CarrierData)]
-        public void CadaValorDoUnityTemSeuTipo(NetworkReachability unity, NetworkKind expected)
+        // Tipo esperado por nome: NetworkKind é interno desde a 005 e teste público não recebe tipo interno por parâmetro.
+        [TestCase(NetworkReachability.NotReachable, "None")]
+        [TestCase(NetworkReachability.ReachableViaLocalAreaNetwork, "LocalArea")]
+        [TestCase(NetworkReachability.ReachableViaCarrierDataNetwork, "CarrierData")]
+        public void CadaValorDoUnityTemSeuTipo(NetworkReachability unity, string expectedName)
         {
-            Assert.That(NetworkKindMapping.From(unity), Is.EqualTo(expected));
+            Assert.That(NetworkKindMapping.From(unity).ToString(), Is.EqualTo(expectedName));
         }
     }
 }

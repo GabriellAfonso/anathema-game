@@ -4,7 +4,7 @@ namespace Anathema.Net.Connection
 {
     /// <summary>O que aconteceu com um pedido de entrar na fila (FR-027, FR-028).</summary>
     /// <example><code>if (queue.Join(deck) == JoinOutcome.AlreadyQueued) return;</code></example>
-    public enum JoinOutcome
+    internal enum JoinOutcome
     {
         /// <summary>A busca começou.</summary>
         Started,

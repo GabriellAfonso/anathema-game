@@ -15,7 +15,7 @@ namespace Anathema.Net.Match
     /// if (frame is MatchUpdateFrame update) Apply(update.Version, update.View, update.Events);
     /// </code>
     /// </example>
-    public sealed class MatchUpdateFrame : ServerFrame
+    internal sealed class MatchUpdateFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c> do frame.</summary>
         /// <example><code>union.Register(MatchUpdateFrame.TypeName, MatchUpdateFrame.Read);</code></example>
@@ -50,7 +50,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o payload do frame.</summary>
         /// <example><code>MatchUpdateFrame update = MatchUpdateFrame.Read(payload);</code></example>
-        public static MatchUpdateFrame Read(IPayloadReader payload)
+        internal static MatchUpdateFrame Read(IPayloadReader payload)
         {
             PlayerView view = PlayerView.Read(payload.ReadObject("view"));
             return new MatchUpdateFrame(payload.ReadInteger("version"), view, MatchEvents.ReadList(payload, "events"), ClockView.ReadOptional(payload));

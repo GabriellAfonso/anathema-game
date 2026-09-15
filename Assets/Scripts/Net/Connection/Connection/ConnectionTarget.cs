@@ -16,7 +16,7 @@ namespace Anathema.Net.Connection
     /// socket.Open(target.WithToken(token));
     /// </code>
     /// </example>
-    public sealed class ConnectionTarget : IEquatable<ConnectionTarget>
+    internal sealed class ConnectionTarget : IEquatable<ConnectionTarget>
     {
         private const string MatchParameter = "matchId";
         private const string TokenParameter = "token";

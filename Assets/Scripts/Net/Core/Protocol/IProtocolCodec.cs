@@ -17,7 +17,7 @@ namespace Anathema.Net.Core
     /// };
     /// </code>
     /// </example>
-    public interface IProtocolCodec
+    internal interface IProtocolCodec
     {
         /// <summary>Envelope <c>{"type": …, "payload": {…}}</c> em uma linha, sempre com <c>payload</c>.</summary>
         /// <example><code>string frame = codec.Encode(new PingMessage(null)); // {"type":"ping","payload":{}}</code></example>

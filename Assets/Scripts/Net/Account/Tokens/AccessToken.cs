@@ -15,7 +15,7 @@ namespace Anathema.Net.Account
     /// if (token.NeedsRenewal(clock.Now, timing.RenewalMargin)) await renewal.RenewAsync();
     /// </code>
     /// </example>
-    public sealed class AccessToken
+    internal sealed class AccessToken
     {
         private readonly string text;
 

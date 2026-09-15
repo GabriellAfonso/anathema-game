@@ -14,7 +14,7 @@ namespace Anathema.Net.Account
     /// AccountCallOutcome&lt;OwnProfile, ProfileRefusal&gt; profile = await profileQuery.ReadAsync();
     /// </code>
     /// </example>
-    public sealed class OwnProfileQuery
+    internal sealed class OwnProfileQuery
     {
         private readonly AuthenticatedHttpClient client;
         private readonly AccountResponseReader responses;

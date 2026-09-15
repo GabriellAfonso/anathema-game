@@ -17,7 +17,7 @@ namespace Anathema.Net.Fakes
     /// string[] offenders = AssemblySignatureScanner.FindUsages(typeof(MonotonicInstant).Assembly, "System.Net.WebSockets");
     /// </code>
     /// </example>
-    public static class AssemblySignatureScanner
+    internal static class AssemblySignatureScanner
     {
         private const BindingFlags Everything =
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |

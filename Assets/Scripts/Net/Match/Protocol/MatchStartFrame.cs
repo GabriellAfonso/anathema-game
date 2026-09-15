@@ -14,7 +14,7 @@ namespace Anathema.Net.Match
     /// if (frame is MatchStartFrame start) Resync(start.Version, start.View, start.Clock);
     /// </code>
     /// </example>
-    public sealed class MatchStartFrame : ServerFrame
+    internal sealed class MatchStartFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c> do frame.</summary>
         /// <example><code>union.Register(MatchStartFrame.TypeName, MatchStartFrame.Read);</code></example>
@@ -44,7 +44,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o payload do frame.</summary>
         /// <example><code>MatchStartFrame start = MatchStartFrame.Read(payload);</code></example>
-        public static MatchStartFrame Read(IPayloadReader payload)
+        internal static MatchStartFrame Read(IPayloadReader payload)
         {
             return new MatchStartFrame(payload.ReadInteger("version"), PlayerView.Read(payload.ReadObject("view")), ClockView.ReadOptional(payload));
         }

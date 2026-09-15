@@ -15,7 +15,7 @@ namespace Anathema.Net.Core
     ///     .Register("match_found", MatchFoundFrame.Read);
     /// </code>
     /// </example>
-    public sealed class DiscriminatedUnion<TBase> where TBase : class
+    internal sealed class DiscriminatedUnion<TBase> where TBase : class
     {
         private readonly string discriminatorField;
         private readonly Func<string, IPayloadReader, TBase> unknownArm;

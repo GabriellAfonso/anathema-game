@@ -13,7 +13,7 @@ namespace Anathema.Net.Account
     /// if (result.Failure == null &amp;&amp; result.Status == 200) Read(result.BodyText);
     /// </code>
     /// </example>
-    public sealed class AuthenticatedCallResult
+    internal sealed class AuthenticatedCallResult
     {
         private AuthenticatedCallResult(int status, string bodyText, AccountCallFailure? failure)
         {

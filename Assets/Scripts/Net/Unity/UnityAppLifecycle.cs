@@ -17,7 +17,7 @@ namespace Anathema.Net.Unity
     /// host.Attach(queue, lifecycle, reachability, ticker);
     /// </code>
     /// </example>
-    public sealed class UnityAppLifecycle : IAppLifecycle
+    internal sealed class UnityAppLifecycle : IAppLifecycle
     {
         private readonly LifecycleSignalFilter filter;
 

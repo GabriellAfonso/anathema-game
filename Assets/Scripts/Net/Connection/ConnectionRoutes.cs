@@ -9,11 +9,11 @@ namespace Anathema.Net.Connection
     /// </summary>
     /// <example>
     /// <code>
-    /// ConnectionRoutes routes = AppEnvManager.Settings.BuildConnectionRoutes();
+    /// ConnectionRoutes routes = config.BuildConnectionRoutes();
     /// ConnectionTarget queue = ConnectionTarget.Matchmaking(routes.Matchmaking);
     /// </code>
     /// </example>
-    public sealed class ConnectionRoutes
+    internal sealed class ConnectionRoutes
     {
         /// <summary>Rotas validadas: URLs absolutas <c>ws://</c> ou <c>wss://</c>.</summary>
         /// <example><code>ConnectionRoutes routes = new ConnectionRoutes(new Uri("ws://127.0.0.1:8000/ws/matchmaking/"), new Uri("ws://127.0.0.1:8000/ws/match/"));</code></example>

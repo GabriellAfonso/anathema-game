@@ -14,7 +14,7 @@ namespace Anathema.Net.Core
     /// ticker.Ticked += () => EvaluateRetry(clock.Now);
     /// </code>
     /// </example>
-    public interface IFrameTicker
+    internal interface IFrameTicker
     {
         /// <summary>Passou um quadro.</summary>
         event Action? Ticked;

@@ -8,7 +8,7 @@ namespace Anathema.Net.Core
     /// lifecycle.WentToBackground += signal => log.Info("app_background");
     /// </code>
     /// </example>
-    public sealed class WentToBackground
+    internal sealed class WentToBackground
     {
         /// <summary>Cria o aviso com o instante da saída.</summary>
         /// <example><code>WentToBackground signal = new WentToBackground(clock.Now);</code></example>

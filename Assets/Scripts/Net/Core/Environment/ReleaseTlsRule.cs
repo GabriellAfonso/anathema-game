@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// if (violation != null) throw new BuildFailedException(violation);
     /// </code>
     /// </example>
-    public static class ReleaseTlsRule
+    internal static class ReleaseTlsRule
     {
         /// <summary>Mensagem da violação, ou nulo quando o build pode seguir.</summary>
         /// <example><code>string? violation = ReleaseTlsRule.Check(developmentBuild: false, "Assets/Scenes/BootstrapScene.unity", "AppConfig_Dev", false, false);</code></example>

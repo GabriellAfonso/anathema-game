@@ -16,7 +16,7 @@ namespace Anathema.Net.Core
     /// filter.OnPause(true);
     /// </code>
     /// </example>
-    public sealed class LifecycleSignalFilter
+    internal sealed class LifecycleSignalFilter
     {
         private readonly IMonotonicClock clock;
         private readonly BackgroundSignalMode mode;

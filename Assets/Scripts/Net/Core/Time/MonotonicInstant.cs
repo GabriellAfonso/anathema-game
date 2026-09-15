@@ -14,7 +14,7 @@ namespace Anathema.Net.Core
     /// TimeSpan elapsed = clock.Now - sentAt;
     /// </code>
     /// </example>
-    public readonly struct MonotonicInstant : IEquatable<MonotonicInstant>, IComparable<MonotonicInstant>
+    internal readonly struct MonotonicInstant : IEquatable<MonotonicInstant>, IComparable<MonotonicInstant>
     {
         /// <summary>Cria o instante a partir de ticks de 100 ns numa origem fixa por execução.</summary>
         /// <example><code>MonotonicInstant start = new MonotonicInstant(0);</code></example>

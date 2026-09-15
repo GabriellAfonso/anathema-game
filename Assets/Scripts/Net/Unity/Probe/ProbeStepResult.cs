@@ -15,7 +15,7 @@ namespace Anathema.Net.Unity
     /// if (!result.Passed) log.Error("connection_probe_failed", new LogField("step", result.StepName));
     /// </code>
     /// </example>
-    public sealed class ProbeStepResult
+    internal sealed class ProbeStepResult
     {
         /// <summary>Cria o resultado.</summary>
         /// <example><code>ProbeStepResult result = new ProbeStepResult("ping_pong", true, fields, threadIds);</code></example>

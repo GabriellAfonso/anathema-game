@@ -12,7 +12,7 @@ namespace Anathema.Net.Fakes
     /// http.RespondNext(200, FakeAccountResponses.Login(FakeAccessJwt.FiveMinutes(), "refresh-1"));
     /// </code>
     /// </example>
-    public static class FakeAccountResponses
+    internal static class FakeAccountResponses
     {
         /// <summary>Corpo 200 de <c>POST /accounts/login/</c>.</summary>
         /// <example><code>string body = FakeAccountResponses.Login(access, "refresh-1");</code></example>

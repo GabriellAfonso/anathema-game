@@ -14,7 +14,7 @@ namespace Anathema.Net.Connection
     /// ConnectionTiming timing = new ConnectionTiming(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(5));
     /// </code>
     /// </example>
-    public sealed class ConnectionTiming
+    internal sealed class ConnectionTiming
     {
         /// <summary>Tempos da camada: ping 10 s, silêncio 30 s, pausa 5 s.</summary>
         /// <example><code>ConnectionTiming timing = ConnectionTiming.Default;</code></example>

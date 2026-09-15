@@ -10,7 +10,7 @@ namespace Anathema.Net.Core
     /// writer.WriteCardInstanceId("card_instance_id", chosen);
     /// </code>
     /// </example>
-    public static class PayloadIdentityWriting
+    internal static class PayloadIdentityWriting
     {
         /// <summary>Escreve o inteiro cru de um <see cref="UserId"/>.</summary>
         /// <example><code>writer.WriteUserId("user_id", self);</code></example>

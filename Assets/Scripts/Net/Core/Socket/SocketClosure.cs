@@ -16,7 +16,7 @@ namespace Anathema.Net.Core
     /// };
     /// </code>
     /// </example>
-    public sealed class SocketClosure
+    internal sealed class SocketClosure
     {
         /// <summary>Motivo local: a conexão caiu sem close frame.</summary>
         /// <example><code>bool dropped = closure.Reason == SocketClosure.AbnormalReason;</code></example>

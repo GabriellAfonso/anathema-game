@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// string path = PayloadPath.Field(reader.Path, "user_id");
     /// </code>
     /// </example>
-    public static class PayloadPath
+    internal static class PayloadPath
     {
         /// <summary>Caminho de um campo dentro de <paramref name="parent"/>; raiz é vazio.</summary>
         /// <example><code>string path = PayloadPath.Field("payload", "code"); // payload.code</code></example>

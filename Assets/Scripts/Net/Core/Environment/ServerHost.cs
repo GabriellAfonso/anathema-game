@@ -15,7 +15,7 @@ namespace Anathema.Net.Core
     /// if (!ServerHost.TryParse(raw, out ServerHost? host, out string problem)) log.Warning("server_host_rejected", new LogField("problem", problem));
     /// </code>
     /// </example>
-    public sealed class ServerHost
+    internal sealed class ServerHost
     {
         private static readonly string[] Schemes = { "https://", "http://", "wss://", "ws://" };
 

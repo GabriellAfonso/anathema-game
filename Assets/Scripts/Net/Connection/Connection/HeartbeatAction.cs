@@ -4,7 +4,7 @@ namespace Anathema.Net.Connection
 {
     /// <summary>O que o client deve fazer neste frame.</summary>
     /// <example><code>if (heartbeat.Tick(delta) == HeartbeatAction.DeclareDead) Drop();</code></example>
-    public enum HeartbeatAction
+    internal enum HeartbeatAction
     {
         /// <summary>Nada a fazer.</summary>
         Idle,

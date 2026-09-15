@@ -10,7 +10,7 @@ namespace Anathema.Net.Core
     ///     new LogField("previous", change.Previous.ToString()), new LogField("current", change.Current.ToString()));
     /// </code>
     /// </example>
-    public interface INetworkReachability
+    internal interface INetworkReachability
     {
         /// <summary>Tipo de rede agora.</summary>
         /// <example><code>NetworkKind now = reachability.Current;</code></example>

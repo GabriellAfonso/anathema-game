@@ -27,7 +27,7 @@ namespace Anathema.Net.Account
 
         /// <summary>Cria o serviço de decks.</summary>
         /// <example><code>PlayerDecks decks = new PlayerDecks(client, codec, log, routes);</code></example>
-        public PlayerDecks(AuthenticatedHttpClient client, IProtocolCodec codec, IClientLog log, AccountRoutes routes)
+        internal PlayerDecks(AuthenticatedHttpClient client, IProtocolCodec codec, IClientLog log, AccountRoutes routes)
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client), "decks client is null: expected the authenticated http client");
             this.codec = codec ?? throw new ArgumentNullException(nameof(codec), "decks codec is null: expected the project codec");

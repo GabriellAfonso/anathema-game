@@ -34,7 +34,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Escreve <c>card_instance_id</c> e, com alvo, <c>target_card_instance_id</c>.</summary>
         /// <example><code>cast.WritePayload(writer);</code></example>
-        public override void WritePayload(IPayloadWriter writer)
+        internal override void Write(IPayloadWriter writer)
         {
             writer.WriteCardInstanceId("card_instance_id", Card);
             if (Target.HasValue)

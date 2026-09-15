@@ -27,6 +27,6 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê um objeto de <c>blocks</c>.</summary>
         /// <example><code>BlockPair pair = BlockPair.Read(item);</code></example>
-        public static BlockPair Read(IPayloadReader pair) => new BlockPair(pair);
+        internal static BlockPair Read(IPayloadReader pair) => new BlockPair(pair);
     }
 }

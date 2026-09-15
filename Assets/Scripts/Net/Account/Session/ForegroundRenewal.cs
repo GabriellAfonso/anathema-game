@@ -15,7 +15,7 @@ namespace Anathema.Net.Account
     /// onReturn.Dispose(); // ao destruir a camada
     /// </code>
     /// </example>
-    public sealed class ForegroundRenewal : IDisposable
+    internal sealed class ForegroundRenewal : IDisposable
     {
         private readonly IAppLifecycle lifecycle;
         private readonly AccountSession session;

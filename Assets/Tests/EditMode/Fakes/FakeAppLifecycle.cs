@@ -16,7 +16,7 @@ namespace Anathema.Net.Fakes
     /// lifecycle.SimulateForeground();
     /// </code>
     /// </example>
-    public sealed class FakeAppLifecycle : IAppLifecycle
+    internal sealed class FakeAppLifecycle : IAppLifecycle
     {
         private readonly FakeMonotonicClock clock;
         private bool inBackground;

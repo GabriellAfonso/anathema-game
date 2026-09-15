@@ -19,7 +19,7 @@ namespace Anathema.Net.Fakes
     /// socket.SimulateClosed(4001, "auth_denied");
     /// </code>
     /// </example>
-    public sealed class FakeWebSocket : IWebSocket
+    internal sealed class FakeWebSocket : IWebSocket
     {
         private enum State { Idle, Opening, Open, Closed }
 

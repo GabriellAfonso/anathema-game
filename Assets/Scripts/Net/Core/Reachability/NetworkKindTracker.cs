@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// if (tracker.ShouldPoll()) tracker.Observe(NetworkKindMapping.From(Application.internetReachability));
     /// </code>
     /// </example>
-    public sealed class NetworkKindTracker
+    internal sealed class NetworkKindTracker
     {
         /// <summary>Intervalo mínimo entre consultas.</summary>
         /// <example><code>TimeSpan every = NetworkKindTracker.PollInterval;</code></example>

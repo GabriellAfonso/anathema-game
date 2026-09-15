@@ -28,7 +28,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Escreve <c>attacker_card_instance_ids</c>.</summary>
         /// <example><code>attack.WritePayload(writer);</code></example>
-        public override void WritePayload(IPayloadWriter writer)
+        internal override void Write(IPayloadWriter writer)
         {
             writer.WriteCardInstanceIdList("attacker_card_instance_ids", Attackers);
         }

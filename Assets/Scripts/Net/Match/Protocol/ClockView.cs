@@ -38,7 +38,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o campo <c>clock</c> do payload; ausente ou nulo vira <see cref="Empty"/>.</summary>
         /// <example><code>ClockView clock = ClockView.ReadOptional(payload);</code></example>
-        public static ClockView ReadOptional(IPayloadReader payload)
+        internal static ClockView ReadOptional(IPayloadReader payload)
         {
             IPayloadReader? clock = payload.ReadOptionalObject("clock");
             if (clock == null)

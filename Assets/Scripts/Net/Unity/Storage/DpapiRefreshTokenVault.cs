@@ -17,7 +17,7 @@ namespace Anathema.Net.Unity
     /// IRefreshTokenVault vault = new DpapiRefreshTokenVault(Path.Combine(Application.persistentDataPath, "account"), slot);
     /// </code>
     /// </example>
-    public sealed class DpapiRefreshTokenVault : IRefreshTokenVault
+    internal sealed class DpapiRefreshTokenVault : IRefreshTokenVault
     {
         // Sem entropia, qualquer programa do mesmo usuário decifraria o arquivo só chamando a DPAPI.
         private static readonly byte[] Entropy = Encoding.UTF8.GetBytes("anathema.refresh_token.v1");

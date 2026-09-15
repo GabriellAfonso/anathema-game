@@ -11,7 +11,7 @@ namespace Anathema.Net.Core
     /// LifecycleSignalFilter filter = new LifecycleSignalFilter(clock, BackgroundSignalMode.DesktopKeepsRunning);
     /// </code>
     /// </example>
-    public enum BackgroundSignalMode
+    internal enum BackgroundSignalMode
     {
         /// <summary>Android: pausa é segundo plano; perda de foco sozinha (teclado, diálogo) não é.</summary>
         AndroidPause,

@@ -14,7 +14,7 @@ namespace Anathema.Net.Fakes
     /// Assert.That(vault.Stored, Is.EqualTo("refresh-1"));
     /// </code>
     /// </example>
-    public sealed class FakeRefreshTokenVault : IRefreshTokenVault
+    internal sealed class FakeRefreshTokenVault : IRefreshTokenVault
     {
         private RefreshToken? stored;
         private string? nextSaveFailure;

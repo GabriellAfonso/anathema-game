@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// public void WritePayload(IPayloadWriter writer) => writer.WriteInteger("deck_id", deckId);
     /// </code>
     /// </example>
-    public interface IPayloadWriter
+    internal interface IPayloadWriter
     {
         /// <summary>Campo de texto.</summary>
         /// <example><code>writer.WriteText("username", username);</code></example>

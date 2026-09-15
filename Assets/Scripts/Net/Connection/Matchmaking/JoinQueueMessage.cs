@@ -13,7 +13,7 @@ namespace Anathema.Net.Connection
     /// SocketSendOutcome sent = await connection.SendAsync(new JoinQueueMessage(deck));
     /// </code>
     /// </example>
-    public sealed class JoinQueueMessage : IOutgoingMessage
+    internal sealed class JoinQueueMessage : IOutgoingMessage
     {
         /// <summary>Valor de <c>type</c> da mensagem.</summary>
         /// <example><code>bool isJoin = message.MessageType == JoinQueueMessage.TypeName;</code></example>

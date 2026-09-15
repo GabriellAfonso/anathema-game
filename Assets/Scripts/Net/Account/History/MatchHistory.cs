@@ -23,7 +23,7 @@ namespace Anathema.Net.Account
 
         /// <summary>Cria a leitura do histórico.</summary>
         /// <example><code>MatchHistory history = new MatchHistory(client, codec, log, routes);</code></example>
-        public MatchHistory(AuthenticatedHttpClient client, IProtocolCodec codec, IClientLog log, AccountRoutes routes)
+        internal MatchHistory(AuthenticatedHttpClient client, IProtocolCodec codec, IClientLog log, AccountRoutes routes)
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client), "history client is null: expected the authenticated http client");
             this.log = log ?? throw new ArgumentNullException(nameof(log), "history log is null: expected the client log");

@@ -16,7 +16,7 @@ namespace Anathema.Net.Fakes
     /// held.Release();
     /// </code>
     /// </example>
-    public sealed class HeldRenewal
+    internal sealed class HeldRenewal
     {
         private readonly TaskCompletionSource<RenewalOutcome> completion = new TaskCompletionSource<RenewalOutcome>();
         private RenewalOutcome? scripted;

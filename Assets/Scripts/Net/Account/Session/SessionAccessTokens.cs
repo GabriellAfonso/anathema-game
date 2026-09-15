@@ -16,7 +16,7 @@ namespace Anathema.Net.Account
     /// AccessTokenOutcome token = await tokens.GetValidAsync();
     /// </code>
     /// </example>
-    public sealed class SessionAccessTokens : IAccessTokenSource
+    internal sealed class SessionAccessTokens : IAccessTokenSource
     {
         private readonly AccountSession session;
         private readonly IMonotonicClock clock;

@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// socket.Open(url);
     /// </code>
     /// </example>
-    public interface IWebSocketFactory
+    internal interface IWebSocketFactory
     {
         /// <summary>Uma instância nova e ociosa.</summary>
         /// <example><code>IWebSocket socket = sockets.Create();</code></example>

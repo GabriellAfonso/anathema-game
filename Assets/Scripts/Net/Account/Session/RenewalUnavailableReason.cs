@@ -4,7 +4,7 @@ namespace Anathema.Net.Account
 {
     /// <summary>Por que uma renovação não saiu, sem que a sessão tenha expirado (research R5).</summary>
     /// <example><code>if (renewal.Reason == RenewalUnavailableReason.Transport) RetryLater();</code></example>
-    public enum RenewalUnavailableReason
+    internal enum RenewalUnavailableReason
     {
         /// <summary>Sem rede, host não resolvido, prazo esgotado.</summary>
         Transport,

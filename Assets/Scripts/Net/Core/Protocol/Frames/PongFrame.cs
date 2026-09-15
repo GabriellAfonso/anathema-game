@@ -12,7 +12,7 @@ namespace Anathema.Net.Core
     /// if (frame is PongFrame pong &amp;&amp; sent.Equals(pong.Marker)) latency.Record(sent);
     /// </code>
     /// </example>
-    public sealed class PongFrame : ServerFrame
+    internal sealed class PongFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c>.</summary>
         /// <example><code>union.Register(PongFrame.TypeName, PongFrame.Read);</code></example>
@@ -32,7 +32,7 @@ namespace Anathema.Net.Core
 
         /// <summary>Braço da união: nunca falha por causa do marcador.</summary>
         /// <example><code>PongFrame pong = PongFrame.Read(payload);</code></example>
-        public static PongFrame Read(IPayloadReader payload)
+        internal static PongFrame Read(IPayloadReader payload)
         {
             return new PongFrame(TryReadMarker(payload));
         }

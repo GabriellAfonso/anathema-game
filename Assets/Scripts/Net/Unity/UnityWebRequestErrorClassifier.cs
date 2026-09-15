@@ -15,7 +15,7 @@ namespace Anathema.Net.Unity
     /// TransportFailureKind kind = UnityWebRequestErrorClassifier.Classify(request.error);
     /// </code>
     /// </example>
-    public static class UnityWebRequestErrorClassifier
+    internal static class UnityWebRequestErrorClassifier
     {
         /// <summary>Categoria de uma falha de transporte a partir do texto do Unity.</summary>
         /// <example><code>TransportFailureKind kind = UnityWebRequestErrorClassifier.Classify("Request timeout");</code></example>

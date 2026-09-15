@@ -13,7 +13,7 @@ namespace Anathema.Net.Connection
     /// if (frame is MatchmakingFailedFrame failed) log.Warning("matchmaking_failed", new LogField("error", failed.Error));
     /// </code>
     /// </example>
-    public sealed class MatchmakingFailedFrame : ServerFrame
+    internal sealed class MatchmakingFailedFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c> do frame.</summary>
         /// <example><code>union.Register(MatchmakingFailedFrame.TypeName, MatchmakingFailedFrame.Read);</code></example>
@@ -33,7 +33,7 @@ namespace Anathema.Net.Connection
 
         /// <summary>Lê o payload do frame.</summary>
         /// <example><code>MatchmakingFailedFrame frame = MatchmakingFailedFrame.Read(payload);</code></example>
-        public static MatchmakingFailedFrame Read(IPayloadReader payload)
+        internal static MatchmakingFailedFrame Read(IPayloadReader payload)
         {
             return new MatchmakingFailedFrame(payload.ReadText("error"));
         }

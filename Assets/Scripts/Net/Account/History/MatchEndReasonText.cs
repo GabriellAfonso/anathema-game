@@ -14,7 +14,7 @@ namespace Anathema.Net.Account
     /// MatchEndReason reason = MatchEndReasonText.Parse(payload.ReadText("reason"));
     /// </code>
     /// </example>
-    public static class MatchEndReasonText
+    internal static class MatchEndReasonText
     {
         private static readonly Dictionary<string, MatchEndReason> Reasons = new Dictionary<string, MatchEndReason>(StringComparer.Ordinal)
         {

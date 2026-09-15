@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// HttpOutcome outcome = await http.SendAsync(new HttpRequestSpec("GET", cardsUrl));
     /// </code>
     /// </example>
-    public interface IHttpTransport
+    internal interface IHttpTransport
     {
         /// <summary>Envia o pedido e devolve resposta ou falha de transporte.</summary>
         /// <example><code>HttpOutcome outcome = await http.SendAsync(request);</code></example>

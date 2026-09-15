@@ -21,7 +21,7 @@ namespace Anathema.Net.Fakes
     /// connection.Connect(target);
     /// </code>
     /// </example>
-    public sealed class FakeAccessTokenSource : IAccessTokenSource
+    internal sealed class FakeAccessTokenSource : IAccessTokenSource
     {
         private static readonly UserId Owner = new UserId(1);
         private static readonly TimeSpan Lifetime = TimeSpan.FromMinutes(5);

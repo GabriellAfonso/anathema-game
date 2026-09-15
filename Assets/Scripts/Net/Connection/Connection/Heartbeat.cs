@@ -18,7 +18,7 @@ namespace Anathema.Net.Connection
     /// if (heartbeat.Tick(delta.TotalSeconds) == HeartbeatAction.SendPing) SendPing();
     /// </code>
     /// </example>
-    public sealed class Heartbeat
+    internal sealed class Heartbeat
     {
         private readonly double intervalSeconds;
         private readonly double timeoutSeconds;

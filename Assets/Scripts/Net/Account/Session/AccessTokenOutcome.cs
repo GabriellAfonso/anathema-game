@@ -12,7 +12,7 @@ namespace Anathema.Net.Account
     /// if (token.Kind == AccessTokenOutcomeKind.Valid) socket.Open(new Uri(url + "?token=" + token.Token!.RevealForRequest()));
     /// </code>
     /// </example>
-    public sealed class AccessTokenOutcome
+    internal sealed class AccessTokenOutcome
     {
         private AccessTokenOutcome(AccessTokenOutcomeKind kind, AccessToken? token = null, SessionUnavailableKind? session = null, RenewalOutcome? renewal = null)
         {

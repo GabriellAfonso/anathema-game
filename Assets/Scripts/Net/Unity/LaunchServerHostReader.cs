@@ -19,7 +19,7 @@ namespace Anathema.Net.Unity
     /// string? host = LaunchServerHostReader.ReadLaunchValue(LaunchServerHostReader.ServerHostName);
     /// </code>
     /// </example>
-    public static class LaunchServerHostReader
+    internal static class LaunchServerHostReader
     {
         /// <summary>Parâmetro com o host do servidor.</summary>
         /// <example><code>ReadLaunchValue(LaunchServerHostReader.ServerHostName);</code></example>

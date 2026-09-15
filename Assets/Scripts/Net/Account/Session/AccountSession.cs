@@ -18,7 +18,7 @@ namespace Anathema.Net.Account
     /// SignInOutcome outcome = await session.SignInAsync("one", new Password("123456"));
     /// </code>
     /// </example>
-    public sealed class AccountSession
+    internal sealed class AccountSession
     {
         private readonly IHttpTransport http;
         private readonly IProtocolCodec codec;

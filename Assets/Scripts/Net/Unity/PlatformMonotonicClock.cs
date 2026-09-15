@@ -12,7 +12,7 @@ namespace Anathema.Net.Unity
     /// IMonotonicClock clock = PlatformMonotonicClock.Create(log);
     /// </code>
     /// </example>
-    public static class PlatformMonotonicClock
+    internal static class PlatformMonotonicClock
     {
         /// <summary>O relógio monotônico que conta o sono do aparelho neste alvo.</summary>
         /// <example><code>IMonotonicClock clock = PlatformMonotonicClock.Create(log);</code></example>

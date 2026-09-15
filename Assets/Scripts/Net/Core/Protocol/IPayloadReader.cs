@@ -15,7 +15,7 @@ namespace Anathema.Net.Core
     /// long? deckId = payload.ReadOptionalInteger("deck_id");
     /// </code>
     /// </example>
-    public interface IPayloadReader
+    internal interface IPayloadReader
     {
         /// <summary>Caminho deste objeto, para mensagens; vazio na raiz.</summary>
         /// <example><code>string where = reader.Path;</code></example>

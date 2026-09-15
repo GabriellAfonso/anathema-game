@@ -15,7 +15,7 @@ namespace Anathema.Net.Core
     /// if (!policy.Permits(url)) RefuseCleartext();
     /// </code>
     /// </example>
-    public sealed class CleartextPolicy
+    internal sealed class CleartextPolicy
     {
         /// <summary>Cria a política; só a composição decide o valor.</summary>
         /// <example><code>CleartextPolicy production = new CleartextPolicy(false);</code></example>

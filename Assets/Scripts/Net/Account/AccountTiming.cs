@@ -13,7 +13,7 @@ namespace Anathema.Net.Account
     /// AccountTiming timing = new AccountTiming(TimeSpan.FromSeconds(30));
     /// </code>
     /// </example>
-    public sealed class AccountTiming
+    internal sealed class AccountTiming
     {
         /// <summary>Margem padrão: 30 s.</summary>
         /// <example><code>TimeSpan margin = AccountTiming.DefaultRenewalMargin;</code></example>

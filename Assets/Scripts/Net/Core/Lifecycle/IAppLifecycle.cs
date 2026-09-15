@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// lifecycle.ReturnedToForeground += signal => Reconnect(signal.AwayFor);
     /// </code>
     /// </example>
-    public interface IAppLifecycle
+    internal interface IAppLifecycle
     {
         /// <summary>O app saiu do primeiro plano.</summary>
         event Action<WentToBackground>? WentToBackground;

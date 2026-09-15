@@ -17,7 +17,7 @@ namespace Anathema.Net.Unity
     /// IMonotonicClock clock = new BootTimeMonotonicClock(log);
     /// </code>
     /// </example>
-    public sealed class BootTimeMonotonicClock : IMonotonicClock
+    internal sealed class BootTimeMonotonicClock : IMonotonicClock
     {
         private const int ClockBootTime = 7;
         private const long NanosecondsPerTick = 100;

@@ -4,7 +4,7 @@ namespace Anathema.Net.Account
 {
     /// <summary>Como terminou uma renovação do token de acesso.</summary>
     /// <example><code>if (outcome.Kind == RenewalOutcomeKind.SessionExpired) ShowLogin();</code></example>
-    public enum RenewalOutcomeKind
+    internal enum RenewalOutcomeKind
     {
         /// <summary>Token de acesso novo.</summary>
         Renewed,

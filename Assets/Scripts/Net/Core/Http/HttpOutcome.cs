@@ -14,7 +14,7 @@ namespace Anathema.Net.Core
     /// if (outcome.AsFailure is TransportFailure failure) ShowOffline(failure.Kind);
     /// </code>
     /// </example>
-    public abstract class HttpOutcome
+    internal abstract class HttpOutcome
     {
         // private protected: só HttpResponse e TransportFailure, neste assembly, estendem.
         private protected HttpOutcome()

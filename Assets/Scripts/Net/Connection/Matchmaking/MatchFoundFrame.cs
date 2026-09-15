@@ -13,7 +13,7 @@ namespace Anathema.Net.Connection
     /// if (frame is MatchFoundFrame found) OnPaired(found.Pairing);
     /// </code>
     /// </example>
-    public sealed class MatchFoundFrame : ServerFrame
+    internal sealed class MatchFoundFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c> do frame.</summary>
         /// <example><code>union.Register(MatchFoundFrame.TypeName, MatchFoundFrame.Read);</code></example>
@@ -33,7 +33,7 @@ namespace Anathema.Net.Connection
 
         /// <summary>Lê o payload do frame.</summary>
         /// <example><code>MatchFoundFrame frame = MatchFoundFrame.Read(payload);</code></example>
-        public static MatchFoundFrame Read(IPayloadReader payload)
+        internal static MatchFoundFrame Read(IPayloadReader payload)
         {
             PairedPlayer self = PairedPlayer.Read(payload.ReadObject("self"));
             PairedPlayer opponent = PairedPlayer.Read(payload.ReadObject("opponent"));

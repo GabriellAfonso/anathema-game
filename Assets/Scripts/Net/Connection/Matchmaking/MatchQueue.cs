@@ -17,7 +17,7 @@ namespace Anathema.Net.Connection
     /// queue.Join(deck);
     /// </code>
     /// </example>
-    public sealed class MatchQueue : IDisposable
+    internal sealed class MatchQueue : IDisposable
     {
         private readonly AuthenticatedConnection connection;
         private readonly ConnectionTarget target;

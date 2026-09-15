@@ -12,7 +12,7 @@ namespace Anathema.Net.Fakes
     /// sockets.Latest.SimulateOpened();
     /// </code>
     /// </example>
-    public sealed class FakeWebSocketFactory : IWebSocketFactory
+    internal sealed class FakeWebSocketFactory : IWebSocketFactory
     {
         private readonly List<FakeWebSocket> created = new List<FakeWebSocket>();
 

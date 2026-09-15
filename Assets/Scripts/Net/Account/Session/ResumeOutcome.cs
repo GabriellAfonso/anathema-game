@@ -33,7 +33,7 @@ namespace Anathema.Net.Account
 
         /// <summary>A renovação que não saiu; só em <see cref="ResumeOutcomeKind.Unavailable"/>.</summary>
         /// <example><code>RenewalUnavailableReason? reason = resumed.Renewal?.Reason;</code></example>
-        public RenewalOutcome? Renewal { get; }
+        internal RenewalOutcome? Renewal { get; }
 
         /// <summary>Entrou sem senha.</summary>
         /// <example><code>return ResumeOutcome.Resumed(token.Owner);</code></example>
@@ -49,7 +49,7 @@ namespace Anathema.Net.Account
 
         /// <summary>Servidor inalcançável ou resposta inesperada.</summary>
         /// <example><code>return ResumeOutcome.Unavailable(renewal);</code></example>
-        public static ResumeOutcome Unavailable(RenewalOutcome renewal)
+        internal static ResumeOutcome Unavailable(RenewalOutcome renewal)
         {
             return new ResumeOutcome(ResumeOutcomeKind.Unavailable, renewal: renewal ?? throw new ArgumentNullException(nameof(renewal), "unavailable resume renewal is null: expected the renewal outcome"));
         }

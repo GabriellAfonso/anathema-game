@@ -16,7 +16,7 @@ namespace Anathema.Net.Json
     /// string body = codec.EncodeObject(writer => writer.WriteText("username", username));
     /// </code>
     /// </example>
-    public sealed class JObjectPayloadWriter : IPayloadWriter
+    internal sealed class JObjectPayloadWriter : IPayloadWriter
     {
         private readonly JObject target;
 

@@ -43,7 +43,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o objeto <c>turn</c>.</summary>
         /// <example><code>TurnView turn = TurnView.Read(clock.ReadObject("turn"));</code></example>
-        public static TurnView Read(IPayloadReader turn)
+        internal static TurnView Read(IPayloadReader turn)
         {
             return new TurnView(turn.ReadInteger("turn_number"), turn.ReadUserId("holder_user_id"), turn.ReadInteger("remaining_ms"), turn.ReadBoolean("warning"));
         }

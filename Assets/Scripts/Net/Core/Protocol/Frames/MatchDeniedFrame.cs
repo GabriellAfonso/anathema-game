@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// if (frame is MatchDeniedFrame denied) log.Warning("match_denied", new LogField("error", denied.Error));
     /// </code>
     /// </example>
-    public sealed class MatchDeniedFrame : ServerFrame
+    internal sealed class MatchDeniedFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c> do frame.</summary>
         /// <example><code>union.Register(MatchDeniedFrame.TypeName, MatchDeniedFrame.Read);</code></example>
@@ -33,7 +33,7 @@ namespace Anathema.Net.Core
 
         /// <summary>Lê o payload do frame.</summary>
         /// <example><code>MatchDeniedFrame frame = MatchDeniedFrame.Read(payload);</code></example>
-        public static MatchDeniedFrame Read(IPayloadReader payload)
+        internal static MatchDeniedFrame Read(IPayloadReader payload)
         {
             return new MatchDeniedFrame(payload.ReadText("error"));
         }

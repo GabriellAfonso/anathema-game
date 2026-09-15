@@ -12,7 +12,7 @@ namespace Anathema.Net.Core
     /// TransportFailure failure = new TransportFailure(TransportFailureKind.Timeout, "Request timeout");
     /// </code>
     /// </example>
-    public sealed class TransportFailure : HttpOutcome
+    internal sealed class TransportFailure : HttpOutcome
     {
         /// <summary>Cria a falha com a categoria e o texto do transporte.</summary>
         /// <example><code>HttpOutcome offline = new TransportFailure(TransportFailureKind.CannotConnect, error);</code></example>

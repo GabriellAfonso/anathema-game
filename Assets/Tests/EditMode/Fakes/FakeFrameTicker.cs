@@ -14,7 +14,7 @@ namespace Anathema.Net.Fakes
     /// ticker.Tick();
     /// </code>
     /// </example>
-    public sealed class FakeFrameTicker : IFrameTicker
+    internal sealed class FakeFrameTicker : IFrameTicker
     {
         /// <inheritdoc />
         public event Action? Ticked;

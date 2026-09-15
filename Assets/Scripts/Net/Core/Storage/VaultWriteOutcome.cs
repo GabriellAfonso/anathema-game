@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// if (saved.Kind == VaultWriteKind.Failed) log.Warning("vault_save_failed", new LogField("detail", saved.Detail));
     /// </code>
     /// </example>
-    public sealed class VaultWriteOutcome
+    internal sealed class VaultWriteOutcome
     {
         private VaultWriteOutcome(VaultWriteKind kind, string detail)
         {

@@ -16,7 +16,7 @@ namespace Anathema.Net.Unity
     /// if (result.EndOfMessage) Deliver(assembler.Complete());
     /// </code>
     /// </example>
-    public sealed class WebSocketMessageAssembler
+    internal sealed class WebSocketMessageAssembler
     {
         private readonly MemoryStream buffer = new MemoryStream();
 

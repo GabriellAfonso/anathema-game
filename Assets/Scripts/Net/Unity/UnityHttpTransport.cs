@@ -20,7 +20,7 @@ namespace Anathema.Net.Unity
     /// HttpOutcome outcome = await http.SendAsync(new HttpRequestSpec("GET", new Uri(httpBase + "/game/cards/")));
     /// </code>
     /// </example>
-    public sealed class UnityHttpTransport : IHttpTransport
+    internal sealed class UnityHttpTransport : IHttpTransport
     {
         private readonly MainThreadQueue queue;
         private readonly CleartextPolicy policy;

@@ -4,7 +4,7 @@ namespace Anathema.Net.Account
 {
     /// <summary>O que a porta de token válido conseguiu entregar.</summary>
     /// <example><code>if (outcome.Kind == AccessTokenOutcomeKind.Valid) OpenSocket(outcome.Token!);</code></example>
-    public enum AccessTokenOutcomeKind
+    internal enum AccessTokenOutcomeKind
     {
         /// <summary>Um token fora da margem de renovação.</summary>
         Valid,

@@ -14,7 +14,7 @@ namespace Anathema.Net.Account
     /// AuthenticatedRequest read = AuthenticatedRequest.Get(routes.Cards);
     /// </code>
     /// </example>
-    public sealed class AuthenticatedRequest
+    internal sealed class AuthenticatedRequest
     {
         private static readonly HashSet<string> AllowedMethods = new HashSet<string> { "GET", "POST", "PATCH", "DELETE" };
 

@@ -16,7 +16,7 @@ namespace Anathema.Net.Unity
     /// MonotonicInstant now = clock.Now;
     /// </code>
     /// </example>
-    public sealed class StopwatchMonotonicClock : IMonotonicClock
+    internal sealed class StopwatchMonotonicClock : IMonotonicClock
     {
         /// <summary>Instante atual em ticks de 100 ns.</summary>
         /// <example><code>MonotonicInstant now = clock.Now;</code></example>

@@ -75,11 +75,13 @@ namespace Anathema.Net.Connection.Tests
             Assert.That(after.Session, Is.EqualTo(SessionUnavailableKind.Expired));
         }
 
-        [TestCase(RenewalUnavailableReason.Transport)]
-        [TestCase(RenewalUnavailableReason.ServerStatus)]
-        [TestCase(RenewalUnavailableReason.OutOfContract)]
-        public async Task IndisponivelCarregaOMotivo(RenewalUnavailableReason reason)
+        // Nome do motivo em texto: o enum é interno desde a 005 e teste público não recebe tipo interno por parâmetro.
+        [TestCase("Transport")]
+        [TestCase("ServerStatus")]
+        [TestCase("OutOfContract")]
+        public async Task IndisponivelCarregaOMotivo(string reasonName)
         {
+            RenewalUnavailableReason reason = (RenewalUnavailableReason)System.Enum.Parse(typeof(RenewalUnavailableReason), reasonName);
             tokens.EnqueueUnavailable(reason);
             tokens.EnqueueRenewalUnavailable(reason);
 

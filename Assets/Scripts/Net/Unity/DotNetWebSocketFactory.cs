@@ -11,7 +11,7 @@ namespace Anathema.Net.Unity
     /// IWebSocket socket = sockets.Create();
     /// </code>
     /// </example>
-    public sealed class DotNetWebSocketFactory : IWebSocketFactory
+    internal sealed class DotNetWebSocketFactory : IWebSocketFactory
     {
         private readonly MainThreadQueue queue;
         private readonly CleartextPolicy policy;

@@ -7,7 +7,7 @@ namespace Anathema.Net.Core
     /// cativo aparece como <see cref="LocalArea"/>.
     /// </summary>
     /// <example><code>if (reachability.Current == NetworkKind.None) ShowOffline();</code></example>
-    public enum NetworkKind
+    internal enum NetworkKind
     {
         /// <summary>Sem rede.</summary>
         None,

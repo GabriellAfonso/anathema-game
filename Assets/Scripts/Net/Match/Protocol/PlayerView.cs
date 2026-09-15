@@ -83,7 +83,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o objeto <c>view</c>.</summary>
         /// <example><code>PlayerView view = PlayerView.Read(payload.ReadObject("view"));</code></example>
-        public static PlayerView Read(IPayloadReader view) => new PlayerView(view);
+        internal static PlayerView Read(IPayloadReader view) => new PlayerView(view);
 
         private static T? ReadOptional<T>(IPayloadReader view, string field, Func<IPayloadReader, T> read) where T : class
         {

@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// throw new PayloadShapeException(new DecodeFailure(DecodeFailureKind.InvalidValue, "payload.user_id", "user_id is 0: expected a positive integer"));
     /// </code>
     /// </example>
-    public sealed class PayloadShapeException : Exception
+    internal sealed class PayloadShapeException : Exception
     {
         /// <summary>Cria a exceção com o motivo.</summary>
         /// <example><code>throw new PayloadShapeException(failure);</code></example>

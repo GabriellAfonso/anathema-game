@@ -17,7 +17,7 @@ namespace Anathema.Net.Account
     /// DecodeOutcome&lt;AccessToken&gt; token = new AccessTokenReader(codec).Read(body.ReadText("access"), clock.Now);
     /// </code>
     /// </example>
-    public sealed class AccessTokenReader
+    internal sealed class AccessTokenReader
     {
         private static readonly long MaxLifetimeSeconds = TimeSpan.MaxValue.Ticks / TimeSpan.TicksPerSecond;
         private readonly IProtocolCodec codec;

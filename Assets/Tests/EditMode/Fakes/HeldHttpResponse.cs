@@ -17,7 +17,7 @@ namespace Anathema.Net.Fakes
     /// refresh.Release(200, "{\"access\": \"...\"}");
     /// </code>
     /// </example>
-    public sealed class HeldHttpResponse
+    internal sealed class HeldHttpResponse
     {
         // Sem RunContinuationsAsynchronously: a continuação roda dentro de Release, na thread do
         // teste, como no adaptador real, que completa na thread principal.

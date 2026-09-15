@@ -10,7 +10,7 @@ namespace Anathema.Net.Unity
     /// NetworkKind kind = NetworkKindMapping.From(Application.internetReachability);
     /// </code>
     /// </example>
-    public static class NetworkKindMapping
+    internal static class NetworkKindMapping
     {
         /// <summary>O <see cref="NetworkKind"/> equivalente.</summary>
         /// <example><code>NetworkKind kind = NetworkKindMapping.From(NetworkReachability.ReachableViaCarrierDataNetwork);</code></example>

@@ -14,7 +14,7 @@ namespace Anathema.Net.Core
     ///     new Dictionary&lt;string, string&gt; { ["Authorization"] = "Bearer " + token });
     /// </code>
     /// </example>
-    public sealed class HttpRequestSpec
+    internal sealed class HttpRequestSpec
     {
         /// <summary>Prazo padrão em segundos, o mesmo do smoke_match.py do backend.</summary>
         /// <example><code>int seconds = HttpRequestSpec.DefaultTimeoutSeconds;</code></example>

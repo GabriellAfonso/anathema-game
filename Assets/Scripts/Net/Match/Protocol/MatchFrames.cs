@@ -14,7 +14,7 @@ namespace Anathema.Net.Match
     /// IProtocolCodec codec = new NewtonsoftProtocolCodec(MatchFrames.CreateUnion(), log);
     /// </code>
     /// </example>
-    public static class MatchFrames
+    internal static class MatchFrames
     {
         /// <summary>Cria a união com todos os braços conhecidos.</summary>
         /// <example><code>DiscriminatedUnion&lt;ServerFrame&gt; frames = MatchFrames.CreateUnion();</code></example>

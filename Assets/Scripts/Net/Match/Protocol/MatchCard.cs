@@ -37,14 +37,14 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê um objeto <c>{card_instance_id, card_id}</c>.</summary>
         /// <example><code>MatchCard card = MatchCard.Read(item);</code></example>
-        public static MatchCard Read(IPayloadReader card)
+        internal static MatchCard Read(IPayloadReader card)
         {
             return new MatchCard(card.ReadCardInstanceId("card_instance_id"), card.ReadCardId("card_id"));
         }
 
         /// <summary>Lê uma lista de cartas, na ordem.</summary>
         /// <example><code>IReadOnlyList&lt;MatchCard&gt; hand = MatchCard.ReadList(side, "hand");</code></example>
-        public static IReadOnlyList<MatchCard> ReadList(IPayloadReader parent, string field)
+        internal static IReadOnlyList<MatchCard> ReadList(IPayloadReader parent, string field)
         {
             return parent.ReadObjectList(field).Select(Read).ToArray();
         }

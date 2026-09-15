@@ -8,7 +8,7 @@ namespace Anathema.Net.Core
     /// string frame = codec.Encode(new PingMessage(marker));
     /// </code>
     /// </example>
-    public interface IOutgoingMessage
+    internal interface IOutgoingMessage
     {
         /// <summary>Valor exato de <c>type</c> no envelope.</summary>
         /// <example><code>string type = message.MessageType; // "ping"</code></example>

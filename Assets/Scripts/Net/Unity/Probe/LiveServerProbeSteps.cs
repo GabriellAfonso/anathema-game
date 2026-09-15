@@ -21,7 +21,7 @@ namespace Anathema.Net.Unity
     /// ProbeStepResult result = await steps.CheckPingPongAsync();
     /// </code>
     /// </example>
-    public sealed class LiveServerProbeSteps
+    internal sealed class LiveServerProbeSteps
     {
         private const string ProbePassword = "probe-pass-123";
         private static readonly TimeSpan SocketWait = TimeSpan.FromSeconds(10);

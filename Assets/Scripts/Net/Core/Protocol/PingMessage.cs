@@ -12,7 +12,7 @@ namespace Anathema.Net.Core
     /// await socket.SendTextAsync(codec.Encode(new PingMessage(new PingMarker(sentAtMs, 1))));
     /// </code>
     /// </example>
-    public sealed class PingMessage : IOutgoingMessage
+    internal sealed class PingMessage : IOutgoingMessage
     {
         /// <summary>Valor de <c>type</c>.</summary>
         /// <example><code>bool isPing = message.MessageType == PingMessage.TypeName;</code></example>

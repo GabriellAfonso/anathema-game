@@ -24,6 +24,6 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o objeto <c>you</c>.</summary>
         /// <example><code>OwnSideView you = OwnSideView.Read(view.ReadObject("you"));</code></example>
-        public static OwnSideView Read(IPayloadReader side) => new OwnSideView(side);
+        internal static OwnSideView Read(IPayloadReader side) => new OwnSideView(side);
     }
 }

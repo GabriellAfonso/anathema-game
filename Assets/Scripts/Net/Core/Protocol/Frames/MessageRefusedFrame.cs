@@ -15,7 +15,7 @@ namespace Anathema.Net.Core
     /// if (refused.Code == "deck_not_found") ShowMissingDeck(refused.Details.ReadInteger("deck_id"));
     /// </code>
     /// </example>
-    public sealed class MessageRefusedFrame : ServerFrame
+    internal sealed class MessageRefusedFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c>.</summary>
         /// <example><code>union.Register(MessageRefusedFrame.TypeName, MessageRefusedFrame.Read);</code></example>
@@ -45,7 +45,7 @@ namespace Anathema.Net.Core
 
         /// <summary>Braço da união: lê <c>code</c> e <c>error</c> obrigatórios.</summary>
         /// <example><code>MessageRefusedFrame refused = MessageRefusedFrame.Read(payload);</code></example>
-        public static MessageRefusedFrame Read(IPayloadReader payload)
+        internal static MessageRefusedFrame Read(IPayloadReader payload)
         {
             return new MessageRefusedFrame(payload.ReadText("code"), payload.ReadText("error"), payload);
         }

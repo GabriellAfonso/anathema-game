@@ -28,7 +28,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Escreve <c>card_instance_ids</c>.</summary>
         /// <example><code>mulligan.WritePayload(writer);</code></example>
-        public override void WritePayload(IPayloadWriter writer)
+        internal override void Write(IPayloadWriter writer)
         {
             writer.WriteCardInstanceIdList("card_instance_ids", Swapped);
         }

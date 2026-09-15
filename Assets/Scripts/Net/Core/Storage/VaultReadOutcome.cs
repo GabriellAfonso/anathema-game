@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// if (stored.Kind == VaultReadKind.Unreadable) vault.Delete();
     /// </code>
     /// </example>
-    public sealed class VaultReadOutcome
+    internal sealed class VaultReadOutcome
     {
         private VaultReadOutcome(VaultReadKind kind, RefreshToken? token, string detail)
         {

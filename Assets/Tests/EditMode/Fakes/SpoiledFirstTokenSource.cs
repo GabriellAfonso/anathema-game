@@ -15,7 +15,7 @@ namespace Anathema.Net.Fakes
     /// IAccessTokenSource tokens = new SpoiledFirstTokenSource(account.Tokens);
     /// </code>
     /// </example>
-    public sealed class SpoiledFirstTokenSource : IAccessTokenSource
+    internal sealed class SpoiledFirstTokenSource : IAccessTokenSource
     {
         private const string SpoilPrefix = "spoiled.";
 

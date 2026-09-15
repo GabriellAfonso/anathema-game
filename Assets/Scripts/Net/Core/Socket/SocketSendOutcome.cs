@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// if (outcome.Status != SocketSendStatus.Sent) log.Warning("send_skipped");
     /// </code>
     /// </example>
-    public sealed class SocketSendOutcome
+    internal sealed class SocketSendOutcome
     {
         /// <summary>Envio feito.</summary>
         /// <example><code>return SocketSendOutcome.Sent;</code></example>

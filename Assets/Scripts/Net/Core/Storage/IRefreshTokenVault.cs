@@ -14,7 +14,7 @@ namespace Anathema.Net.Core
     /// vault.Delete();
     /// </code>
     /// </example>
-    public interface IRefreshTokenVault
+    internal interface IRefreshTokenVault
     {
         /// <summary>Lê o token guardado.</summary>
         /// <example><code>VaultReadOutcome stored = vault.Read();</code></example>

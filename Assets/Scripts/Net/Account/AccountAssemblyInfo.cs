@@ -20,3 +20,21 @@ using System.Runtime.CompilerServices;
 // A estratégia dos bots do marco da feature 004 é testada com um catálogo montado pelo mesmo leitor interno
 // (specs/004-match-session/research.md, R14).
 [assembly: InternalsVisibleTo("Anathema.Net.Unity.Tests")]
+
+// A fachada compõe a conta (sessão, token válido, cliente autenticado) e reage à expiração da sessão; os testes
+// dela montam catálogo e sessão pelas mesmas peças internas (specs/005-presentation-facade/research.md, R2, R8).
+[assembly: InternalsVisibleTo("Anathema.Net.Facade")]
+[assembly: InternalsVisibleTo("Anathema.Net.Facade.Tests")]
+
+// Desde a 005 sessão, token, rotas e cliente autenticado são internos (research R2): a conexão pede token, a partida
+// lê o texto do motivo de fim, a borda compõe e a configuração monta as rotas.
+[assembly: InternalsVisibleTo("Anathema.Net.Connection")]
+[assembly: InternalsVisibleTo("Anathema.Net.Match")]
+[assembly: InternalsVisibleTo("Anathema.Net.Unity")]
+[assembly: InternalsVisibleTo("Anathema.Config")]
+[assembly: InternalsVisibleTo("Anathema.Net.Connection.Tests")]
+[assembly: InternalsVisibleTo("Anathema.Config.Tests")]
+
+// A estratégia da prova final é testada com um catálogo montado pelo leitor interno; a assembly da prova não é amiga
+// (plan.md, Complexity Tracking).
+[assembly: InternalsVisibleTo("Anathema.Client.Proof.Tests")]

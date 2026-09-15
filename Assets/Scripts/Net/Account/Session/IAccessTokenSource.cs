@@ -14,7 +14,7 @@ namespace Anathema.Net.Account
     /// RenewalOutcome afterRejection = await tokens.RenewNowAsync(); // depois de um close 4001
     /// </code>
     /// </example>
-    public interface IAccessTokenSource
+    internal interface IAccessTokenSource
     {
         /// <summary>O token atual, ou um renovado antes se faltar menos que a margem.</summary>
         /// <example><code>AccessTokenOutcome token = await tokens.GetValidAsync();</code></example>

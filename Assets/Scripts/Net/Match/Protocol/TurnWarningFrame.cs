@@ -13,7 +13,7 @@ namespace Anathema.Net.Match
     /// if (frame is TurnWarningFrame warning) clock.NoteWarning(warning, arrival);
     /// </code>
     /// </example>
-    public sealed class TurnWarningFrame : ServerFrame
+    internal sealed class TurnWarningFrame : ServerFrame
     {
         /// <summary>Valor de <c>type</c> do frame.</summary>
         /// <example><code>union.Register(TurnWarningFrame.TypeName, TurnWarningFrame.Read);</code></example>
@@ -43,7 +43,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o payload do frame.</summary>
         /// <example><code>TurnWarningFrame warning = TurnWarningFrame.Read(payload);</code></example>
-        public static TurnWarningFrame Read(IPayloadReader payload)
+        internal static TurnWarningFrame Read(IPayloadReader payload)
         {
             return new TurnWarningFrame(payload.ReadInteger("turn_number"), payload.ReadUserId("holder_user_id"), payload.ReadInteger("remaining_ms"));
         }

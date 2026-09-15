@@ -32,6 +32,6 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o objeto <c>combat</c>.</summary>
         /// <example><code>CombatView combat = CombatView.Read(view.ReadObject("combat"));</code></example>
-        public static CombatView Read(IPayloadReader combat) => new CombatView(combat);
+        internal static CombatView Read(IPayloadReader combat) => new CombatView(combat);
     }
 }

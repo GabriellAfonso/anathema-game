@@ -20,7 +20,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Não escreve campo nenhum.</summary>
         /// <example><code>forfeit.WritePayload(writer);</code></example>
-        public override void WritePayload(IPayloadWriter writer)
+        internal override void Write(IPayloadWriter writer)
         {
         }
     }

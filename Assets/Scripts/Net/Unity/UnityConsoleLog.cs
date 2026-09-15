@@ -15,7 +15,7 @@ namespace Anathema.Net.Unity
     /// log.Info("connection_probe_passed", new LogField("host", host));
     /// </code>
     /// </example>
-    public sealed class UnityConsoleLog : IClientLog
+    internal sealed class UnityConsoleLog : IClientLog
     {
         /// <summary>Escreve a entrada no nível correspondente do console.</summary>
         /// <example><code>log.Write(entry);</code></example>

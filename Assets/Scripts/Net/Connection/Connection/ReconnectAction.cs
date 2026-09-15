@@ -4,7 +4,7 @@ namespace Anathema.Net.Connection
 {
     /// <summary>O que o cliente deve fazer depois que o socket fechou.</summary>
     /// <example><code>if (plan.Action == ReconnectAction.GiveUp) GiveUp(plan.Reason);</code></example>
-    public enum ReconnectAction
+    internal enum ReconnectAction
     {
         /// <summary>Espera o delay e conecta de novo com o token atual.</summary>
         Retry,

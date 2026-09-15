@@ -15,7 +15,7 @@ namespace Anathema.Net.Core
     /// };
     /// </code>
     /// </example>
-    public sealed class NetworkKindChanged
+    internal sealed class NetworkKindChanged
     {
         /// <summary>Cria a mudança; anterior igual ao novo lança.</summary>
         /// <example><code>NetworkKindChanged change = new NetworkKindChanged(NetworkKind.LocalArea, NetworkKind.CarrierData);</code></example>

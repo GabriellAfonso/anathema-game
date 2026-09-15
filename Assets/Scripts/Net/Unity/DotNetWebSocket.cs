@@ -21,7 +21,7 @@ namespace Anathema.Net.Unity
     /// socket.Open(new Uri(wsBase + "/ws/matchmaking/?token=" + token));
     /// </code>
     /// </example>
-    public sealed class DotNetWebSocket : IWebSocket
+    internal sealed class DotNetWebSocket : IWebSocket
     {
         private const int StateIdle = 0, StateOpening = 1, StateOpen = 2, StateClosed = 3;
         private const int ReceiveChunkBytes = 8192;

@@ -11,7 +11,7 @@ namespace Anathema.Net.Fakes
     /// reachability.SimulateKind(NetworkKind.CarrierData);
     /// </code>
     /// </example>
-    public sealed class FakeNetworkReachability : INetworkReachability
+    internal sealed class FakeNetworkReachability : INetworkReachability
     {
         /// <summary>Cria com o tipo de rede inicial.</summary>
         /// <example><code>FakeNetworkReachability offline = new FakeNetworkReachability(NetworkKind.None);</code></example>

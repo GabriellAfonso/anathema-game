@@ -16,7 +16,7 @@ namespace Anathema.Net.Fakes
     /// clock.Advance(TimeSpan.FromMinutes(7));
     /// </code>
     /// </example>
-    public sealed class FakeMonotonicClock : IMonotonicClock
+    internal sealed class FakeMonotonicClock : IMonotonicClock
     {
         /// <summary>Ticks do instante inicial: uma hora depois da origem.</summary>
         /// <example><code>MonotonicInstant start = new MonotonicInstant(FakeMonotonicClock.StartTicks);</code></example>

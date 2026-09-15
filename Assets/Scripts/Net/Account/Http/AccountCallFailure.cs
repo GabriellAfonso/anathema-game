@@ -37,7 +37,7 @@ namespace Anathema.Net.Account
 
         /// <summary>A falha do transporte; só em <see cref="AccountCallFailureKind.TransportFailed"/>.</summary>
         /// <example><code>TransportFailureKind? transport = failure.Transport?.Kind;</code></example>
-        public TransportFailure? Transport { get; }
+        internal TransportFailure? Transport { get; }
 
         /// <summary>Status da resposta fora do contrato; 0 nos outros casos.</summary>
         /// <example><code>int status = failure.Status;</code></example>
@@ -49,7 +49,7 @@ namespace Anathema.Net.Account
 
         /// <summary>A renovação que não saiu; só em <see cref="AccountCallFailureKind.RenewalUnavailable"/>.</summary>
         /// <example><code>RenewalUnavailableReason? reason = failure.Renewal?.Reason;</code></example>
-        public RenewalOutcome? Renewal { get; }
+        internal RenewalOutcome? Renewal { get; }
 
         /// <summary>Sem token para usar.</summary>
         /// <example><code>return AccountCallFailure.SessionUnavailable(SessionUnavailableKind.NoSession);</code></example>
@@ -60,7 +60,7 @@ namespace Anathema.Net.Account
 
         /// <summary>O transporte falhou.</summary>
         /// <example><code>return AccountCallFailure.TransportFailed(outcome.AsFailure!);</code></example>
-        public static AccountCallFailure TransportFailed(TransportFailure transport)
+        internal static AccountCallFailure TransportFailed(TransportFailure transport)
         {
             TransportFailure required = transport ?? throw new ArgumentNullException(nameof(transport), "transport failure is null: expected the failure from IHttpTransport");
             return new AccountCallFailure(AccountCallFailureKind.TransportFailed, transport: required);
@@ -76,7 +76,7 @@ namespace Anathema.Net.Account
 
         /// <summary>A renovação necessária não saiu (status do servidor ou resposta fora do contrato).</summary>
         /// <example><code>return AccountCallFailure.RenewalUnavailable(renewal);</code></example>
-        public static AccountCallFailure RenewalUnavailable(RenewalOutcome renewal)
+        internal static AccountCallFailure RenewalUnavailable(RenewalOutcome renewal)
         {
             RenewalOutcome required = renewal ?? throw new ArgumentNullException(nameof(renewal), "unavailable renewal is null: expected the renewal outcome that did not succeed");
             return new AccountCallFailure(AccountCallFailureKind.RenewalUnavailable, renewal: required);

@@ -16,7 +16,7 @@ namespace Anathema.Net.Match
     /// HandCardHint hint = HandCardHints.For(card.Instance, mirror.Current!, catalog, log);
     /// </code>
     /// </example>
-    public static class HandCardHints
+    internal static class HandCardHints
     {
         /// <summary>A dica da cópia na visão dada; carta fora do catálogo é registrada no log, se houver um.</summary>
         /// <example><code>HandCardHint hint = HandCardHints.For(new CardInstanceId(24), view, catalog);</code></example>

@@ -13,7 +13,7 @@ namespace Anathema.Net.Connection
     /// IProtocolCodec codec = new NewtonsoftProtocolCodec(ConnectionFrames.CreateUnion(), log);
     /// </code>
     /// </example>
-    public static class ConnectionFrames
+    internal static class ConnectionFrames
     {
         /// <summary>União nova, com todos os braços conhecidos pela camada.</summary>
         /// <example><code>DiscriminatedUnion&lt;ServerFrame&gt; frames = ConnectionFrames.CreateUnion();</code></example>

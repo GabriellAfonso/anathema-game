@@ -40,7 +40,7 @@ namespace Anathema.Net.Connection
 
         /// <summary>Lê um jogador do objeto <c>self</c> ou <c>opponent</c>.</summary>
         /// <example><code>PairedPlayer opponent = PairedPlayer.Read(payload.ReadObject("opponent"));</code></example>
-        public static PairedPlayer Read(IPayloadReader player)
+        internal static PairedPlayer Read(IPayloadReader player)
         {
             return new PairedPlayer(player.ReadUserId("user_id"), player.ReadText("nickname"), player.ReadText("icon"), player.ReadInteger("level"));
         }

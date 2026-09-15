@@ -43,7 +43,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê o objeto <c>profile</c>.</summary>
         /// <example><code>MatchProfile profile = MatchProfile.Read(side.ReadObject("profile"));</code></example>
-        public static MatchProfile Read(IPayloadReader profile)
+        internal static MatchProfile Read(IPayloadReader profile)
         {
             return new MatchProfile(profile.ReadUserId("user_id"), profile.ReadText("nickname"), profile.ReadText("icon"), profile.ReadInteger("level"));
         }

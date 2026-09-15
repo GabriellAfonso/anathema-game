@@ -19,7 +19,7 @@ namespace Anathema.Net.Core
     /// queue.Drain();
     /// </code>
     /// </example>
-    public sealed class MainThreadQueue
+    internal sealed class MainThreadQueue
     {
         private readonly ConcurrentQueue<Action> items = new ConcurrentQueue<Action>();
         private readonly IClientLog log;

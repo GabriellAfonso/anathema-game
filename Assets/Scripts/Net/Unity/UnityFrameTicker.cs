@@ -14,7 +14,7 @@ namespace Anathema.Net.Unity
     /// host.Attach(queue, lifecycle, reachability, ticker);
     /// </code>
     /// </example>
-    public sealed class UnityFrameTicker : IFrameTicker
+    internal sealed class UnityFrameTicker : IFrameTicker
     {
         /// <inheritdoc />
         public event Action? Ticked;

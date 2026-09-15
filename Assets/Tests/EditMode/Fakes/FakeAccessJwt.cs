@@ -15,7 +15,7 @@ namespace Anathema.Net.Fakes
     /// string access = FakeAccessJwt.FiveMinutes("renewed");
     /// </code>
     /// </example>
-    public static class FakeAccessJwt
+    internal static class FakeAccessJwt
     {
         private const string Header = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
 

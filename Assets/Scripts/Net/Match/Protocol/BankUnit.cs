@@ -38,11 +38,11 @@ namespace Anathema.Net.Match
 
         /// <summary>Lê um objeto do banco.</summary>
         /// <example><code>BankUnit unit = BankUnit.Read(item);</code></example>
-        public static BankUnit Read(IPayloadReader unit) => new BankUnit(unit);
+        internal static BankUnit Read(IPayloadReader unit) => new BankUnit(unit);
 
         /// <summary>Lê a lista <c>bank</c>, na ordem.</summary>
         /// <example><code>IReadOnlyList&lt;BankUnit&gt; bank = BankUnit.ReadList(side, "bank");</code></example>
-        public static IReadOnlyList<BankUnit> ReadList(IPayloadReader parent, string field)
+        internal static IReadOnlyList<BankUnit> ReadList(IPayloadReader parent, string field)
         {
             return parent.ReadObjectList(field).Select(Read).ToArray();
         }

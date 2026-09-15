@@ -13,7 +13,7 @@ namespace Anathema.Net.Core
     /// PingMarker marker = new PingMarker(sentAtMs: (long)(clock.Now.Ticks / TimeSpan.TicksPerMillisecond), sequence: 1);
     /// </code>
     /// </example>
-    public sealed class PingMarker : IEquatable<PingMarker>
+    internal sealed class PingMarker : IEquatable<PingMarker>
     {
         /// <summary>Nome do campo do instante de envio.</summary>
         /// <example><code>payload.ReadInteger(PingMarker.SentAtMsField);</code></example>

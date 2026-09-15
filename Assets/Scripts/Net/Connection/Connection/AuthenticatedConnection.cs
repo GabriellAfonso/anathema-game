@@ -19,7 +19,7 @@ namespace Anathema.Net.Connection
     /// connection.Connect(ConnectionTarget.Match(routes.Match, pairing.Match));
     /// </code>
     /// </example>
-    public sealed class AuthenticatedConnection : IDisposable
+    internal sealed class AuthenticatedConnection : IDisposable
     {
         private readonly ConnectionPorts ports;
         private readonly IAccessTokenSource tokens;

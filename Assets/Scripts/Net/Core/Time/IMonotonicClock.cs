@@ -12,7 +12,7 @@ namespace Anathema.Net.Core
     /// MonotonicInstant arrivedAt = clock.Now;
     /// </code>
     /// </example>
-    public interface IMonotonicClock
+    internal interface IMonotonicClock
     {
         /// <summary>Instante atual. Leituras sucessivas nunca diminuem.</summary>
         /// <example><code>MonotonicInstant now = clock.Now;</code></example>

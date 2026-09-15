@@ -14,7 +14,7 @@ namespace Anathema.Net.Account
     /// if (renewed.Kind == RenewalOutcomeKind.Renewed) Reconnect(renewed.Token!);
     /// </code>
     /// </example>
-    public sealed class RenewalOutcome
+    internal sealed class RenewalOutcome
     {
         private RenewalOutcome(RenewalOutcomeKind kind, AccessToken? token = null, RenewalUnavailableReason? reason = null, TransportFailure? transport = null, string detail = "")
         {

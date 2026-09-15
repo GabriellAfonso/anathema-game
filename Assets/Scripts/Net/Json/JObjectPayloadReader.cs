@@ -17,7 +17,7 @@ namespace Anathema.Net.Json
     /// string token = reader.ReadText("token");
     /// </code>
     /// </example>
-    public sealed class JObjectPayloadReader : IPayloadReader
+    internal sealed class JObjectPayloadReader : IPayloadReader
     {
         private readonly JObject source;
 

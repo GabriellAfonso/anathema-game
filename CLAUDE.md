@@ -59,6 +59,10 @@ protocolo que o cliente fala está nos contratos de lá:
 
 Quando o cliente e um contrato discordam, o cliente está errado.
 
+A parte visual entra por um lugar só: a superfície da camada de rede, em
+`specs/005-presentation-facade/contracts/presentation-surface.md`. O que não
+está listado lá não é para a apresentação usar (e fora dali não compila).
+
 
 # O servidor é a autoridade
 
@@ -157,5 +161,5 @@ Decisões em vigor:
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
-`specs/004-match-session/plan.md`
+`specs/005-presentation-facade/plan.md`
 <!-- SPECKIT END -->

@@ -1,0 +1,24 @@
+{
+    "name": "Anathema.Client.Proof",
+    "rootNamespace": "Anathema.Client.Proof",
+    "references": [
+        "Anathema.Net.Core",
+        "Anathema.Net.Account",
+        "Anathema.Net.Connection",
+        "Anathema.Net.Match",
+        "Anathema.Net.Facade",
+        "Anathema.Net.Unity",
+        "Anathema.Config"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_EDITOR || DEVELOPMENT_BUILD"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -6,6 +6,7 @@ using UnityEngine;
 
 // Fica no namespace global: o codigo antigo (PlayerSession, LoginController, AppEnvManager)
 // usa AppConfig sem using, e esta feature evolui o arquivo no lugar sem tocar neles.
+// Na 005 quem lê o AppConfig é o ClientHost e o MatchProofRunner, ainda sem using.
 [CreateAssetMenu(
     fileName = "AppConfig",
     menuName = "Config/App Config"
@@ -44,7 +45,7 @@ public class AppConfig : ScriptableObject
     /// (extra de intent <c>serverHost</c> no Android, <c>-serverHost</c> no Windows) vale no
     /// lugar de <see cref="apiBaseUrl"/>: no celular, <c>localhost</c> e o proprio aparelho.
     /// </summary>
-    /// <example><code>string host = AppEnvManager.Settings.EffectiveHost; // 192.168.0.10:8000</code></example>
+    /// <example><code>string host = config.EffectiveHost; // 192.168.0.10:8000</code></example>
     public string EffectiveHost
     {
         get
@@ -88,11 +89,24 @@ public class AppConfig : ScriptableObject
     }
 
     /// <summary>
+    /// As rotas de conta e dos dois sockets juntas, no host efetivo, para a composição do hospedeiro
+    /// (specs/005-presentation-facade/contracts/composition-and-scenes.md).
+    /// </summary>
+    /// <example><code>ServerRoutes routes = configDev.BuildServerRoutes();</code></example>
+    public ServerRoutes BuildServerRoutes()
+    {
+        AccountRoutes account = BuildAccountRoutes();
+        Anathema.Net.Connection.ConnectionRoutes sockets = BuildConnectionRoutes();
+        return new ServerRoutes(account.Register, account.Login, account.Refresh, account.OwnProfile, account.Cards, account.Decks, account.Matches,
+            sockets.Matchmaking, sockets.Match);
+    }
+
+    /// <summary>
     /// Rotas HTTP de conta e dados do jogador no host efetivo. Rota vazia lança com o campo e o
     /// asset, para o erro de configuração aparecer na composição e não no primeiro pedido.
     /// </summary>
-    /// <example><code>AccountRoutes routes = AppEnvManager.Settings.BuildAccountRoutes();</code></example>
-    public AccountRoutes BuildAccountRoutes()
+    /// <example><code>AccountRoutes routes = config.BuildAccountRoutes();</code></example>
+    internal AccountRoutes BuildAccountRoutes()
     {
         return new AccountRoutes(
             RouteUrl(registerEndpoint, nameof(registerEndpoint)),
@@ -108,8 +122,8 @@ public class AppConfig : ScriptableObject
     /// Os dois sockets (fila e partida) no host efetivo, com <c>ws</c> ou <c>wss</c> conforme
     /// <see cref="useTls"/>. Rota vazia lança com o campo e o asset, como as rotas de conta.
     /// </summary>
-    /// <example><code>Anathema.Net.Connection.ConnectionRoutes routes = AppEnvManager.Settings.BuildConnectionRoutes();</code></example>
-    public Anathema.Net.Connection.ConnectionRoutes BuildConnectionRoutes()
+    /// <example><code>Anathema.Net.Connection.ConnectionRoutes routes = config.BuildConnectionRoutes();</code></example>
+    internal Anathema.Net.Connection.ConnectionRoutes BuildConnectionRoutes()
     {
         return new Anathema.Net.Connection.ConnectionRoutes(
             new System.Uri(WsUrl(RequireRoute(matchmakingConsumerUrl, nameof(matchmakingConsumerUrl)))),

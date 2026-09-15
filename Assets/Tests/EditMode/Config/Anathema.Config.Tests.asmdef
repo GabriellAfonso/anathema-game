@@ -8,6 +8,7 @@
         "Anathema.Net.Account",
         "Anathema.Net.Connection",
         "Anathema.Config",
+        "Anathema.Net.Unity",
         "Anathema.Net.Fakes"
     ],
     "includePlatforms": [

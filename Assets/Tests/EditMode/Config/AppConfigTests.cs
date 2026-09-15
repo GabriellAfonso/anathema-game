@@ -109,6 +109,18 @@ namespace Anathema.Config.Tests
         }
 
         [Test]
+        public void RotasDoServidorJuntamContaESocketsNoHostEfetivo()
+        {
+            FillAccountRoutes();
+            config.matchmakingConsumerUrl = "/ws/matchmaking/";
+            config.matchConsumerUrl = "/ws/match/";
+
+            string routes = config.BuildServerRoutes().ToString();
+
+            Assert.That(routes, Does.Contain("login=http://127.0.0.1:8000/accounts/login/").And.Contain("match=ws://127.0.0.1:8000/ws/match/"));
+        }
+
+        [Test]
         public void RotasDeContaSeguemUseTls()
         {
             FillAccountRoutes();

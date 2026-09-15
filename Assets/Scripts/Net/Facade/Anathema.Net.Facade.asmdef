@@ -1,0 +1,19 @@
+{
+    "name": "Anathema.Net.Facade",
+    "rootNamespace": "Anathema.Net.Facade",
+    "references": [
+        "Anathema.Net.Core",
+        "Anathema.Net.Account",
+        "Anathema.Net.Connection",
+        "Anathema.Net.Match"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

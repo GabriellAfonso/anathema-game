@@ -7,9 +7,9 @@ using Anathema.Net.Fakes;
 using Anathema.Net.Json;
 using NUnit.Framework;
 
-namespace Anathema.Net.Unity.Tests
+namespace Anathema.Net.Facade.Tests
 {
-    public class LiveAccountServicesTests
+    public class AccountServicesTests
     {
         // O NUnit reaproveita a instância do fixture entre os testes: os fakes nascem no SetUp para
         // um teste não herdar os pedidos roteirizados e registrados pelo anterior.
@@ -30,7 +30,7 @@ namespace Anathema.Net.Unity.Tests
         [Test]
         public async Task SessaoTokensEPerfilCompartilhamAMesmaSessao()
         {
-            using LiveAccountServices account = Compose(new FakeRefreshTokenVault());
+            using AccountServices account = Compose(new FakeRefreshTokenVault());
             http.RespondNext(200, FakeAccountResponses.Login(FakeAccessJwt.FiveMinutes("login"), "refresh-1"));
 
             await account.Session.SignInAsync("one", new Password("123456"));
@@ -49,7 +49,7 @@ namespace Anathema.Net.Unity.Tests
         [Test]
         public async Task VoltarDepoisDeSeteMinutosRenova()
         {
-            using LiveAccountServices account = Compose(new FakeRefreshTokenVault());
+            using AccountServices account = Compose(new FakeRefreshTokenVault());
             http.RespondNext(200, FakeAccountResponses.Login(FakeAccessJwt.FiveMinutes("login"), "refresh-1"));
             await account.Session.SignInAsync("one", new Password("123456"));
             lifecycle.SimulateBackground();
@@ -66,10 +66,10 @@ namespace Anathema.Net.Unity.Tests
         public async Task SegundaComposicaoComAMesmaGuardaRetomaSemSenha()
         {
             FakeRefreshTokenVault vault = new FakeRefreshTokenVault();
-            using LiveAccountServices first = Compose(vault);
+            using AccountServices first = Compose(vault);
             http.RespondNext(200, FakeAccountResponses.Login(FakeAccessJwt.FiveMinutes("login"), "refresh-1"));
             await first.Session.SignInAsync("one", new Password("123456"));
-            using LiveAccountServices second = Compose(vault);
+            using AccountServices second = Compose(vault);
             http.RespondNext(200, FakeAccountResponses.Refresh(FakeAccessJwt.FiveMinutes("resumed")));
 
             ResumeOutcome resumed = await second.Session.ResumeAsync();
@@ -78,10 +78,12 @@ namespace Anathema.Net.Unity.Tests
             Assert.That(resumed.User, Is.EqualTo(first.Session.Self));
         }
 
-        private LiveAccountServices Compose(IRefreshTokenVault vault)
+        private AccountServices Compose(IRefreshTokenVault vault)
         {
             IProtocolCodec codec = new NewtonsoftProtocolCodec(GenericServerFrames.CreateUnion(), log);
-            return new LiveAccountServices(http, codec, clock, lifecycle, log, LocalAccountRoutes.Create(), vault, new AccountTiming());
+            ClientPorts ports = new ClientPorts(http, new FakeWebSocketFactory(), clock, new FakeFrameTicker(), lifecycle, new FakeNetworkReachability(NetworkKind.LocalArea),
+                new MainThreadQueue(log), log, codec, vault, FacadeTestRig.AccountRoutesForTests(), FacadeTestRig.ConnectionRoutesForTests(), new AccountTiming());
+            return new AccountServices(ports);
         }
     }
 }

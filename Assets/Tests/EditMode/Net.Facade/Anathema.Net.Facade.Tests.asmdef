@@ -1,16 +1,15 @@
 {
-    "name": "Anathema.Net.Unity.Tests",
-    "rootNamespace": "Anathema.Net.Unity.Tests",
+    "name": "Anathema.Net.Facade.Tests",
+    "rootNamespace": "Anathema.Net.Facade.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Anathema.Net.Core",
-        "Anathema.Net.Account",
         "Anathema.Net.Json",
+        "Anathema.Net.Account",
         "Anathema.Net.Connection",
         "Anathema.Net.Match",
         "Anathema.Net.Facade",
-        "Anathema.Net.Unity",
         "Anathema.Net.Fakes"
     ],
     "includePlatforms": [

@@ -3,39 +3,40 @@ using System;
 using Anathema.Net.Account;
 using Anathema.Net.Core;
 
-namespace Anathema.Net.Unity
+namespace Anathema.Net.Facade
 {
     /// <summary>
     /// A conta do jogador composta de uma vez: sessão, porta de token válido, cliente autenticado e
     /// os serviços de dados, mais a renovação na volta ao primeiro plano. Recebe as portas pelo
     /// construtor, para os testes comporem com fakes do mesmo jeito que o jogo compõe com os
-    /// adaptadores reais.
+    /// adaptadores reais. Veio de <c>Anathema.Net.Unity.LiveAccountServices</c>: a fachada, que é núcleo, compõe
+    /// a conta (specs/005-presentation-facade/research.md, R8).
     /// </summary>
     /// <example>
     /// <code>
-    /// LiveAccountServices account = LiveAccountServices.FromAdapters(adapters, lifecycle, config.BuildAccountRoutes(), PlatformRefreshTokenVault.Create(log));
+    /// AccountServices account = new AccountServices(LivePorts.Create(adapters, lifecycle, reachability, ticker, vault, accountRoutes, connectionRoutes));
     /// ResumeOutcome resumed = await account.Session.ResumeAsync();
     /// </code>
     /// </example>
-    public sealed class LiveAccountServices : IDisposable
+    internal sealed class AccountServices : IDisposable
     {
         private readonly ForegroundRenewal foregroundRenewal;
 
         /// <summary>Compõe a conta sobre as portas dadas.</summary>
-        /// <example><code>LiveAccountServices account = new LiveAccountServices(http, codec, clock, lifecycle, log, routes, vault, new AccountTiming());</code></example>
-        public LiveAccountServices(IHttpTransport http, IProtocolCodec codec, IMonotonicClock clock, IAppLifecycle lifecycle,
-            IClientLog log, AccountRoutes routes, IRefreshTokenVault vault, AccountTiming timing)
+        /// <example><code>AccountServices account = new AccountServices(ports);</code></example>
+        public AccountServices(ClientPorts ports)
         {
-            Session = new AccountSession(http, codec, clock, vault, log, routes);
-            SessionAccessTokens tokens = new SessionAccessTokens(Session, clock, timing);
+            ClientPorts required = ports ?? throw new ArgumentNullException(nameof(ports), "ports are null: expected the ClientPorts built by the composition");
+            Session = new AccountSession(required.Http, required.Codec, required.Clock, required.Vault, required.Log, required.AccountRoutes);
+            SessionAccessTokens tokens = new SessionAccessTokens(Session, required.Clock, required.Timing);
             Tokens = tokens;
-            Client = new AuthenticatedHttpClient(http, Session, tokens);
-            Profile = new OwnProfileQuery(Client, codec, log, routes);
-            Registration = new AccountRegistration(http, codec, log, routes);
-            Catalog = new CardCatalog(Client, Session, codec, log, routes);
-            Decks = new PlayerDecks(Client, codec, log, routes);
-            History = new MatchHistory(Client, codec, log, routes);
-            foregroundRenewal = new ForegroundRenewal(lifecycle, Session, tokens, clock, timing, log);
+            Client = new AuthenticatedHttpClient(required.Http, Session, tokens);
+            Profile = new OwnProfileQuery(Client, required.Codec, required.Log, required.AccountRoutes);
+            Registration = new AccountRegistration(required.Http, required.Codec, required.Log, required.AccountRoutes);
+            Catalog = new CardCatalog(Client, Session, required.Codec, required.Log, required.AccountRoutes);
+            Decks = new PlayerDecks(Client, required.Codec, required.Log, required.AccountRoutes);
+            History = new MatchHistory(Client, required.Codec, required.Log, required.AccountRoutes);
+            foregroundRenewal = new ForegroundRenewal(required.Lifecycle, Session, tokens, required.Clock, required.Timing, required.Log);
         }
 
         /// <summary>Sessão de conta.</summary>
@@ -69,13 +70,6 @@ namespace Anathema.Net.Unity
         /// <summary>Histórico de partidas.</summary>
         /// <example><code>AccountCallOutcome&lt;MatchHistoryPage, HistoryRefusal&gt; page = await account.History.ReadPageAsync(new HistoryPageRequest());</code></example>
         public MatchHistory History { get; }
-
-        /// <summary>Compõe sobre os adaptadores reais, com a margem padrão.</summary>
-        /// <example><code>LiveAccountServices account = LiveAccountServices.FromAdapters(adapters, lifecycle, routes, vault);</code></example>
-        public static LiveAccountServices FromAdapters(LiveNetworkAdapters adapters, IAppLifecycle lifecycle, AccountRoutes routes, IRefreshTokenVault vault)
-        {
-            return new LiveAccountServices(adapters.Http, adapters.Codec, adapters.Clock, lifecycle, adapters.Log, routes, vault, new AccountTiming());
-        }
 
         /// <summary>Solta a assinatura do ciclo de vida.</summary>
         /// <example><code>account.Dispose();</code></example>

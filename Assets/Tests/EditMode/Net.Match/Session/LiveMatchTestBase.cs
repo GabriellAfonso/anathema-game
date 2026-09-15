@@ -24,7 +24,7 @@ namespace Anathema.Net.Match.Tests
             Connection = Rig.Connection();
             Live = new LiveMatch(Connection, MatchTestRig.MatchBase, MatchTestRig.Match, Rig.Catalog, Rig.Clock, Rig.Log);
             Statuses = new List<LiveMatchStatus>();
-            Live.StatusChanged += Statuses.Add;
+            Live.StatusChanged.Subscribe(Statuses.Add);
         }
 
         internal void StartAndOpen()

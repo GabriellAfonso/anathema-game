@@ -6,7 +6,7 @@ namespace Anathema.Net.Match
     /// <summary>Aviso de prioridade mudou entre dois frames aceitos; nula no mulligan. Não sai no primeiro frame.</summary>
     /// <example>
     /// <code>
-    /// mirror.PriorityChanged += change => highlight.enabled = change.Current == mirror.Self;
+    /// mirror.PriorityChanged.Subscribe(change => highlight.enabled = change.Current == mirror.Self);
     /// </code>
     /// </example>
     public sealed class PriorityChange

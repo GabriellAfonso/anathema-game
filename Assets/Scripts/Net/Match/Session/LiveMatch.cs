@@ -16,7 +16,7 @@ namespace Anathema.Net.Match
     /// <example>
     /// <code>
     /// LiveMatch match = new LiveMatch(connection, routes.Match, pairing.Match, catalog, clock, log);
-    /// match.Mirror.ViewReplaced += change => Redraw(change.Current);
+    /// match.Mirror.ViewReplaced.Subscribe(change => Redraw(change.Current));
     /// match.Start();
     /// </code>
     /// </example>
@@ -36,7 +36,7 @@ namespace Anathema.Net.Match
 
         /// <summary>Sessão pronta para <see cref="Start"/>, sobre a conexão de partida compartilhada.</summary>
         /// <example><code>LiveMatch match = new LiveMatch(connection, routes.Match, pairing.Match, catalog, clock, log);</code></example>
-        public LiveMatch(AuthenticatedConnection connection, Uri matchBase, MatchId match, LoadedCatalog catalog, IMonotonicClock clock, IClientLog log)
+        internal LiveMatch(AuthenticatedConnection connection, Uri matchBase, MatchId match, LoadedCatalog catalog, IMonotonicClock clock, IClientLog log)
         {
             this.connection = connection ?? throw new ArgumentNullException(nameof(connection), $"connection of {match} is null: expected the match AuthenticatedConnection");
             this.catalog = catalog ?? throw new ArgumentNullException(nameof(catalog), $"catalog of {match} is null: expected the loaded card catalog");
@@ -44,10 +44,12 @@ namespace Anathema.Net.Match
             this.log = log ?? throw new ArgumentNullException(nameof(log), $"log of {match} is null: expected the client log");
             target = ConnectionTarget.Match(matchBase, match);
             Match = match;
-            Pending = new PendingPlay();
+            Pending = new PendingPlay(log);
             Mirror = new MatchMirror(log);
             Clock = new TurnClock(clock, log);
             Commands = new MatchCommands(connection, Pending, log);
+            StatusChanged = new EventFeed<LiveMatchStatus>("match_status_changed", log);
+            Refused = new EventFeed<PlayRefusal>("match_play_refused", log);
             narrator = new MatchNarrator(Mirror, catalog, match, log);
         }
 
@@ -76,12 +78,12 @@ namespace Anathema.Net.Match
         public PendingPlay Pending { get; }
 
         /// <summary>O estado da sessão mudou.</summary>
-        /// <example><code>match.StatusChanged += status => ShowStatus(status);</code></example>
-        public event Action<LiveMatchStatus>? StatusChanged;
+        /// <example><code>subscriptions.Add(match.StatusChanged.Subscribe(status => ShowStatus(status)));</code></example>
+        public EventFeed<LiveMatchStatus> StatusChanged { get; }
 
         /// <summary>O servidor recusou uma jogada.</summary>
-        /// <example><code>match.Refused += refusal => ShowRefusal(refusal.Code);</code></example>
-        public event Action<PlayRefusal>? Refused;
+        /// <example><code>subscriptions.Add(match.Refused.Subscribe(refusal => ShowRefusal(refusal.Code)));</code></example>
+        public EventFeed<PlayRefusal> Refused { get; }
 
         /// <summary>Assina a conexão e abre o socket de partida; uma vez por sessão.</summary>
         /// <example><code>match.Start();</code></example>
@@ -206,20 +208,9 @@ namespace Anathema.Net.Match
             // Antes dos avisos: quem responde ao estado novo mandando um comando não pode tê-lo apagado logo depois.
             Pending.ClearOnUpdate();
             Mirror.Apply(view, version, events);
-            RaiseClock(clockNotices);
+            // Assinante do relógio que lança vai para o log pelo próprio feed, sem calar o resto do frame (FR-015).
+            clockNotices.Raise();
             SettleAfterState();
-        }
-
-        private void RaiseClock(ClockAnnouncements clockNotices)
-        {
-            try
-            {
-                clockNotices.Raise();
-            }
-            catch (Exception failure)
-            {
-                log.Error("match_subscriber_failed", new LogField("notice", "clock"), new LogField("exception", failure.GetType().Name), new LogField("message", failure.Message));
-            }
         }
 
         private void SettleAfterState()
@@ -243,7 +234,7 @@ namespace Anathema.Net.Match
             log.Warning("match_play_refused", new LogField("code", refusal.CodeText), new LogField("error", refusal.Error),
                 new LogField("probable_command", refusal.ProbableCommand?.MessageType ?? "none"));
             Pending.ClearCurrent();
-            Refused?.Invoke(refusal);
+            Refused.Publish(refusal);
         }
 
         private void OnRecovered()
@@ -259,7 +250,7 @@ namespace Anathema.Net.Match
             Status = next;
             log.Info("match_status", new LogField("match_id", Match.Value), new LogField("phase", next.Phase.ToString()), new LogField("stale", next.IsStale),
                 new LogField("give_up_kind", next.GiveUp == null ? "none" : next.GiveUp.Kind.ToString()));
-            StatusChanged?.Invoke(next);
+            StatusChanged.Publish(next);
         }
     }
 }

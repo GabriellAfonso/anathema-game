@@ -29,6 +29,8 @@ namespace Anathema.Net.Match
         {
             this.clock = clock ?? throw new ArgumentNullException(nameof(clock), "clock is null: expected the monotonic clock of the device");
             this.log = log ?? throw new ArgumentNullException(nameof(log), "log is null: expected the client log");
+            TurnStarted = new EventFeed<TurnView>("turn_started", log);
+            TurnRunningOut = new EventFeed<long>("turn_running_out", log);
         }
 
         /// <summary>A vez desenhada, com o restante da última âncora; nula sem vez.</summary>
@@ -44,12 +46,12 @@ namespace Anathema.Net.Match
         public TimeSpan? MulliganRemaining => mulliganMs.HasValue ? RemainingSince(mulliganMs.Value, mulliganAnchor) : (TimeSpan?)null;
 
         /// <summary>Começou uma vez nova (<c>turn_number</c> diferente do desenhado).</summary>
-        /// <example><code>clock.TurnStarted += turn => ResetTimerBar(turn);</code></example>
-        public event Action<TurnView>? TurnStarted;
+        /// <example><code>subscriptions.Add(clock.TurnStarted.Subscribe(turn => ResetTimerBar(turn)));</code></example>
+        public EventFeed<TurnView> TurnStarted { get; }
 
         /// <summary>O tempo da vez está acabando; no máximo uma vez por <c>turn_number</c>.</summary>
-        /// <example><code>clock.TurnRunningOut += turnNumber => FlashTimer();</code></example>
-        public event Action<long>? TurnRunningOut;
+        /// <example><code>subscriptions.Add(clock.TurnRunningOut.Subscribe(turnNumber => FlashTimer()));</code></example>
+        public EventFeed<long> TurnRunningOut { get; }
 
         internal ClockAnnouncements Anchor(ClockView view, MonotonicInstant arrival)
         {
@@ -75,9 +77,9 @@ namespace Anathema.Net.Match
                 RaiseRunningOut(warning.TurnNumber);
         }
 
-        internal void RaiseStarted(TurnView turn) => TurnStarted?.Invoke(turn);
+        internal void RaiseStarted(TurnView turn) => TurnStarted.Publish(turn);
 
-        internal void RaiseRunningOut(long turnNumber) => TurnRunningOut?.Invoke(turnNumber);
+        internal void RaiseRunningOut(long turnNumber) => TurnRunningOut.Publish(turnNumber);
 
         private void AnchorTurn(TurnView? next, MonotonicInstant arrival, ClockAnnouncements pending)
         {

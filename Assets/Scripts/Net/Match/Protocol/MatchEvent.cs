@@ -11,7 +11,7 @@ namespace Anathema.Net.Match
     /// </summary>
     /// <example>
     /// <code>
-    /// mirror.EventReceived += matchEvent => { if (matchEvent is UnitDiedEvent died) PlayDeath(died.Card); };
+    /// mirror.EventReceived.Subscribe(matchEvent => { if (matchEvent is UnitDiedEvent died) PlayDeath(died.Card); });
     /// </code>
     /// </example>
     public abstract class MatchEvent

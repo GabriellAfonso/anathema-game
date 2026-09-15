@@ -5,7 +5,7 @@ namespace Anathema.Net.Match
     /// <summary>Aviso de fase mudou entre dois frames aceitos. Não sai no primeiro frame: não há fase anterior.</summary>
     /// <example>
     /// <code>
-    /// mirror.PhaseChanged += change => { if (change.Current == MatchPhase.Combat) ShowDefense(); };
+    /// mirror.PhaseChanged.Subscribe(change => { if (change.Current == MatchPhase.Combat) ShowDefense(); });
     /// </code>
     /// </example>
     public sealed class PhaseChange

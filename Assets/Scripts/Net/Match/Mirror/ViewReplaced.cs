@@ -6,7 +6,7 @@ namespace Anathema.Net.Match
     /// <summary>Aviso de estado substituído: a visão anterior (nula no primeiro frame) e a atual.</summary>
     /// <example>
     /// <code>
-    /// mirror.ViewReplaced += change => Redraw(change.Current);
+    /// mirror.ViewReplaced.Subscribe(change => Redraw(change.Current));
     /// </code>
     /// </example>
     public sealed class ViewReplaced

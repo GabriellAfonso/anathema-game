@@ -21,11 +21,11 @@ namespace Anathema.Net.Match.Tests
             log = new FakeClientLog();
             mirror = new MatchMirror(log);
             notices = new List<string>();
-            mirror.ViewReplaced += _ => notices.Add("view");
-            mirror.EventReceived += item => notices.Add("event:" + item.KindText);
-            mirror.PhaseChanged += change => notices.Add($"phase:{change.Previous}->{change.Current}");
-            mirror.PriorityChanged += change => notices.Add($"priority:{change.Previous?.Value}->{change.Current?.Value}");
-            mirror.MatchEnded += ending => notices.Add($"ended:{ending.Won}");
+            mirror.ViewReplaced.Subscribe(_ => notices.Add("view"));
+            mirror.EventReceived.Subscribe(item => notices.Add("event:" + item.KindText));
+            mirror.PhaseChanged.Subscribe(change => notices.Add($"phase:{change.Previous}->{change.Current}"));
+            mirror.PriorityChanged.Subscribe(change => notices.Add($"priority:{change.Previous?.Value}->{change.Current?.Value}"));
+            mirror.MatchEnded.Subscribe(ending => notices.Add($"ended:{ending.Won}"));
         }
 
         [Test]
@@ -78,8 +78,8 @@ namespace Anathema.Net.Match.Tests
             MatchMirror failing = new MatchMirror(log);
             List<string> events = new List<string>();
             PlayerView? seenInsideEvent = null;
-            failing.ViewReplaced += _ => throw new InvalidOperationException("quebrado");
-            failing.EventReceived += item => { events.Add(item.KindText); seenInsideEvent = failing.Current; };
+            failing.ViewReplaced.Subscribe(_ => throw new InvalidOperationException("quebrado"));
+            failing.EventReceived.Subscribe(item => { events.Add(item.KindText); seenInsideEvent = failing.Current; });
             IReadOnlyList<MatchEvent> twoEvents = MatchJson.Fixture<MatchUpdateFrame>("contract-match-update-all-events.json").Events.Take(2).ToArray();
             PlayerView view = MirrorViews.Action();
 
@@ -87,7 +87,7 @@ namespace Anathema.Net.Match.Tests
 
             Assert.That(events, Is.EqualTo(new[] { "mulligan_taken", "unit_played" }));
             Assert.That(seenInsideEvent, Is.SameAs(view));
-            LogField notice = log.Single("match_subscriber_failed").Fields.First(field => field.Name == "notice");
+            LogField notice = log.Single("feed_listener_failed").Fields.First(field => field.Name == "feed");
             Assert.That(notice.Value, Is.EqualTo("view_replaced"));
         }
     }

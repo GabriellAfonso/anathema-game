@@ -17,7 +17,7 @@ namespace Anathema.Net.Match.Tests
         public void RecordRefusals()
         {
             refusals = new List<PlayRefusal>();
-            Live.Refused += refusals.Add;
+            Live.Refused.Subscribe(refusals.Add);
         }
 
         [Test]

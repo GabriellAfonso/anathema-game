@@ -25,7 +25,7 @@ namespace Anathema.Net.Match.Tests
         public void PrimeiroFrameDefineEstadoVersaoEIdentidade()
         {
             List<ViewReplaced> replaced = new List<ViewReplaced>();
-            mirror.ViewReplaced += replaced.Add;
+            mirror.ViewReplaced.Subscribe(replaced.Add);
             PlayerView view = MirrorViews.Mulligan();
 
             mirror.Apply(view, 4, Array.Empty<MatchEvent>());

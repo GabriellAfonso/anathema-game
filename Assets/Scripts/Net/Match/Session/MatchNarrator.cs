@@ -19,6 +19,7 @@ namespace Anathema.Net.Match
         private readonly LoadedCatalog catalog;
         private readonly MatchId match;
         private readonly IClientLog log;
+        private readonly IDisposable subscription;
 
         internal MatchNarrator(MatchMirror mirror, LoadedCatalog catalog, MatchId match, IClientLog log)
         {
@@ -26,12 +27,12 @@ namespace Anathema.Net.Match
             this.catalog = catalog;
             this.match = match;
             this.log = log;
-            mirror.EventReceived += Narrate;
+            subscription = mirror.EventReceived.Subscribe(Narrate);
         }
 
         public void Dispose()
         {
-            mirror.EventReceived -= Narrate;
+            subscription.Dispose();
         }
 
         private void Narrate(MatchEvent item)

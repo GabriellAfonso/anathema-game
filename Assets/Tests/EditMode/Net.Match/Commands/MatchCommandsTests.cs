@@ -21,7 +21,7 @@ namespace Anathema.Net.Match.Tests
         public void CreateRig()
         {
             rig = new MatchTestRig();
-            pending = new PendingPlay();
+            pending = new PendingPlay(rig.Log);
         }
 
         [Test]

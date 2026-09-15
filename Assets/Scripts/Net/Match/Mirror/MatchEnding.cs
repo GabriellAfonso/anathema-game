@@ -6,7 +6,7 @@ namespace Anathema.Net.Match
     /// <summary>Aviso de partida terminou: o desfecho e se o próprio jogador venceu. Sai uma vez por partida.</summary>
     /// <example>
     /// <code>
-    /// mirror.MatchEnded += ending => ShowResult(ending.Won ? "Vitória" : "Derrota");
+    /// mirror.MatchEnded.Subscribe(ending => ShowResult(ending.Won ? "Vitória" : "Derrota"));
     /// </code>
     /// </example>
     public sealed class MatchEnding

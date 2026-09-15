@@ -10,7 +10,7 @@ namespace Anathema.Net.Match
     /// </summary>
     /// <example>
     /// <code>
-    /// match.Refused += refusal => log.Warning("play_refused", new LogField("code", refusal.CodeText));
+    /// match.Refused.Subscribe(refusal => log.Warning("play_refused", new LogField("code", refusal.CodeText)));
     /// </code>
     /// </example>
     public sealed class PlayRefusal

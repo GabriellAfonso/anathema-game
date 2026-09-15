@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using Anathema.Net.Core;
+using Anathema.Net.Fakes;
 using NUnit.Framework;
 
 namespace Anathema.Net.Match.Tests
@@ -16,9 +17,9 @@ namespace Anathema.Net.Match.Tests
         [SetUp]
         public void CreatePending()
         {
-            pending = new PendingPlay();
+            pending = new PendingPlay(new FakeClientLog());
             changes = new List<PlayCommand?>();
-            pending.CurrentChanged += changes.Add;
+            pending.CurrentChanged.Subscribe(changes.Add);
             play = new PlayUnitCommand(new CardInstanceId(12));
             pass = new PassCommand();
         }

@@ -22,8 +22,8 @@ namespace Anathema.Net.Match.Tests
             time = new FakeMonotonicClock();
             clock = new TurnClock(time, new FakeClientLog());
             notices = new List<string>();
-            clock.TurnStarted += turn => notices.Add($"started:{turn.TurnNumber}:{turn.Holder.Value}");
-            clock.TurnRunningOut += turnNumber => notices.Add($"running_out:{turnNumber}");
+            clock.TurnStarted.Subscribe(turn => notices.Add($"started:{turn.TurnNumber}:{turn.Holder.Value}"));
+            clock.TurnRunningOut.Subscribe(turnNumber => notices.Add($"running_out:{turnNumber}"));
         }
 
         [Test]

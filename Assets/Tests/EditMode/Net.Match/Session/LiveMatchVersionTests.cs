@@ -16,7 +16,7 @@ namespace Anathema.Net.Match.Tests
         {
             GoLive(LiveFrames.StartMulligan(7));
             int replaced = 0;
-            Live.Mirror.ViewReplaced += _ => replaced++;
+            Live.Mirror.ViewReplaced.Subscribe(_ => replaced++);
 
             Rig.Receive(LiveFrames.UpdateAction(6));
             Rig.Receive(LiveFrames.UpdateAction(7));
@@ -31,7 +31,7 @@ namespace Anathema.Net.Match.Tests
             GoLive(LiveFrames.StartMulligan(7));
             PlayerView before = Live.Mirror.Current!;
             List<long?> replacedVersions = new List<long?>();
-            Live.Mirror.ViewReplaced += _ => replacedVersions.Add(Live.Mirror.Version);
+            Live.Mirror.ViewReplaced.Subscribe(_ => replacedVersions.Add(Live.Mirror.Version));
 
             DropAndReopen(TimeSpan.FromSeconds(10));
             Rig.Receive(LiveFrames.StartMulligan(7));
@@ -82,9 +82,9 @@ namespace Anathema.Net.Match.Tests
         {
             StartAndOpen();
             List<string> notices = new List<string>();
-            Live.Mirror.ViewReplaced += _ => notices.Add("view:turn=" + Live.Clock.Turn?.TurnNumber);
-            Live.Mirror.EventReceived += item => notices.Add("event:" + item.KindText);
-            Live.Clock.TurnStarted += turn => notices.Add("turn_started:" + turn.TurnNumber);
+            Live.Mirror.ViewReplaced.Subscribe(_ => notices.Add("view:turn=" + Live.Clock.Turn?.TurnNumber));
+            Live.Mirror.EventReceived.Subscribe(item => notices.Add("event:" + item.KindText));
+            Live.Clock.TurnStarted.Subscribe(turn => notices.Add("turn_started:" + turn.TurnNumber));
 
             Rig.Receive(LiveFrames.UpdateAction(5));
 
@@ -109,7 +109,7 @@ namespace Anathema.Net.Match.Tests
         {
             StartAndOpen();
             List<long> exposed = new List<long>();
-            Live.Mirror.ViewReplaced += _ => exposed.Add(Live.Mirror.Version!.Value);
+            Live.Mirror.ViewReplaced.Subscribe(_ => exposed.Add(Live.Mirror.Version!.Value));
 
             foreach (long version in new long[] { 5, 3, 9, 9, 7, 12, 1, 12, 13 })
                 Rig.Receive(LiveFrames.UpdateAction(version));

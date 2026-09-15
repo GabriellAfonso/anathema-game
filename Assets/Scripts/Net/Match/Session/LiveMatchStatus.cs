@@ -7,7 +7,7 @@ namespace Anathema.Net.Match
     /// <summary>O estado da sessão de partida, imutável: fase, marca de desatualizado, desfecho ou motivo de desistência.</summary>
     /// <example>
     /// <code>
-    /// match.StatusChanged += status => { if (status.Phase == LiveMatchPhase.Finished) ShowResult(status.Outcome); };
+    /// match.StatusChanged.Subscribe(status => { if (status.Phase == LiveMatchPhase.Finished) ShowResult(status.Outcome); });
     /// </code>
     /// </example>
     public sealed class LiveMatchStatus : IEquatable<LiveMatchStatus>

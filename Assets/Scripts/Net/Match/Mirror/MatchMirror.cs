@@ -12,7 +12,7 @@ namespace Anathema.Net.Match
     /// </summary>
     /// <example>
     /// <code>
-    /// match.Mirror.ViewReplaced += change => Redraw(change.Current);
+    /// match.Mirror.ViewReplaced.Subscribe(change => Redraw(change.Current));
     /// bool canClick = match.Mirror.IsMyPriority;
     /// </code>
     /// </example>
@@ -24,6 +24,11 @@ namespace Anathema.Net.Match
         internal MatchMirror(IClientLog log)
         {
             this.log = log ?? throw new ArgumentNullException(nameof(log), "log is null: expected the client log that records failing subscribers");
+            ViewReplaced = new EventFeed<ViewReplaced>("view_replaced", log);
+            EventReceived = new EventFeed<MatchEvent>("event_received", log);
+            PhaseChanged = new EventFeed<PhaseChange>("phase_changed", log);
+            PriorityChanged = new EventFeed<PriorityChange>("priority_changed", log);
+            MatchEnded = new EventFeed<MatchEnding>("match_ended", log);
         }
 
         /// <summary>A visão atual; nula antes do primeiro frame aceito.</summary>
@@ -67,32 +72,34 @@ namespace Anathema.Net.Match
         public bool? DidIWin => Current?.Outcome == null ? (bool?)null : Current.Outcome.DefeatedUser != Self;
 
         /// <summary>Estado substituído, antes de qualquer outro aviso do frame.</summary>
-        /// <example><code>mirror.ViewReplaced += change => Redraw(change.Current);</code></example>
-        public event Action<ViewReplaced>? ViewReplaced;
+        /// <example><code>subscriptions.Add(mirror.ViewReplaced.Subscribe(change => Redraw(change.Current)));</code></example>
+        public EventFeed<ViewReplaced> ViewReplaced { get; }
 
         /// <summary>Cada evento do frame, na ordem recebida.</summary>
-        /// <example><code>mirror.EventReceived += matchEvent => Animate(matchEvent);</code></example>
-        public event Action<MatchEvent>? EventReceived;
+        /// <example><code>subscriptions.Add(mirror.EventReceived.Subscribe(matchEvent => Animate(matchEvent)));</code></example>
+        public EventFeed<MatchEvent> EventReceived { get; }
 
         /// <summary>A fase mudou em relação ao frame anterior.</summary>
-        /// <example><code>mirror.PhaseChanged += change => ShowPhase(change.Current);</code></example>
-        public event Action<PhaseChange>? PhaseChanged;
+        /// <example><code>subscriptions.Add(mirror.PhaseChanged.Subscribe(change => ShowPhase(change.Current)));</code></example>
+        public EventFeed<PhaseChange> PhaseChanged { get; }
 
         /// <summary>A prioridade mudou em relação ao frame anterior.</summary>
-        /// <example><code>mirror.PriorityChanged += change => ShowPriority(change.Current);</code></example>
-        public event Action<PriorityChange>? PriorityChanged;
+        /// <example><code>subscriptions.Add(mirror.PriorityChanged.Subscribe(change => ShowPriority(change.Current)));</code></example>
+        public EventFeed<PriorityChange> PriorityChanged { get; }
 
         /// <summary>A partida terminou; uma vez.</summary>
-        /// <example><code>mirror.MatchEnded += ending => ShowResult(ending.Won);</code></example>
-        public event Action<MatchEnding>? MatchEnded;
+        /// <example><code>subscriptions.Add(mirror.MatchEnded.Subscribe(ending => ShowResult(ending.Won)));</code></example>
+        public EventFeed<MatchEnding> MatchEnded { get; }
 
         internal void Apply(PlayerView view, long version, IReadOnlyList<MatchEvent> events)
         {
             PlayerView? previous = Current;
+            // Um assinante quebrado não cala os avisos seguintes, porque cada feed isola o ouvinte; o estado já foi
+            // substituído antes (FR-015).
             Replace(view, version);
-            Announce("view_replaced", () => ViewReplaced?.Invoke(new ViewReplaced(previous, view)));
+            ViewReplaced.Publish(new ViewReplaced(previous, view));
             foreach (MatchEvent item in events)
-                Announce("event_received", () => EventReceived?.Invoke(item));
+                EventReceived.Publish(item);
 
             AnnounceChanges(previous, view);
             AnnounceEndOnce(view);
@@ -115,10 +122,10 @@ namespace Anathema.Net.Match
                 return;
 
             if (previous.Phase != current.Phase)
-                Announce("phase_changed", () => PhaseChanged?.Invoke(new PhaseChange(previous.Phase, current.Phase)));
+                PhaseChanged.Publish(new PhaseChange(previous.Phase, current.Phase));
 
             if (previous.PriorityUser != current.PriorityUser)
-                Announce("priority_changed", () => PriorityChanged?.Invoke(new PriorityChange(previous.PriorityUser, current.PriorityUser)));
+                PriorityChanged.Publish(new PriorityChange(previous.PriorityUser, current.PriorityUser));
         }
 
         private void AnnounceEndOnce(PlayerView view)
@@ -128,20 +135,7 @@ namespace Anathema.Net.Match
 
             endAnnounced = true;
             MatchOutcome outcome = view.Outcome;
-            Announce("match_ended", () => MatchEnded?.Invoke(new MatchEnding(outcome, outcome.DefeatedUser != Self)));
-        }
-
-        private void Announce(string notice, Action raise)
-        {
-            try
-            {
-                raise();
-            }
-            catch (Exception failure)
-            {
-                // Um assinante quebrado não cala os avisos seguintes; o estado já foi substituído antes (FR-015).
-                log.Error("match_subscriber_failed", new LogField("notice", notice), new LogField("exception", failure.GetType().Name), new LogField("message", failure.Message));
-            }
+            MatchEnded.Publish(new MatchEnding(outcome, outcome.DefeatedUser != Self));
         }
     }
 }

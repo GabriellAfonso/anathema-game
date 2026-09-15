@@ -24,7 +24,7 @@ namespace Anathema.Net.Match.Tests
             log = new FakeClientLog();
             clock = new TurnClock(time, log);
             runningOut = new List<long>();
-            clock.TurnRunningOut += runningOut.Add;
+            clock.TurnRunningOut.Subscribe(runningOut.Add);
         }
 
         [Test]

@@ -15,7 +15,7 @@ namespace Anathema.Net.Match.Tests
         {
             GoLive(LiveFrames.StartMulligan(4));
             MatchEnding? ending = null;
-            Live.Mirror.MatchEnded += value => ending = value;
+            Live.Mirror.MatchEnded.Subscribe(value => ending = value);
 
             Rig.Receive(LiveFrames.UpdateFinished(20));
             Rig.Advance(TimeSpan.FromSeconds(30));
@@ -46,7 +46,7 @@ namespace Anathema.Net.Match.Tests
             GoLive(LiveFrames.StartMulligan(4));
             int statusesBefore = Statuses.Count;
             int replaced = 0;
-            Live.Mirror.ViewReplaced += _ => replaced++;
+            Live.Mirror.ViewReplaced.Subscribe(_ => replaced++);
 
             Live.Dispose();
 

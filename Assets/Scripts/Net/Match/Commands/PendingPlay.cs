@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using Anathema.Net.Core;
 
 namespace Anathema.Net.Match
 {
@@ -10,15 +11,16 @@ namespace Anathema.Net.Match
     /// </summary>
     /// <example>
     /// <code>
-    /// match.Pending.CurrentChanged += pending => spinner.SetActive(pending != null);
+    /// subscriptions.Add(match.Pending.CurrentChanged.Subscribe(pending => spinner.SetActive(pending != null)));
     /// </code>
     /// </example>
     public sealed class PendingPlay
     {
         private PlayCommand? lastSentBefore;
 
-        internal PendingPlay()
+        internal PendingPlay(IClientLog log)
         {
+            CurrentChanged = new EventFeed<PlayCommand?>("pending_changed", log ?? throw new ArgumentNullException(nameof(log), "log is null: expected the client log that records failing listeners"));
         }
 
         /// <summary>O comando pendente; nulo depois de atualização aceita, recusa ou reconexão.</summary>
@@ -30,8 +32,8 @@ namespace Anathema.Net.Match
         public PlayCommand? LastSentSinceUpdate { get; private set; }
 
         /// <summary>O pendente mudou.</summary>
-        /// <example><code>pending.CurrentChanged += command => spinner.SetActive(command != null);</code></example>
-        public event Action<PlayCommand?>? CurrentChanged;
+        /// <example><code>subscriptions.Add(pending.CurrentChanged.Subscribe(command => spinner.SetActive(command != null)));</code></example>
+        public EventFeed<PlayCommand?> CurrentChanged { get; }
 
         internal void MarkSent(PlayCommand command)
         {
@@ -64,7 +66,7 @@ namespace Anathema.Net.Match
                 return;
 
             Current = next;
-            CurrentChanged?.Invoke(next);
+            CurrentChanged.Publish(next);
         }
     }
 }
